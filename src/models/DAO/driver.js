@@ -25,6 +25,23 @@ const insertDriver = async (driver) => {
     }
 }
 
+const selectDriverIdByCPF = async (cpf) => {
+    try {
+        let sql = `SELECT CAST(id AS DECIMAL) AS id FROM tbl_motorista WHERE cpf LIKE '${cpf}'`
+
+        const id = await prisma.$queryRawUnsafe(sql)
+
+        if (id.length > 0) {
+            return id
+        } else {
+            return false
+        }
+    } catch (err) {
+        return false
+    }
+}
+
 module.exports = {
     insertDriver,
+    selectDriverIdByCPF
 }

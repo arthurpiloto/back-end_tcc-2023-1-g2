@@ -6,7 +6,7 @@ DATA DE CRIAÇÃO: 03/03/2023
 VERSÃO: 1.0
 ************************/
 
-const { insertDriver } = require('../models/DAO/driver.js')
+const { insertDriver, selectDriverIdByCPF } = require('../models/DAO/driver.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const newDriver = async function (driver) {
@@ -28,6 +28,25 @@ const newDriver = async function (driver) {
     }
 };
 
+const selectDriverId = async (cpf) => {
+    if (cpf != '' && cpf != undefined) {
+        let id = await selectDriverIdByCPF(cpf)
+
+        id.forEach(element => {
+            id = element
+        })
+
+        if (id) {
+            return { status: 200, message: id }
+        } else {
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+        }
+    } else {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    }
+}
+
 module.exports = {
-    newDriver
+    newDriver,
+    selectDriverId
 }

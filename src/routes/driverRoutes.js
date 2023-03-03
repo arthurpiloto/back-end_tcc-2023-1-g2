@@ -1,6 +1,6 @@
 const express = require(`express`)
 const jsonParser = express.json()
-const { newDriver } = require('../controllers/driverController.js')
+const { newDriver, selectDriverId } = require('../controllers/driverController.js')
 const { MESSAGE_ERROR } = require('../modules/config.js')
 
 const router = express.Router()
@@ -30,6 +30,31 @@ router
             message = MESSAGE_ERROR.CONTENT_TYPE
         }
         return response.status(statusCode).json(message)
+    })
+
+router
+    .route('/driver/id/:driverCpf')
+    .get(async(request, response) => {
+        let statusCode
+        let message
+        let cpf = request.params.driverCpf
+    
+        if(cpf != '' && cpf != undefined) {
+            const userData = await selectDriverId(cpf)
+    
+            if (userData) {
+                statusCode = userData.status
+                message = userData.message
+            } else {
+                statusCode = userData.status
+                message = userData.message
+            }
+        } else {
+            statusCode = userData.status
+            message = userData.message
+        }
+    
+        response.status(statusCode).json(message)
     })
 
 module.exports = router
