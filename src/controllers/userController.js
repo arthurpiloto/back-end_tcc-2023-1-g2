@@ -8,7 +8,7 @@ VERSÃO: 1.0
 const { insertDriver } = require('../models/DAO/driver.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
-const newDriver = async function (driver){
+const newUser = async function (user){
     //Validacao dos campos obrigatorios para user
     if (user.nome ==  '' || user.nome == null || user.rg == '' || user.rg == null || user.cpf == '' || user.cpf == null || user.telefone == '' || user.telefone == null || user.data_nascimento == '' || user.data_nascimento == null || user.senha == ''|| user.senha == null) {
         return {status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS}
@@ -29,5 +29,5 @@ const newDriver = async function (driver){
 };
 
 module.exports={
-    newDriver
+    newUser
 }
