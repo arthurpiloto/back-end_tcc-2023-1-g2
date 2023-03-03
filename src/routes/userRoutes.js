@@ -1,6 +1,7 @@
 const express = require(`express`)
 const jsonParser = express.json()
 const { newUser } = require('../controllers/userController.js')
+const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const router = express.Router()
 
@@ -23,11 +24,11 @@ router
                 message = dadosUser.message 
             } else{
                 statusCode = 400
-                message = "Error Empty Body"
+                message = MESSAGE_ERROR.EMPTY_BODY
             }
         } else{
             statusCode = 415
-            message = "Error Content-Type"
+            message = MESSAGE_ERROR.CONTENT_TYPE
         }
         return response.status(statusCode).json(message)
     })
