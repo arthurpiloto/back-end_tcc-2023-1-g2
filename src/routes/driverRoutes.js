@@ -40,18 +40,18 @@ router
         let cpf = request.params.driverCpf
     
         if(cpf != '' && cpf != undefined) {
-            const userData = await selectDriverId(cpf)
+            const driverData = await selectDriverId(cpf)
     
-            if (userData) {
-                statusCode = userData.status
-                message = userData.message
+            if (driverData) {
+                statusCode = driverData.status
+                message = driverData.message
             } else {
-                statusCode = userData.status
-                message = userData.message
+                statusCode = driverData.status
+                message = driverData.message
             }
         } else {
-            statusCode = userData.status
-            message = userData.message
+            statusCode = driverData.status
+            message = driverData.message
         }
     
         response.status(statusCode).json(message)
