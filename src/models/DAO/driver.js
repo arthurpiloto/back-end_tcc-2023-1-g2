@@ -13,7 +13,6 @@ const insertDriver = async (driver) => {
         let sql = `INSERT INTO tbl_motorista (nome, email, rg, cpf, cnh, telefone, data_nascimento, senha, foto, avaliacao, descricao)
         values ('${driver.nome}', '${driver.email}', '${driver.rg}', '${driver.cpf}', '${driver.cnh}', '${driver.telefone}', '${driver.data_nascimento}', '${driver.senha}', '${driver.foto}', ${driver.avaliacao}, '${driver.descricao}');`
 
-        console.log(sql)
         const result = await prisma.$executeRawUnsafe(sql)
 
         if (result) {
