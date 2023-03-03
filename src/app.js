@@ -19,9 +19,11 @@ app.use((request, response, next) => {
 
 const userRouter = require('./routes/userRoutes.js')
 const driverRouter = require('./routes/driverRoutes.js')
+const modelRouter = require('./routes/modelRoutes.js')
 
 app.use(userRouter)
 app.use(driverRouter)
+app.use(modelRouter)
 
 app.listen(3030, () => {
     console.log("Server waiting requests...")
