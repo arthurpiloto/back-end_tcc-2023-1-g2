@@ -32,11 +32,11 @@ const selectDriverId = async (cpf) => {
     if (cpf != '' && cpf != undefined) {
         let id = await selectDriverIdByCPF(cpf)
 
-        id.forEach(element => {
-            id = element
-        })
-
         if (id) {
+            id.forEach(element => {
+                id = element
+            })
+            
             return { status: 200, message: id }
         } else {
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }

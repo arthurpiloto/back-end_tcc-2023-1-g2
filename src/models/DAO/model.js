@@ -15,6 +15,8 @@ const insertModel = async (model) => {
 
         const result = await prisma.$executeRawUnsafe(sql)
 
+        console.log(result)
+
         if (result) {
             return true
         } else {
@@ -25,6 +27,23 @@ const insertModel = async (model) => {
     }
 }
 
+const selectModelIdByName = async (name) => {
+    try {
+        let sql = `SELECT CAST(id AS DECIMAL) AS id FROM tbl_modelo WHERE modelo LIKE '${name}';`
+
+        const id = await prisma.$queryRawUnsafe(sql)
+
+        if (id.length > 0) {
+            return id
+        } else {
+            return false
+        }
+    } catch (err) {
+        return false
+    }
+}
+
 module.exports = {
     insertModel,
+    selectModelIdByName
 }

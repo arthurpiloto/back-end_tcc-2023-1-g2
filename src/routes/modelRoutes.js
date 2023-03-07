@@ -1,6 +1,6 @@
 const express = require(`express`)
 const jsonParser = express.json()
-const { newModel } = require('../controllers/modelController.js')
+const { newModel, selectModelId } = require('../controllers/modelController.js')
 const { MESSAGE_ERROR } = require('../modules/config.js')
 
 const router = express.Router()
@@ -30,6 +30,31 @@ router
             message = MESSAGE_ERROR.CONTENT_TYPE
         }
         return response.status(statusCode).json(message)
+    })
+
+router
+    .route('/model/id/:modelName')
+    .get(async(request, response) => {
+        let statusCode
+        let message
+        let name = request.params.modelName
+    
+        if(name != '' && name != undefined) {
+            const modelData = await selectModelId(name)
+    
+            if (modelData) {
+                statusCode = modelData.status
+                message = modelData.message
+            } else {
+                statusCode = modelData.status
+                message = modelData.message
+            }
+        } else {
+            statusCode = modelData.status
+            message = modelData.message
+        }
+    
+        response.status(statusCode).json(message)
     })
 
 module.exports = router

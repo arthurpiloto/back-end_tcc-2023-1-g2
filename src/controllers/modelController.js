@@ -5,7 +5,7 @@ AUTOR: NICOLAS DOBBECK
 DATA DE CRIAÇÃO: 03/03/2023
 VERSÃO: 1.0
 ************************************************************************/
-const { insertModel } = require('../models/DAO/model.js')
+const { insertModel, selectModelIdByName } = require('../models/DAO/model.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const newModel = async function (model){
@@ -24,8 +24,28 @@ const newModel = async function (model){
             return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
         }
     }
-};
+}
 
-module.exports={
-    newModel
+const selectModelId = async (name) => {
+    if (name != '' && name != undefined) {
+        let id = await selectModelIdByName(name)
+
+        if (id) {
+            id.forEach(element => {
+                id = element
+            })
+            
+            return { status: 200, message: id }
+        } else {
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+        }
+    } else {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    }
+}
+
+
+module.exports = {
+    newModel,
+    selectModelId
 }
