@@ -50,6 +50,22 @@ const updateUser = async (user) => {
     }
 }
 
+const deleteUser = async (id) => {
+    try {
+        let sql = `DELETE FROM tbl_usuario WHERE id = ${id}`
+        
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if (result) {
+            return true
+        } else {
+            return false
+        }
+    } catch (err) {
+        return false
+    }
+}
+
 const selectAllUsers = async () => {
     try {
         let sql = `SELECT * FROM tbl_usuario ORDER BY id DESC`
@@ -69,5 +85,6 @@ const selectAllUsers = async () => {
 module.exports = {
     insertUser,
     updateUser,
+    deleteUser,
     selectAllUsers,
 }

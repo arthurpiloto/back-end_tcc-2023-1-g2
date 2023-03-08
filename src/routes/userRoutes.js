@@ -8,7 +8,7 @@ VERSÃO: 1.0
 
 const express = require(`express`)
 const jsonParser = express.json()
-const { newUser, renewUser, listAllUsers } = require('../controllers/userController.js')
+const { novoUser, atualizarUser, deletarUser, listarUsers } = require('../controllers/userController.js')
 const { MESSAGE_ERROR } = require('../modules/config.js')
 
 const router = express.Router()
@@ -27,7 +27,7 @@ router
             let dadosBody = request.body
 
             if (JSON.stringify(dadosBody) != `{}`) {
-                const dadosUser = await newUser(dadosBody)
+                const dadosUser = await novoUser(dadosBody)
                 statusCode = dadosUser.status
                 message = dadosUser.message 
             } else{
@@ -59,7 +59,7 @@ router
                 if(id != '' && id != undefined) {
                     bodyData.id = id
     
-                    const updatedUser = await renewUser(bodyData)
+                    const updatedUser = await atualizarUser(bodyData)
     
                     statusCode = updatedUser.status
                     message = updatedUser.message
@@ -79,6 +79,25 @@ router
         return response.status(statusCode).json(message)
     })
 
+    .delete(async(request, response) => {
+        let statusCode
+        let message
+
+        let id = request.params.userId
+
+        if(id != '' && id != undefined) {
+            const deletedUser = await deletarUser(id)
+
+            statusCode = deletedUser.status
+            message = deletedUser.message
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_ID
+        }
+        
+        response.status(statusCode).json(message)
+    })
+
 
 router
     .route('/users')
@@ -86,7 +105,7 @@ router
         let statusCode
         let message
 
-        const usersData = await listAllUsers()
+        const usersData = await listarUsers()
 
         if (usersData) {
             statusCode = 200

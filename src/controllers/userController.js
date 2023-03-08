@@ -5,10 +5,10 @@ AUTOR: NICOLAS DOBBECK
 DATA DE CRIAÇÃO: 01/03/2023
 VERSÃO: 1.0
 ************************************************************************/
-const { insertUser, updateUser, selectAllUsers } = require('../models/DAO/user.js')
+const { insertUser, updateUser, deleteUser, selectAllUsers } = require('../models/DAO/user.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
-const newUser = async (user) => {
+const novoUser = async (user) => {
     //Validacao dos campos obrigatorios para user
     if (user.nome ==  '' || user.nome == null || user.rg == '' || user.rg == null || user.cpf == '' || user.cpf == null || user.telefone == '' || user.telefone == null || user.data_nascimento == '' || user.data_nascimento == null || user.senha == ''|| user.senha == null) {
         return {status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS}
@@ -27,7 +27,7 @@ const newUser = async (user) => {
     }
 }
 
-const renewUser = async (user) => {
+const atualizarUser = async (user) => {
     if (user.nome ==  '' || user.nome == null || user.rg == '' || user.rg == null || user.cpf == '' || user.cpf == null || user.telefone == '' || user.telefone == null || user.data_nascimento == '' || user.data_nascimento == null || user.senha == ''|| user.senha == null) {
         return {status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS}
     } else if (!user.email.includes('@')){
@@ -45,7 +45,21 @@ const renewUser = async (user) => {
     }
 }
 
-const listAllUsers = async () => {
+const deletarUser = async (id) => {
+    if (id == '' || id == undefined) {
+        return {status: 400, message: MESSAGE_ERROR.REQUIRED_ID}
+    } else {
+        const result = await deleteUser(id)
+
+        if (result) {
+            return {status: 200, message: MESSAGE_SUCCESS.DELETE_ITEM}
+        } else {
+            return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+        }
+    }
+}
+
+const listarUsers = async () => {
     let usersJson = {}
 
     const result = await selectAllUsers()
@@ -60,7 +74,8 @@ const listAllUsers = async () => {
 
 
 module.exports = {
-    newUser,
-    listAllUsers,
-    renewUser
+    novoUser,
+    atualizarUser,
+    deletarUser,
+    listarUsers,
 }
