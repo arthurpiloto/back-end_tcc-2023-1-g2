@@ -1,3 +1,11 @@
+/************************************************************************
+OBJETIVO: ARQUIVO RESPONSÁVEL PELA ORGANIZAÇÃO DAS ROTAS
+DE MODELO
+AUTOR: ARTHUR PILOTO
+DATA DE CRIAÇÃO: 03/03/2023
+VERSÃO: 1.0
+************************************************************************/
+
 const express = require(`express`)
 const jsonParser = express.json()
 const { newModel, selectModelId } = require('../controllers/modelController.js')
