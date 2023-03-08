@@ -8,7 +8,7 @@ VERSÃO: 1.0
 
 const express = require(`express`)
 const jsonParser = express.json()
-const { newDriver, selectDriverId } = require('../controllers/driverController.js')
+const { newDriver, listAllDrivers, listDriverIdByCPF } = require('../controllers/driverController.js')
 const { MESSAGE_ERROR } = require('../modules/config.js')
 
 const router = express.Router()
@@ -41,6 +41,25 @@ router
     })
 
 router
+    .route('/drivers')
+    .get(async(request, response) => {
+        let statusCode
+        let message
+
+        const driversData = await listAllDrivers()
+
+        if (driversData) {
+            statusCode = 200
+            message = driversData
+        } else {
+            statusCode = 404
+            message = MESSAGE_ERROR.NOT_FOUND_DB
+        }
+
+        return response.status(statusCode).json(message)
+    })
+
+router
     .route('/driver/id/:driverCpf')
     .get(async(request, response) => {
         let statusCode
@@ -48,7 +67,7 @@ router
         let cpf = request.params.driverCpf
     
         if(cpf != '' && cpf != undefined) {
-            const driverData = await selectDriverId(cpf)
+            const driverData = await listDriverIdByCPF(cpf)
     
             if (driverData) {
                 statusCode = driverData.status
