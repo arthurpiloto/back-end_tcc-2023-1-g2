@@ -1,7 +1,7 @@
 const express = require(`express`)
 const jsonParser = express.json()
-const { newUser } = require('../controllers/userController.js')
-const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
+const { newUser, listAllUsers } = require('../controllers/userController.js')
+const { MESSAGE_ERROR } = require('../modules/config.js')
 
 const router = express.Router()
 
@@ -26,10 +26,29 @@ router
                 statusCode = 400
                 message = MESSAGE_ERROR.EMPTY_BODY
             }
-        } else{
+        } else {
             statusCode = 415
             message = MESSAGE_ERROR.CONTENT_TYPE
         }
+        return response.status(statusCode).json(message)
+    })
+
+router
+    .route('/users')
+    .get(async(request, response) => {
+        let statusCode
+        let message
+
+        const usersData = await listAllUsers()
+
+        if (usersData) {
+            statusCode = 200
+            message = usersData
+        } else {
+            statusCode = 404
+            message = MESSAGE_ERROR.NOT_FOUND_DB
+        }
+
         return response.status(statusCode).json(message)
     })
 
