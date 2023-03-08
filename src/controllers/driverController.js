@@ -6,7 +6,7 @@ DATA DE CRIAÇÃO: 03/03/2023
 VERSÃO: 1.0
 ************************/
 
-const { insertDriver, updateDriver, selectAllDrivers, selectDriverIdByCPF } = require('../models/DAO/driver.js')
+const { insertDriver, updateDriver, deleteDriver, selectAllDrivers, selectDriverIdByCPF } = require('../models/DAO/driver.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const novoDriver = async (driver) => {
@@ -47,6 +47,20 @@ const atualizarDriver = async (driver) => {
     }
 }
 
+const deletarDriver = async (id) => {
+    if (id == '' || id == undefined) {
+        return {status: 400, message: MESSAGE_ERROR.REQUIRED_ID}
+    } else {
+        const result = await deleteDriver(id)
+
+        if (result) {
+            return {status: 200, message: MESSAGE_SUCCESS.DELETE_ITEM}
+        } else {
+            return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+        }
+    }
+}
+
 const listarDrivers = async () => {
     let driverJson = {}
 
@@ -81,6 +95,7 @@ const listarDriverIdByCPF = async (cpf) => {
 module.exports = {
     novoDriver,
     atualizarDriver,
+    deletarDriver,
     listarDrivers,
     listarDriverIdByCPF
 }

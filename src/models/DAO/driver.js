@@ -54,6 +54,22 @@ const updateDriver = async (driver) => {
     }
 }
 
+const deleteDriver = async (id) => {
+    try {
+        let sql = `DELETE FROM tbl_motorista WHERE id = ${id}`
+        
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if (result) {
+            return true
+        } else {
+            return false
+        }
+    } catch (err) {
+        return false
+    }
+}
+
 const selectAllDrivers = async () => {
     try {
         let sql = `SELECT * FROM tbl_motorista ORDER BY id DESC`
@@ -89,6 +105,7 @@ const selectDriverIdByCPF = async (cpf) => {
 module.exports = {
     insertDriver,
     updateDriver,
+    deleteDriver,
     selectAllDrivers,
     selectDriverIdByCPF,
 }

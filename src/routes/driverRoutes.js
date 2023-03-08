@@ -8,7 +8,7 @@ VERSÃO: 1.0
 
 const express = require(`express`)
 const jsonParser = express.json()
-const { novoDriver, atualizarDriver, listarDrivers, listarDriverIdByCPF } = require('../controllers/driverController.js')
+const { novoDriver, atualizarDriver, deletarDriver,  listarDrivers, listarDriverIdByCPF } = require('../controllers/driverController.js')
 const { MESSAGE_ERROR } = require('../modules/config.js')
 
 const router = express.Router()
@@ -76,6 +76,25 @@ router
         }
     
         return response.status(statusCode).json(message)
+    })
+
+    .delete(async(request, response) => {
+        let statusCode
+        let message
+
+        let id = request.params.driverId
+
+        if(id != '' && id != undefined) {
+            const deletedDriver = await deletarDriver(id)
+
+            statusCode = deletedDriver.status
+            message = deletedDriver.message
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_ID
+        }
+        
+        response.status(statusCode).json(message)
     })
 
 router
