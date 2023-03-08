@@ -8,7 +8,7 @@ VERSÃO: 1.0
 
 const express = require(`express`)
 const jsonParser = express.json()
-const { newDriver, listAllDrivers, listDriverIdByCPF } = require('../controllers/driverController.js')
+const { novoDriver, atualizarDriver, listarDrivers, listarDriverIdByCPF } = require('../controllers/driverController.js')
 const { MESSAGE_ERROR } = require('../modules/config.js')
 
 const router = express.Router()
@@ -26,7 +26,7 @@ router
             let dadosBody = request.body
 
             if (JSON.stringify(dadosBody) != `{}`) {
-                const dadosDriver = await newDriver(dadosBody)
+                const dadosDriver = await novoDriver(dadosBody)
                 statusCode = dadosDriver.status
                 message = dadosDriver.message 
             } else{
@@ -41,12 +41,50 @@ router
     })
 
 router
+    .route('/driver/:driverId')
+    .put(jsonParser, async(request, response) => {
+        let statusCode
+        let message
+        let headerContentType
+    
+        headerContentType = request.headers['content-type']
+    
+        if(headerContentType == 'application/json') {
+            let bodyData = request.body
+    
+            if(JSON.stringify(bodyData) != '{}') {
+                let id = request.params.driverId
+    
+                if(id != '' && id != undefined) {
+                    bodyData.id = id
+    
+                    const updatedDriver = await atualizarDriver(bodyData)
+    
+                    statusCode = updatedDriver.status
+                    message = updatedDriver.message
+                } else {
+                    statusCode = 400
+                    message = MESSAGE_ERROR.REQUIRED_ID
+                }
+            } else {
+                statusCode = 400
+                message = MESSAGE_ERROR.EMPTY_BODY
+            }
+        } else {
+            statusCode = 415
+            message = MESSAGE_ERROR.INCORRECT_CONTENT_TYPE
+        }
+    
+        return response.status(statusCode).json(message)
+    })
+
+router
     .route('/drivers')
     .get(async(request, response) => {
         let statusCode
         let message
 
-        const driversData = await listAllDrivers()
+        const driversData = await listarDrivers()
 
         if (driversData) {
             statusCode = 200
@@ -67,7 +105,7 @@ router
         let cpf = request.params.driverCpf
     
         if(cpf != '' && cpf != undefined) {
-            const driverData = await listDriverIdByCPF(cpf)
+            const driverData = await listarDriverIdByCPF(cpf)
     
             if (driverData) {
                 statusCode = driverData.status

@@ -25,6 +25,35 @@ const insertDriver = async (driver) => {
     }
 }
 
+const updateDriver = async (driver) => {
+    try {
+        let sql = `UPDATE tbl_motorista SET 
+            nome = '${driver.nome}',
+            email = '${driver.email}',
+            rg = '${driver.rg}',
+            cpf = '${driver.cpf}',
+            cnh = '${driver.cnh}',
+            telefone = '${driver.telefone}',
+            data_nascimento = '${driver.data_nascimento}',
+            inicio_carreira = '${driver.inicio_carreira}',
+            senha = '${driver.senha}',
+            foto = '${driver.foto}',
+            avaliacao = '${driver.avaliacao}',
+            descricao = '${driver.descricao}'
+        WHERE id = ${driver.id};`
+
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if (result) {
+            return true
+        } else {
+            return false
+        }
+    } catch (err) {
+        return false
+    }
+}
+
 const selectAllDrivers = async () => {
     try {
         let sql = `SELECT * FROM tbl_motorista ORDER BY id DESC`
@@ -59,6 +88,7 @@ const selectDriverIdByCPF = async (cpf) => {
 
 module.exports = {
     insertDriver,
+    updateDriver,
+    selectAllDrivers,
     selectDriverIdByCPF,
-    selectAllDrivers
 }
