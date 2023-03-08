@@ -82,9 +82,26 @@ const selectAllUsers = async () => {
     }
 }
 
+const selectUserById = async (id) => {
+    try {
+        let sql = `SELECT * FROM tbl_usuario WHERE id = ${id};`
+
+        const result = await prisma.$queryRawUnsafe(sql)
+
+        if (result) {
+            return result
+        } else {
+            return false
+        }
+    } catch (err) {
+        return false
+    }
+}
+
 module.exports = {
     insertUser,
     updateUser,
     deleteUser,
     selectAllUsers,
+    selectUserById,
 }

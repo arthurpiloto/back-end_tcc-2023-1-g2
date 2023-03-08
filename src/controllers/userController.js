@@ -5,7 +5,7 @@ AUTOR: NICOLAS DOBBECK
 DATA DE CRIAÇÃO: 01/03/2023
 VERSÃO: 1.0
 ************************************************************************/
-const { insertUser, updateUser, deleteUser, selectAllUsers } = require('../models/DAO/user.js')
+const { insertUser, updateUser, deleteUser, selectAllUsers, selectUserById } = require('../models/DAO/user.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const novoUser = async (user) => {
@@ -60,15 +60,30 @@ const deletarUser = async (id) => {
 }
 
 const listarUsers = async () => {
-    let usersJson = {}
-
     const result = await selectAllUsers()
 
     if (result) {
+        let usersJson = {}
         usersJson.users = result
         return usersJson
     } else {
         return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+    }
+}
+
+const listarUserById = async (id) => {
+    if (id == '' || id == undefined) {
+        return {status: 400, message: MESSAGE_ERROR.REQUIRED_ID}
+    } else {
+        const result = await selectUserById(id)
+
+        if (result) {
+            let userJson = {}
+            userJson.user = result
+            return userJson
+        } else {
+            return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+        }
     }
 }
 
@@ -78,4 +93,5 @@ module.exports = {
     atualizarUser,
     deletarUser,
     listarUsers,
+    listarUserById,
 }

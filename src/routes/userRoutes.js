@@ -8,7 +8,7 @@ VERSÃO: 1.0
 
 const express = require(`express`)
 const jsonParser = express.json()
-const { novoUser, atualizarUser, deletarUser, listarUsers } = require('../controllers/userController.js')
+const { novoUser, atualizarUser, deletarUser, listarUsers, listarUserById } = require('../controllers/userController.js')
 const { MESSAGE_ERROR } = require('../modules/config.js')
 
 const router = express.Router()
@@ -43,6 +43,25 @@ router
 
 router
     .route('/user/:userId')
+    .get(async(request, response) => {
+        let statusCode
+        let message
+        
+        let id = request.params.userId
+
+        const userData = await listarUserById(id)
+
+        if (userData) {
+            statusCode = 200
+            message = userData
+        } else {
+            statusCode = 404
+            message = MESSAGE_ERROR.NOT_FOUND_DB
+        }
+
+        return response.status(statusCode).json(message)
+    })
+
     .put(jsonParser, async(request, response) => {
         let statusCode
         let message
@@ -105,11 +124,11 @@ router
         let statusCode
         let message
 
-        const usersData = await listarUsers()
+        const userData = await listarUsers()
 
-        if (usersData) {
+        if (userData) {
             statusCode = 200
-            message = usersData
+            message = userData
         } else {
             statusCode = 404
             message = MESSAGE_ERROR.NOT_FOUND_DB
