@@ -8,7 +8,7 @@ VERSÃO: 1.0
 const { insertModel, selectModelIdByName } = require('../models/DAO/model.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
-const newModel = async function (model){
+const newModel = async (model) => {
     
     if (model.modelo ==  '' || model.modelo == null ) {
         return {status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS}

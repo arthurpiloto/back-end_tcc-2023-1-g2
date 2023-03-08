@@ -9,7 +9,7 @@ VERSÃO: 1.0
 const { insertDriver, selectDriverIdByCPF } = require('../models/DAO/driver.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
-const newDriver = async function (driver) {
+const newDriver = async (driver) => {
     if (driver.nome == '' || driver.nome == null || driver.rg == '' || driver.rg == null || driver.cpf == '' || driver.cpf == null || driver.cnh == '' || driver.cnh == null ||
         driver.telefone == '' || driver.telefone == null || driver.data_nascimento == '' || driver.data_nascimento == null || driver.inicio_carreira == '' || driver.inicio_carreira == null || driver.senha == '' || driver.senha == null) {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
