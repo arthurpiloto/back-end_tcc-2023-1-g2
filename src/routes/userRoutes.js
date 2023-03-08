@@ -8,7 +8,7 @@ VERSÃO: 1.0
 
 const express = require(`express`)
 const jsonParser = express.json()
-const { newUser, listAllUsers } = require('../controllers/userController.js')
+const { newUser, renewUser, listAllUsers } = require('../controllers/userController.js')
 const { MESSAGE_ERROR } = require('../modules/config.js')
 
 const router = express.Router()
@@ -40,6 +40,45 @@ router
         }
         return response.status(statusCode).json(message)
     })
+
+router
+    .route('/user/:userId')
+    .put(jsonParser, async(request, response) => {
+        let statusCode
+        let message
+        let headerContentType
+    
+        headerContentType = request.headers['content-type']
+    
+        if(headerContentType == 'application/json') {
+            let bodyData = request.body
+    
+            if(JSON.stringify(bodyData) != '{}') {
+                let id = request.params.userId
+    
+                if(id != '' && id != undefined) {
+                    bodyData.id = id
+    
+                    const updatedUser = await renewUser(bodyData)
+    
+                    statusCode = updatedUser.status
+                    message = updatedUser.message
+                } else {
+                    statusCode = 400
+                    message = MESSAGE_ERROR.REQUIRED_ID
+                }
+            } else {
+                statusCode = 400
+                message = MESSAGE_ERROR.EMPTY_BODY
+            }
+        } else {
+            statusCode = 415
+            message = MESSAGE_ERROR.INCORRECT_CONTENT_TYPE
+        }
+    
+        return response.status(statusCode).json(message)
+    })
+
 
 router
     .route('/users')
