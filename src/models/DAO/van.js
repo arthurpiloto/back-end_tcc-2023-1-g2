@@ -25,6 +25,79 @@ const insertVan = async (van) => {
     }
 }
 
+const updateVan = async (van) => {
+    try {
+        let sql = `UPDATE tbl_van SET 
+            placa = '${van.placa}',
+            foto = '${van.foto}',
+            quantidade_vagas = ${van.quantidade_vagas},
+            id_modelo = ${van.id_modelo},
+            id_motorista = ${van.id_motorista}
+            WHERE id = ${van.id}`
+
+
+
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if (result) {
+            return true
+        } else {
+            return false
+        }
+    } catch (err) {
+        return false
+    }
+}
+
+const deleteVan = async (id) => {
+    try {
+        let sql = `DELETE FROM tbl_van WHERE id = ${id}`
+
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if (result) {
+            return true
+        } else {
+            return false
+        }
+    } catch (err) {
+        return false
+    }
+}
+
+
+const selectAllVans = async () => {
+    try {
+        let sql = `SELECT * FROM tbl_van ORDER BY id DESC`
+
+        const result = await prisma.$queryRawUnsafe(sql)
+
+        if (result) {
+            return result
+        } else {
+            return false
+        }
+    } catch (err) {
+        return false
+    }
+}
+
+const selectVanById = async (id) => {
+    try {
+        let sql = `SELECT * FROM tbl_van WHERE id = ${id};`
+
+        const result = await prisma.$queryRawUnsafe(sql)
+
+        if (result) {
+            return result
+        } else {
+            return false
+        }
+    } catch (err) {
+        return false
+    }
+}
+
 module.exports = {
-    insertVan,
+    insertVan, updateVan, deleteVan, selectAllVans, selectVanById
 }

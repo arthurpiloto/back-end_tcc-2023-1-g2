@@ -5,25 +5,83 @@ AUTOR: NICOLAS DOBBECK
 DATA DE CRIAÇÃO: 01/03/2023
 VERSÃO: 1.0
 ************************************************************************/
-const { insertVan } = require('../models/DAO/van.js')
+const { insertVan, updateVan, deleteVan, selectAllVans, selectVanById } = require('../models/DAO/van.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const newVan = async (van) => {
-    if (van.placa ==  '' || van.placa == null || van.quantidade_vagas == '' || van.quantidade_vagas == null || van.id_modelo == '' || van.id_modelo == null || van.id_motorista == '' || van.id_motorista == null) {
-        return {status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS}
+    if (van.placa == '' || van.placa == null || van.quantidade_vagas == '' || van.quantidade_vagas == null || van.id_modelo == '' || van.id_modelo == null || van.id_motorista == '' || van.id_motorista == null) {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     } else if (van.placa.length > 10 || van.foto.length > 200) {
-        return {status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED}
-    } else{
+        return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
+    } else {
         const result = await insertVan(van)
 
         if (result) {
-            return {status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM}
-        } else{
-            return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+            return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }
+        } else {
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+        }
+    }
+}
+
+const atualizarVan = async (van) => {
+    if (van.placa == '' || van.placa == null || van.quantidade_vagas == '' || van.quantidade_vagas == null || van.id_modelo == '' || van.id_modelo == null || van.id_motorista == '' || van.id_motorista == null) {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    } else if (van.placa.length > 10 || van.foto.length > 200) {
+        return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
+    } else {
+        const result = await updateVan(van)
+
+        if (result) {
+            return { status: 201, message: MESSAGE_SUCCESS.UPDATE_ITEM }
+        } else {
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+        }
+    }
+}
+
+const deletarVan = async (id) => {
+    if (id == '' || id == undefined) {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    } else {
+        const result = await deleteVan(id)
+
+        if (result) {
+            return { status: 200, message: MESSAGE_SUCCESS.DELETE_ITEM }
+        } else {
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+        }
+    }
+}
+
+const listarVans = async () => {
+    const result = await selectAllVans()
+
+    if (result) {
+        let vansJson = {}
+        vansJson.vans = result
+        return vansJson
+    } else {
+        return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+    }
+}
+
+const listarVanById = async (id) => {
+    if (id == '' || id == undefined) {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    } else {
+        const result = await selectVanById(id)
+
+        if (result) {
+            let vanJson = {}
+            vanJson.van = result
+            return { status: 200, message: vanJson }
+        } else {
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
         }
     }
 }
 
 module.exports = {
-    newVan
+    newVan, atualizarVan, deletarVan, listarVans, listarVanById
 }
