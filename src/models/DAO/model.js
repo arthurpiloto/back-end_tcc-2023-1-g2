@@ -15,8 +15,6 @@ const insertModel = async (model) => {
 
         const result = await prisma.$executeRawUnsafe(sql)
 
-        console.log(result)
-
         if (result) {
             return true
         } else {
