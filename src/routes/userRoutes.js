@@ -165,13 +165,10 @@ router
 
             if (JSON.stringify(dadosBody) != `{}`) {
                 const dadosUser = await userLogin(dadosBody.email, dadosBody.senha)
-                
-                if (dadosUser.status == 200) {
-                    console.log(dadosUser.message)
-                } else {
-                    statusCode = 100
-                    message = 'erro'
-                }
+                console.log(dadosUser)
+                dadosUser.message.token.forEach(element => {
+                    console.log(element)
+                })
             } else {
                 statusCode = 400
                 message = MESSAGE_ERROR.EMPTY_BODY

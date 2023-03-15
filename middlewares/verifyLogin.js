@@ -10,7 +10,6 @@ const { selectAllUsers } = require('../src/models/DAO/user.js')
 
 const verifyLogin = async (userInfos) => {
     const allUsers = await selectAllUsers()
-    console.log(allUsers)
     let foundUser
     
     allUsers.forEach(user => {
