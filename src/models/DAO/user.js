@@ -11,7 +11,7 @@ const prisma = new PrismaClient()
 const insertUser = async (user) => {
     try {
         let sql = `INSERT INTO tbl_usuario (nome, email, rg, cpf, telefone, data_nascimento, senha, foto)
-        VALUES ('${user.nome}', '${user.email}', '${user.rg}', '${user.cpf}', '${user.telefone}', '${user.data_nascimento}', '${user.senha}', '${user.foto}');`
+        VALUES ('${user.nome}', '${user.email}', '${user.rg}', '${user.cpf}', '${user.telefone}', '${user.data_nascimento}', md5('${user.senha}'), '${user.foto}');`
 
         const result = await prisma.$executeRawUnsafe(sql)
 
@@ -34,7 +34,7 @@ const updateUser = async (user) => {
             cpf = '${user.cpf}', 
             telefone = '${user.telefone}', 
             data_nascimento = '${user.data_nascimento}', 
-            senha = '${user.senha}', 
+            senha = md5('${user.senha}'), 
             foto = '${user.foto}'
         WHERE id = ${user.id};`
 
@@ -98,10 +98,26 @@ const selectUserById = async (id) => {
     }
 }
 
+const loginUser = async (userLogin, userPassword) => {
+    try {
+        let sql = `SELECT * FROM tbl_usuario WHERE email = '${userLogin}' AND senha = md5('${userPassword}');`
+
+        const result = await prisma.$queryRawUnsafe(sql)
+
+        if(result.length > 0)
+            return result
+        else
+            return false
+    } catch (err) {
+        return false
+    }
+}
+
 module.exports = {
     insertUser,
     updateUser,
     deleteUser,
     selectAllUsers,
     selectUserById,
+    loginUser
 }

@@ -5,7 +5,8 @@ AUTOR: NICOLAS DOBBECK
 DATA DE CRIAÇÃO: 01/03/2023
 VERSÃO: 1.0
 ************************************************************************/
-const { insertUser, updateUser, deleteUser, selectAllUsers, selectUserById } = require('../models/DAO/user.js')
+const { insertUser, updateUser, deleteUser, selectAllUsers, selectUserById, loginUser } = require('../models/DAO/user.js')
+const { createJwt, validateJwt } = require('../../middlewares/jwt.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const novoUser = async (user) => {
@@ -87,6 +88,21 @@ const listarUserById = async (id) => {
     }
 }
 
+const userLogin = async(userLogin, userPassword) => {
+    if (userLogin == '' || userLogin == undefined || userPassword == '' || userPassword == undefined) {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    } else {
+        const login = await loginUser(userLogin, userPassword)
+
+        if (login) {
+            let userToken = await createJwt(login)
+            login.token = userToken
+            return { status: 200, message: login }
+        } else {
+            return { message: MESSAGE_ERROR.NOT_FOUND_DB, status: 404 }
+        }
+    }
+}
 
 module.exports = {
     novoUser,
@@ -94,4 +110,5 @@ module.exports = {
     deletarUser,
     listarUsers,
     listarUserById,
+    userLogin
 }

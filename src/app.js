@@ -2,7 +2,7 @@
 OBJETIVO: API RESPONSÁVEL PELA MANIPULAÇÃO DE DADOS DO BACK-END.
 (GET, POST, PUT, DELETE)
 AUTOR: ARTHUR PILOTO
-DATA DE CRIAÇÃO: 10/10/2022
+DATA DE CRIAÇÃO: 24/02/2023
 VERSÃO: 1.0
 ************************************************************************/
 const express = require(`express`)
@@ -29,5 +29,5 @@ app.use(modelRouter)
 app.use(vanRouter)
 
 app.listen(3030, () => {
-    console.log("Server waiting requests...")
+    console.log("Server waiting requests at http://localhost:3030")
 })

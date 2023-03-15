@@ -8,8 +8,10 @@ VERSÃO: 1.0
 
 const express = require(`express`)
 const jsonParser = express.json()
-const { novoUser, atualizarUser, deletarUser, listarUsers, listarUserById } = require('../controllers/userController.js')
+const { novoUser, atualizarUser, deletarUser, listarUsers, listarUserById, userLogin } = require('../controllers/userController.js')
 const { MESSAGE_ERROR } = require('../modules/config.js')
+const { verifyLogin } = require('../../middlewares/verifyLogin.js')
+const { createJwt, validateJwt } = require('../../middlewares/jwt.js')
 
 const router = express.Router()
 
@@ -132,6 +134,51 @@ router
         } else {
             statusCode = 404
             message = MESSAGE_ERROR.NOT_FOUND_DB
+        }
+
+        return response.status(statusCode).json(message)
+    })
+
+// Function to verify jwt
+const verifyJwt = async (req, res, next) => {
+    let token = req.headers['x-access-token']
+    const authenticatedToken = await validateJwt(token)
+
+    if(authenticatedToken) {
+        next()
+    } else {
+        return res.status(401).end()
+    }
+}
+
+router
+    .route('/user/login')
+    .post(jsonParser, async(request, response) => {
+        let statusCode
+        let message
+        let headerContentType
+
+        headerContentType = request.headers[`content-type`]
+
+        if (headerContentType == `application/json`) {
+            let dadosBody = request.body
+
+            if (JSON.stringify(dadosBody) != `{}`) {
+                const dadosUser = await userLogin(dadosBody.email, dadosBody.senha)
+                
+                if (dadosUser.status == 200) {
+                    console.log(dadosUser.message)
+                } else {
+                    statusCode = 100
+                    message = 'erro'
+                }
+            } else {
+                statusCode = 400
+                message = MESSAGE_ERROR.EMPTY_BODY
+            }
+        } else {
+            statusCode = 415
+            message = MESSAGE_ERROR.CONTENT_TYPE
         }
 
         return response.status(statusCode).json(message)
