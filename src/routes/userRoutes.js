@@ -57,7 +57,7 @@ router
 
 router
     .route('/user/:userId')
-    .get(async(request, response) => {
+    .get(/*verifyJwt,*/ async(request, response) => {
         let statusCode
         let message
         
@@ -112,7 +112,7 @@ router
         return response.status(statusCode).json(message)
     })
 
-    .delete(async(request, response) => {
+    .delete(/*verifyJwt,*/ async(request, response) => {
         let statusCode
         let message
 
@@ -134,7 +134,7 @@ router
 
 router
     .route('/users')
-    .get(verifyJwt, async(request, response) => {
+    .get(/*verifyJwt,*/ async(request, response) => {
         let statusCode
         let message
 
