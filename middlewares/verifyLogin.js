@@ -11,11 +11,13 @@ const { selectAllUsers } = require('../src/models/DAO/user.js')
 const verifyLogin = async (userInfos) => {
     const allUsers = await selectAllUsers()
     let foundUser
-    
-    allUsers.forEach(user => {
-        if(user.email == userInfos.email && user.senha == userInfos.senha) {
-            foundUser = user
-        }
+
+    userInfos.message.forEach(element => {
+        allUsers.forEach(user => {
+            if(user.email == element.email && user.senha == element.senha) {
+                foundUser = user
+            }
+        })
     })
 
     return foundUser

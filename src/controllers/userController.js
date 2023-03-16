@@ -95,8 +95,6 @@ const userLogin = async(userLogin, userPassword) => {
         const login = await loginUser(userLogin, userPassword)
 
         if (login) {
-            let userToken = await createJwt(login)
-            login.token = userToken
             return { status: 200, message: login }
         } else {
             return { message: MESSAGE_ERROR.NOT_FOUND_DB, status: 404 }

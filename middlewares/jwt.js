@@ -16,13 +16,13 @@ const createJwt = async (user) => {
     })
     const id = user.id
 
-    return { status: 200, response: { message: MESSAGE_SUCCESS.JWT_CREATED, token, id } };
+    return { status: 200, response: { message: MESSAGE_SUCCESS.JWT_CREATED, token, id } }
 }
 
 const validateJwt = async (token) => {
     let jwtStatus
-    jwt.verify(token, process.env.SECRET, async (error, decode) => {
-        if(error) {
+    jwt.verify(token, process.env.SECRET, (error, decode) => {
+        if (error) {
             jwtStatus = false
         } else {
             jwtStatus = true

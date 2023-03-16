@@ -15,6 +15,18 @@ const { createJwt, validateJwt } = require('../../middlewares/jwt.js')
 
 const router = express.Router()
 
+// FUNCTION TO VERIFY JWT
+const verifyJwt = async (request, response, next) => {
+    let token = request.headers['x-access-token']
+    const authenticatedToken = await validateJwt(token)
+
+    if(authenticatedToken) {
+        next()
+    } else {
+        return response.status(401).end()
+    }
+}
+
 // ROTA PARA INSERIR NOVO USUÁRIO
 router
     .route('/user')
@@ -122,7 +134,7 @@ router
 
 router
     .route('/users')
-    .get(async(request, response) => {
+    .get(verifyJwt, async(request, response) => {
         let statusCode
         let message
 
@@ -139,22 +151,10 @@ router
         return response.status(statusCode).json(message)
     })
 
-// Function to verify jwt
-const verifyJwt = async (req, res, next) => {
-    let token = req.headers['x-access-token']
-    const authenticatedToken = await validateJwt(token)
-
-    if(authenticatedToken) {
-        next()
-    } else {
-        return res.status(401).end()
-    }
-}
-
 router
     .route('/user/login')
     .post(jsonParser, async(request, response) => {
-        let statusCode
+        let statusCode = 200
         let message
         let headerContentType
 
@@ -165,10 +165,24 @@ router
 
             if (JSON.stringify(dadosBody) != `{}`) {
                 const dadosUser = await userLogin(dadosBody.email, dadosBody.senha)
-                console.log(dadosUser)
-                dadosUser.message.token.forEach(element => {
-                    console.log(element)
-                })
+                
+                if (dadosUser.status == 200) {
+                    const authUser = await verifyLogin(dadosUser)
+
+                    if (authUser) {
+                        const jwt = await createJwt(authUser)
+
+                        statusCode = jwt.status
+                        message = jwt.response
+                    } else {
+                        statusCode = 401
+                        message = MESSAGE_ERROR.INVALID_USER
+                    }
+                } else {
+                    statusCode = dadosUser.status
+                    message = dadosUser.message
+                }
+
             } else {
                 statusCode = 400
                 message = MESSAGE_ERROR.EMPTY_BODY
