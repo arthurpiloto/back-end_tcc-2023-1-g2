@@ -7,6 +7,7 @@ VERSÃO: 1.0
 ************************/
 
 const { insertDriver, updateDriver, deleteDriver, selectAllDrivers, selectDriverIdByCPF } = require('../models/DAO/driver.js')
+const { verifyCpf } = require('../utils/verifyCpf.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const novoDriver = async (driver) => {
@@ -18,13 +19,19 @@ const novoDriver = async (driver) => {
     } else if (driver.email.length > 256 || driver.nome.length > 150 || driver.rg.length > 12 || driver.cpf.length > 18 || driver.telefone.length > 20 || driver.senha.length > 30 || driver.cnh.length > 15) {
         return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
     } else {
-        const result = await insertDriver(driver)
+        // const safeCpf = await verifyCpf(driver.cpf)
 
-        if (result) {
-            return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }
-        } else {
-            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
-        }
+        // if (safeCpf) {
+            const result = await insertDriver(driver)
+
+            if (result) {
+                return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }
+            } else {
+                return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+            }
+        // } else {
+            // return { status: 400, message: MESSAGE_ERROR.INVALID_DATA }
+        // }
     }
 }
 
@@ -49,14 +56,14 @@ const atualizarDriver = async (driver) => {
 
 const deletarDriver = async (id) => {
     if (id == '' || id == undefined) {
-        return {status: 400, message: MESSAGE_ERROR.REQUIRED_ID}
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
     } else {
         const result = await deleteDriver(id)
 
         if (result) {
-            return {status: 200, message: MESSAGE_SUCCESS.DELETE_ITEM}
+            return { status: 200, message: MESSAGE_SUCCESS.DELETE_ITEM }
         } else {
-            return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
         }
     }
 }
@@ -70,7 +77,7 @@ const listarDrivers = async () => {
         driverJson.drivers = result
         return driverJson
     } else {
-        return {status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB}
+        return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
     }
 }
 
@@ -82,7 +89,7 @@ const listarDriverIdByCPF = async (cpf) => {
             id.forEach(element => {
                 id = element
             })
-            
+
             return { status: 200, message: id }
         } else {
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
