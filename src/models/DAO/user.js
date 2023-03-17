@@ -10,8 +10,8 @@ const prisma = new PrismaClient()
 
 const insertUser = async (user) => {
     try {
-        let sql = `INSERT INTO tbl_usuario (nome, email, rg, cpf, telefone, data_nascimento, senha, foto)
-        VALUES ('${user.nome}', '${user.email}', '${user.rg}', '${user.cpf}', '${user.telefone}', '${user.data_nascimento}', md5('${user.senha}'), '${user.foto}');`
+        let sql = `INSERT INTO tbl_usuario (nome, email, rg, cpf, cep, telefone, data_nascimento, senha, foto)
+        VALUES ('${user.nome}', '${user.email}', '${user.rg}', '${user.cpf}', '${user.cep}', '${user.telefone}', '${user.data_nascimento}', md5('${user.senha}'), '${user.foto}');`
 
         const result = await prisma.$executeRawUnsafe(sql)
 
@@ -32,6 +32,7 @@ const updateUser = async (user) => {
             email = '${user.email}', 
             rg = '${user.rg}', 
             cpf = '${user.cpf}', 
+            cep = '${user.cep}', 
             telefone = '${user.telefone}', 
             data_nascimento = '${user.data_nascimento}', 
             senha = md5('${user.senha}'), 
