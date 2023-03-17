@@ -6,7 +6,8 @@ DATA DE CRIAÇÃO: 01/03/2023
 VERSÃO: 1.0
 ************************************************************************/
 const { insertUser, updateUser, deleteUser, selectAllUsers, selectUserById, loginUser } = require('../models/DAO/user.js')
-const { createJwt, validateJwt } = require('../../middlewares/jwt.js')
+const { verifyCpf } = require('../utils/verifyCpf.js')
+const { verifyRg } = require('../utils/verifyRg.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const novoUser = async (user) => {
@@ -18,13 +19,20 @@ const novoUser = async (user) => {
     } else if (user.email.length > 256 || user.nome.length > 150 || user.rg.length > 12 || user.cpf.length > 18 || user.cep.length > 9 || user.telefone.length > 20 || user.senha.length > 32) {
         return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
     } else {
-        const result = await insertUser(user)
+        // const safeCpf = await verifyCpf(user.cpf)
+        // const safeRg = await verifyRg(user.rg)
 
-        if (result) {
-            return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }
-        } else {
-            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
-        }
+        // if (safeCpf && safeRg) {
+            const result = await insertUser(user)
+
+            if (result) {
+                return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }
+            } else {
+                return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+            }
+        // } else {
+        //     return { status: 400, message: MESSAGE_ERROR.INVALID_DATA }
+        // }
     }
 }
 
@@ -36,13 +44,20 @@ const atualizarUser = async (user) => {
     } else if (user.email.length > 256 || user.nome.length > 150 || user.rg.length > 12 || user.cpf.length > 18 || user.cep.length > 9 || user.telefone.length > 20 || user.senha.length > 30) {
         return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
     } else {
-        const result = await updateUser(user)
+        // const safeCpf = await verifyCpf(user.cpf)
+        // const safeRg = await verifyRg(user.rg)
 
-        if (result) {
-            return { status: 201, message: MESSAGE_SUCCESS.UPDATE_ITEM }
-        } else {
-            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
-        }
+        // if (safeCpf && safeRg) {
+            const result = await updateUser(user)
+
+            if (result) {
+                return { status: 201, message: MESSAGE_SUCCESS.UPDATE_ITEM }
+            } else {
+                return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+            }
+        // } else {
+        //     return { status: 400, message: MESSAGE_ERROR.INVALID_DATA }
+        // }
     }
 }
 
