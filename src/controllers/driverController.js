@@ -6,7 +6,7 @@ DATA DE CRIAÇÃO: 03/03/2023
 VERSÃO: 1.0
 ************************/
 
-const { insertDriver, updateDriver, deleteDriver, selectAllDrivers, selectDriverIdByCPF } = require('../models/DAO/driver.js')
+const { insertDriver, updateDriver, deleteDriver, selectAllDrivers, selectDriverIdByCPF, selectDriverById } = require('../models/DAO/driver.js')
 const { verifyCpf } = require('../utils/verifyCpf.js')
 const { verifyRg } = require('../utils/verifyRg.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
@@ -113,10 +113,27 @@ const listarDriverIdByCPF = async (cpf) => {
     }
 }
 
+const listarDriverById = async (id) => {
+    if (id == '' || id == undefined) {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    } else {
+        const result = await selectDriverById(id)
+
+        if (result) {
+            let driverJson = {}
+            driverJson.driver = result
+            return { status: 200, message: driverJson }
+        } else {
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+        }
+    }
+}
+
 module.exports = {
     novoDriver,
     atualizarDriver,
     deletarDriver,
     listarDrivers,
-    listarDriverIdByCPF
+    listarDriverIdByCPF,
+    listarDriverById
 }

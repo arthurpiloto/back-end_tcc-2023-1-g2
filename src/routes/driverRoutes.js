@@ -8,14 +8,14 @@ VERSÃO: 1.0
 
 const express = require(`express`)
 const jsonParser = express.json()
-const { novoDriver, atualizarDriver, deletarDriver,  listarDrivers, listarDriverIdByCPF } = require('../controllers/driverController.js')
+const { novoDriver, atualizarDriver, deletarDriver, listarDrivers, listarDriverIdByCPF, listarDriverById } = require('../controllers/driverController.js')
 const { MESSAGE_ERROR } = require('../modules/config.js')
 
 const router = express.Router()
 
 router
     .route('/driver')
-    .post(jsonParser, async(request, response) => {
+    .post(jsonParser, async (request, response) => {
         let statusCode
         let message
         let headerContentType
@@ -28,12 +28,12 @@ router
             if (JSON.stringify(dadosBody) != `{}`) {
                 const dadosDriver = await novoDriver(dadosBody)
                 statusCode = dadosDriver.status
-                message = dadosDriver.message 
-            } else{
+                message = dadosDriver.message
+            } else {
                 statusCode = 400
                 message = MESSAGE_ERROR.EMPTY_BODY
             }
-        } else{
+        } else {
             statusCode = 415
             message = MESSAGE_ERROR.CONTENT_TYPE
         }
@@ -42,24 +42,42 @@ router
 
 router
     .route('/driver/:driverId')
-    .put(jsonParser, async(request, response) => {
+    .get(async (request, response) => {
+        let statusCode
+        let message
+        let id = request.params.driverId
+
+        if (id != '' && id != undefined) {
+            const driversData = await listarDriverById(id)
+
+            statusCode = driversData.status
+            message = driversData.message
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_ID
+        }
+
+        return response.status(statusCode).json(message)
+    })
+
+    .put(jsonParser, async (request, response) => {
         let statusCode
         let message
         let headerContentType
-    
+
         headerContentType = request.headers['content-type']
-    
-        if(headerContentType == 'application/json') {
+
+        if (headerContentType == 'application/json') {
             let bodyData = request.body
-    
-            if(JSON.stringify(bodyData) != '{}') {
+
+            if (JSON.stringify(bodyData) != '{}') {
                 let id = request.params.driverId
-    
-                if(id != '' && id != undefined) {
+
+                if (id != '' && id != undefined) {
                     bodyData.id = id
-    
+
                     const updatedDriver = await atualizarDriver(bodyData)
-    
+
                     statusCode = updatedDriver.status
                     message = updatedDriver.message
                 } else {
@@ -74,17 +92,17 @@ router
             statusCode = 415
             message = MESSAGE_ERROR.INCORRECT_CONTENT_TYPE
         }
-    
+
         return response.status(statusCode).json(message)
     })
 
-    .delete(async(request, response) => {
+    .delete(async (request, response) => {
         let statusCode
         let message
 
         let id = request.params.driverId
 
-        if(id != '' && id != undefined) {
+        if (id != '' && id != undefined) {
             const deletedDriver = await deletarDriver(id)
 
             statusCode = deletedDriver.status
@@ -93,13 +111,13 @@ router
             statusCode = 400
             message = MESSAGE_ERROR.REQUIRED_ID
         }
-        
+
         response.status(statusCode).json(message)
     })
 
 router
     .route('/drivers')
-    .get(async(request, response) => {
+    .get(async (request, response) => {
         let statusCode
         let message
 
@@ -118,14 +136,14 @@ router
 
 router
     .route('/driver/id/:driverCpf')
-    .get(async(request, response) => {
+    .get(async (request, response) => {
         let statusCode
         let message
         let cpf = request.params.driverCpf
-    
-        if(cpf != '' && cpf != undefined) {
+
+        if (cpf != '' && cpf != undefined) {
             const driverData = await listarDriverIdByCPF(cpf)
-    
+
             if (driverData) {
                 statusCode = driverData.status
                 message = driverData.message
@@ -137,7 +155,7 @@ router
             statusCode = driverData.status
             message = driverData.message
         }
-    
+
         response.status(statusCode).json(message)
     })
 
