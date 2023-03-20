@@ -89,7 +89,7 @@ const selectUserById = async (id) => {
 
         const result = await prisma.$queryRawUnsafe(sql)
 
-        if (result) {
+        if (result != null) {
             return result
         } else {
             return false

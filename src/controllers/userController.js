@@ -96,9 +96,9 @@ const listarUserById = async (id) => {
         if (result) {
             let userJson = {}
             userJson.user = result
-            return userJson
+            return { status: 200, message: userJson }
         } else {
-            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
         }
     }
 }

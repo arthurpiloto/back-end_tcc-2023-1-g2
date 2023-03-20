@@ -63,14 +63,14 @@ router
         
         let id = request.params.userId
 
-        const userData = await listarUserById(id)
+        if (id != '' && id != undefined) {
+            const userData = await listarUserById(id)
 
-        if (userData) {
-            statusCode = 200
-            message = userData
+            statusCode = userData.status
+            message = userData.message
         } else {
-            statusCode = 404
-            message = MESSAGE_ERROR.NOT_FOUND_DB
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_ID
         }
 
         return response.status(statusCode).json(message)

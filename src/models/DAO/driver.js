@@ -108,7 +108,7 @@ const selectDriverById = async (id) => {
 
         const result = await prisma.$queryRawUnsafe(sql)
 
-        if (result.id != null) {
+        if (result != null) {
             return result
         } else {
             return false
