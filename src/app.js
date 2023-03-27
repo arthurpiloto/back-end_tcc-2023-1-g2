@@ -23,12 +23,14 @@ const driverRouter = require('./routes/driverRoutes.js')
 const modelRouter = require('./routes/modelRoutes.js')
 const vanRouter = require('./routes/vanRoutes.js')
 const commentRouter = require('./routes/commentRoutes.js')
+const schoolRouter = require('./routes/schoolRoutes.js')
 
 app.use(userRouter)
 app.use(driverRouter)
 app.use(modelRouter)
 app.use(vanRouter)
 app.use(commentRouter)
+app.use(schoolRouter)
 
 app.listen(3030, () => {
     console.log("Server waiting requests at http://localhost:3030")
