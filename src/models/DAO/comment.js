@@ -41,7 +41,6 @@ const updateComment = async (comment) => {
             return false
         }
     } catch (err) {
-        console.log(err);
         return false
     }
 }

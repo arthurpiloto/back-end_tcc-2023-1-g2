@@ -134,20 +134,4 @@ router
         return response.status(statusCode).json(message)
     })
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 module.exports = router

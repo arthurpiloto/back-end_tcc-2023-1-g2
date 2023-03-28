@@ -5,7 +5,7 @@ AUTOR: NICOLAS DOBBECK
 DATA DE CRIAÇÃO: 27/03/2023
 VERSÃO: 1.0
 ************************************************************************/
-const { insertSchool } = require('../models/DAO/school.js')
+const { insertSchool, selectAllSchools, updateSchool, deleteSchool, selectSchoolById } = require('../models/DAO/school.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const novoSchool = async (school) => {
@@ -24,6 +24,62 @@ const novoSchool = async (school) => {
     }
 }
 
+const atualizarSchool = async (school) => {
+    if (school.nome == '' || school.nome == null) {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    } else if (school.nome.length > 150) {
+        return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
+    }else{
+        const result = await updateSchool(school)
+
+        if (result) {
+            return { status: 201, message: MESSAGE_SUCCESS.UPDATE_ITEM }
+        } else {
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+        }
+    }
+}
+
+const deletarSchool = async (id) => {
+    if (id == '' || id == undefined) {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    } else {
+        const result = await deleteSchool(id)
+
+        if (result) {
+            return { status: 200, message: MESSAGE_SUCCESS.DELETE_ITEM }
+        } else {
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+        }
+    }
+}
+
+const listarSchoolById = async (id) => {
+    if (id == '' || id == undefined) {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    } else {
+        const result = await selectSchoolById(id)
+
+        if (result) {
+            return { status: 200, message: result }
+        } else {
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+        }
+    }
+}
+
+const listarSchools = async () => {
+    const result = await selectAllSchools()
+
+    if (result) {
+        let schoolsJson = {}
+        schoolsJson.school = result
+        return schoolsJson
+    } else {
+        return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+    }
+}
+
 module.exports={
-    novoSchool
+    novoSchool, listarSchools, atualizarSchool, deletarSchool, listarSchoolById
 }
