@@ -8,7 +8,7 @@ VERSÃO: 1.0
 const { Router } = require('express')
 const express = require(`express`)
 const jsonParser = express.json()
-const { novoTypePayment, listarTypespayments } = require('../controllers/typePaymentController.js')
+const { novoTypePayment, listarTypespayments, atualizarTypePayment } = require('../controllers/typePaymentController.js')
 const { MESSAGE_ERROR } = require('../modules/config.js')
 const router = express.Router()
 
@@ -36,6 +36,45 @@ router
             statusCode = 415
             message = MESSAGE_ERROR.CONTENT_TYPE
         }
+        return response.status(statusCode).json(message)
+    })
+
+
+router
+    .route('/typePayment/:typePaymentId')
+    .put(jsonParser, async(request, response) => {
+        let statusCode
+        let message
+        let headerContentType
+    
+        headerContentType = request.headers['content-type']
+    
+        if(headerContentType == 'application/json') {
+            let bodyData = request.body
+    
+            if(JSON.stringify(bodyData) != '{}') {
+                let id = request.params.typePaymentId
+    
+                if(id != '' && id != undefined) {
+                    bodyData.id = id
+    
+                    const updatedTypePayment = await atualizarTypePayment(bodyData)
+    
+                    statusCode = updatedTypePayment.status
+                    message = updatedTypePayment.message
+                } else {
+                    statusCode = 400
+                    message = MESSAGE_ERROR.REQUIRED_ID
+                }
+            } else {
+                statusCode = 400
+                message = MESSAGE_ERROR.EMPTY_BODY
+            }
+        } else {
+            statusCode = 415
+            message = MESSAGE_ERROR.INCORRECT_CONTENT_TYPE
+        }
+    
         return response.status(statusCode).json(message)
     })
 

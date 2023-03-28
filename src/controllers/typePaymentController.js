@@ -5,7 +5,7 @@ AUTOR: NICOLAS DOBBECK
 DATA DE CRIAÇÃO: 28/03/2023
 VERSÃO: 1.0
 ************************************************************************/
-const { insertTypePayment, selectAllTypesPayments } = require('../models/DAO//typePayment.js')
+const { insertTypePayment, selectAllTypesPayments, updateTypePayment } = require('../models/DAO//typePayment.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const novoTypePayment = async (typePayment) => {
@@ -24,6 +24,23 @@ const novoTypePayment = async (typePayment) => {
     }
 }
 
+const atualizarTypePayment = async (typePayment) => {
+    if (typePayment.tipo_pagamento == '' || typePayment.tipo_pagamento == null) {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    } else if (typePayment.tipo_pagamento.length > 150) {
+        return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
+    }else{
+        const result = await updateTypePayment(typePayment)
+
+        if (result) {
+            return { status: 200, message: MESSAGE_SUCCESS.UPDATE_ITEM }
+        } else {
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+        }
+    }
+}
+
+
 const listarTypespayments = async () => {
     const result = await selectAllTypesPayments()
 
@@ -37,5 +54,5 @@ const listarTypespayments = async () => {
 }
 
 module.exports={
-    novoTypePayment, listarTypespayments
+    novoTypePayment, listarTypespayments, atualizarTypePayment
 }

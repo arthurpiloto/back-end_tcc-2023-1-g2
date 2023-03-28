@@ -25,6 +25,24 @@ const insertTypePayment = async (typePayment) => {
     }
 }
 
+const updateTypePayment = async (typePayment) => {
+    try {
+        let sql = `UPDATE tbl_tipo_pagamento SET 
+                tipo_pagamento = '${typePayment.tipo_pagamento}' 
+            WHERE id = ${typePayment.id};`
+
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if (result) {
+            return true
+        } else {
+            return false
+        }
+    } catch (err) {
+        return false
+    }
+}
+
 const selectAllTypesPayments = async () => {
     try {
         let sql = `SELECT * FROM tbl_tipo_pagamento ORDER BY id DESC`
@@ -42,5 +60,5 @@ const selectAllTypesPayments = async () => {
 } 
 
 module.exports={
-    insertTypePayment, selectAllTypesPayments
+    insertTypePayment, selectAllTypesPayments, updateTypePayment
 }
