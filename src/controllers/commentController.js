@@ -56,7 +56,7 @@ const listarCommentById = async (id) => {
     } else {
         const result = await selectCommentById(id)
 
-        if (result) {
+        if (result.length !== 0) {
             return { status: 200, message: result }
         } else {
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }

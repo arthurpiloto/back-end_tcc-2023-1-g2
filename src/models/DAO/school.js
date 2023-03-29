@@ -82,11 +82,7 @@ const selectSchoolById = async (id) => {
         const result = await prisma.$queryRawUnsafe(sql)
 
         if (result) {
-            let returnMessage
-            result.forEach(element => {
-                returnMessage = element.nome
-            })
-            return returnMessage
+            return result
         } else {
             return false
         }

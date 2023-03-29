@@ -68,11 +68,7 @@ const selectCommentById = async (id) => {
         const result = await prisma.$queryRawUnsafe(sql)
 
         if (result) {
-            let returnMessage
-            result.forEach(element => {
-                returnMessage = element.comentario
-            })
-            return returnMessage
+            return result
         } else {
             return false
         }

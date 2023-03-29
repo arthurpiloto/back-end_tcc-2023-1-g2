@@ -49,10 +49,10 @@ router
         let id = request.params.typePaymentId
 
         if (id != '' && id != undefined) {
-            const schoolData = await listarTypePaymentById(id)
+            const paymentData = await listarTypePaymentById(id)
 
-            statusCode = schoolData.status
-            message = schoolData.message
+            statusCode = paymentData.status
+            message = paymentData.message
         } else {
             statusCode = 400
             message = MESSAGE_ERROR.REQUIRED_ID

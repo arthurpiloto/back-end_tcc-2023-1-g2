@@ -67,11 +67,7 @@ const selectTypePaymentByID = async (id) => {
         const result = await prisma.$queryRawUnsafe(sql)
 
         if (result) {
-            let returnMessage
-            result.forEach(element => {
-                returnMessage = element.tipo_pagamento
-            })
-            return returnMessage
+            return result
         } else {
             return false
         }
