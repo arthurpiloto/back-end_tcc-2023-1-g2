@@ -8,7 +8,7 @@ VERSÃO: 1.0
 const { Router } = require('express')
 const express = require(`express`)
 const jsonParser = express.json()
-const { novoTypePayment, listarTypespayments, atualizarTypePayment } = require('../controllers/typePaymentController.js')
+const { novoTypePayment, listarTypespayments, atualizarTypePayment, deletarTypePayment, listarTypePaymentById } = require('../controllers/typePaymentController.js')
 const { MESSAGE_ERROR } = require('../modules/config.js')
 const router = express.Router()
 
@@ -42,6 +42,25 @@ router
 
 router
     .route('/typePayment/:typePaymentId')
+    .get(async(request, response) => {
+        let statusCode
+        let message
+        
+        let id = request.params.typePaymentId
+
+        if (id != '' && id != undefined) {
+            const schoolData = await listarTypePaymentById(id)
+
+            statusCode = schoolData.status
+            message = schoolData.message
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_ID
+        }
+
+        return response.status(statusCode).json(message)
+    })
+
     .put(jsonParser, async(request, response) => {
         let statusCode
         let message
@@ -76,6 +95,25 @@ router
         }
     
         return response.status(statusCode).json(message)
+    })
+
+    .delete(async(request, response) => {
+        let statusCode
+        let message
+
+        let id = request.params.typePaymentId
+
+        if(id != '' && id != undefined) {
+            const deletedTypePayment = await deletarTypePayment(id)
+
+            statusCode = deletedTypePayment.status
+            message = deletedTypePayment.message
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_ID
+        }
+        
+        response.status(statusCode).json(message)
     })
 
 router 

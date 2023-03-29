@@ -5,7 +5,7 @@ AUTOR: NICOLAS DOBBECK
 DATA DE CRIAÇÃO: 28/03/2023
 VERSÃO: 1.0
 ************************************************************************/
-const { insertTypePayment, selectAllTypesPayments, updateTypePayment } = require('../models/DAO//typePayment.js')
+const { insertTypePayment, selectAllTypesPayments, updateTypePayment, deleteTypePayment, selectTypePaymentByID } = require('../models/DAO//typePayment.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const novoTypePayment = async (typePayment) => {
@@ -40,6 +40,33 @@ const atualizarTypePayment = async (typePayment) => {
     }
 }
 
+const deletarTypePayment = async (id) => {
+    if (id == '' || id == undefined) {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    } else {
+        const result = await deleteTypePayment(id)
+
+        if (result) {
+            return { status: 200, message: MESSAGE_SUCCESS.DELETE_ITEM }
+        } else {
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+        }
+    }
+}
+
+const listarTypePaymentById = async (id) => {
+    if (id == '' || id == undefined) {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    } else {
+        const result = await selectTypePaymentByID(id)
+
+        if (result) {
+            return { status: 200, message: result }
+        } else {
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+        }
+    }
+}
 
 const listarTypespayments = async () => {
     const result = await selectAllTypesPayments()
@@ -54,5 +81,5 @@ const listarTypespayments = async () => {
 }
 
 module.exports={
-    novoTypePayment, listarTypespayments, atualizarTypePayment
+    novoTypePayment, listarTypespayments, atualizarTypePayment, deletarTypePayment, listarTypePaymentById
 }

@@ -43,6 +43,43 @@ const updateTypePayment = async (typePayment) => {
     }
 }
 
+const deleteTypePayment = async (id) => {
+    try {
+        let sql = `DELETE FROM tbl_tipo_pagamento WHERE id = ${id}`
+
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if (result) {
+            return true
+        } else {
+            return false
+        }
+    } catch (err) {
+        console.log(err);
+        return false
+    }
+}
+
+const selectTypePaymentByID = async (id) => {
+    try {
+        let sql = `SELECT * FROM tbl_tipo_pagamento WHERE id = ${id}`
+
+        const result = await prisma.$queryRawUnsafe(sql)
+
+        if (result) {
+            let returnMessage
+            result.forEach(element => {
+                returnMessage = element.tipo_pagamento
+            })
+            return returnMessage
+        } else {
+            return false
+        }
+    } catch (err) {
+        return false
+    }
+}
+
 const selectAllTypesPayments = async () => {
     try {
         let sql = `SELECT * FROM tbl_tipo_pagamento ORDER BY id DESC`
@@ -57,8 +94,8 @@ const selectAllTypesPayments = async () => {
     } catch (err) {
         return false
     }
-} 
+}
 
 module.exports={
-    insertTypePayment, selectAllTypesPayments, updateTypePayment
+    insertTypePayment, selectAllTypesPayments, updateTypePayment, deleteTypePayment, selectTypePaymentByID
 }
