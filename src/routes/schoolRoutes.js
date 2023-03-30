@@ -1,16 +1,14 @@
 /************************************************************************
 OBJETIVO: ARQUIVO RESPONSÁVEL PELA ORGANIZAÇÃO DAS ROTAS
-DE VAN
+DE ESCOLA
 AUTOR: NICOLAS DOBBECK MENDES
 DATA DE CRIAÇÃO: 27/03/2023
 VERSÃO: 1.0
 ************************************************************************/
-const { Router } = require('express')
 const express = require(`express`)
 const jsonParser = express.json()
 const { novoSchool, listarSchools, atualizarSchool, deletarSchool, listarSchoolById } = require('../controllers/schoolController.js')
 const { MESSAGE_ERROR } = require('../modules/config.js')
-const { listarCommentById } = require('../controllers/commentController.js')
 const router = express.Router()
 
 router
