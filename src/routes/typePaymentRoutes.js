@@ -1,11 +1,10 @@
 /************************************************************************
 OBJETIVO: ARQUIVO RESPONSÁVEL PELA ORGANIZAÇÃO DAS ROTAS
-DE VAN
+DE TIPO DE PAGAMENTO
 AUTOR: NICOLAS DOBBECK MENDES
 DATA DE CRIAÇÃO: 28/03/2023
 VERSÃO: 1.0
 ************************************************************************/
-const { Router } = require('express')
 const express = require(`express`)
 const jsonParser = express.json()
 const { novoTypePayment, listarTypespayments, atualizarTypePayment, deletarTypePayment, listarTypePaymentById } = require('../controllers/typePaymentController.js')

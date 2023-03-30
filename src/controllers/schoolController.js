@@ -13,7 +13,7 @@ const novoSchool = async (school) => {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     } else if (school.nome.length > 150) {
         return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
-    }else{
+    } else {
         const result = await insertSchool(school)
 
         if (result) {
@@ -29,7 +29,7 @@ const atualizarSchool = async (school) => {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     } else if (school.nome.length > 150) {
         return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
-    }else{
+    } else {
         const result = await updateSchool(school)
 
         if (result) {
@@ -80,6 +80,6 @@ const listarSchools = async () => {
     }
 }
 
-module.exports={
+module.exports = {
     novoSchool, listarSchools, atualizarSchool, deletarSchool, listarSchoolById
 }

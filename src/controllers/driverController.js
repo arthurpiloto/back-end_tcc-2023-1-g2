@@ -24,15 +24,15 @@ const novoDriver = async (driver) => {
         // const safeRg = await verifyRg(driver.rg)
 
         // if (safeCpf && safeRg) {
-            const result = await insertDriver(driver)
+        const result = await insertDriver(driver)
 
-            if (result) {
-                return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }
-            } else {
-                return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
-            }
+        if (result) {
+            return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }
+        } else {
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+        }
         // } else {
-            // return { status: 400, message: MESSAGE_ERROR.INVALID_DATA }
+        // return { status: 400, message: MESSAGE_ERROR.INVALID_DATA }
         // }
     }
 }
@@ -52,15 +52,15 @@ const atualizarDriver = async (driver) => {
             // const safeRg = await verifyRg(driver.rg)
 
             // if (safeCpf && safeRg) {
-                const result = await updateDriver(driver)
+            const result = await updateDriver(driver)
 
-                if (result) {
-                    return { status: 201, message: MESSAGE_SUCCESS.UPDATE_ITEM }
-                } else {
-                    return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
-                }
+            if (result) {
+                return { status: 201, message: MESSAGE_SUCCESS.UPDATE_ITEM }
+            } else {
+                return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+            }
             // } else {
-                // return { status: 400, message: MESSAGE_ERROR.INVALID_DATA }
+            // return { status: 400, message: MESSAGE_ERROR.INVALID_DATA }
             // }
         } else {
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }

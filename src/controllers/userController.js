@@ -23,13 +23,13 @@ const novoUser = async (user) => {
         // const safeRg = await verifyRg(user.rg)
 
         // if (safeCpf && safeRg) {
-            const result = await insertUser(user)
+        const result = await insertUser(user)
 
-            if (result) {
-                return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }
-            } else {
-                return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
-            }
+        if (result) {
+            return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }
+        } else {
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+        }
         // } else {
         //     return { status: 400, message: MESSAGE_ERROR.INVALID_DATA }
         // }
@@ -48,13 +48,13 @@ const atualizarUser = async (user) => {
         // const safeRg = await verifyRg(user.rg)
 
         // if (safeCpf && safeRg) {
-            const result = await updateUser(user)
+        const result = await updateUser(user)
 
-            if (result) {
-                return { status: 201, message: MESSAGE_SUCCESS.UPDATE_ITEM }
-            } else {
-                return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
-            }
+        if (result) {
+            return { status: 201, message: MESSAGE_SUCCESS.UPDATE_ITEM }
+        } else {
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+        }
         // } else {
         //     return { status: 400, message: MESSAGE_ERROR.INVALID_DATA }
         // }

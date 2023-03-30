@@ -13,7 +13,7 @@ const novoTypePayment = async (typePayment) => {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     } else if (typePayment.tipo_pagamento.length > 150) {
         return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
-    }else{
+    } else {
         const result = await insertTypePayment(typePayment)
 
         if (result) {
@@ -29,7 +29,7 @@ const atualizarTypePayment = async (typePayment) => {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     } else if (typePayment.tipo_pagamento.length > 150) {
         return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
-    }else{
+    } else {
         const result = await updateTypePayment(typePayment)
 
         if (result) {
@@ -80,6 +80,6 @@ const listarTypespayments = async () => {
     }
 }
 
-module.exports={
+module.exports = {
     novoTypePayment, listarTypespayments, atualizarTypePayment, deletarTypePayment, listarTypePaymentById
 }

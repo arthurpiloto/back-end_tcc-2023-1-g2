@@ -65,7 +65,6 @@ const deleteVan = async (id) => {
     }
 }
 
-
 const selectAllVans = async () => {
     try {
         let sql = `SELECT * FROM tbl_van ORDER BY id DESC`

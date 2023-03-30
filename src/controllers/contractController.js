@@ -9,9 +9,9 @@ const { insertContract } = require('../models/DAO/contract.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const novoContract = async (contract) => {
-    if (contract.valor == '' || contract.valor == null || contract.nome_passageiro == '' || contract.nome_passageiro == null || contract.idade_passageiro == '' || contract.idade_passageiro == null || 
-    contract.id_usuario == '' || contract.id_usuario == null || contract.id_motorista == '' || contract.id_motorista == null || contract.id_escola == '' || contract.id_escola == null || contract.id_tipo_pagamento == '' || 
-    contract.id_tipo_pagamento == null || contract.id_tipo_contrato == '' || contract.id_tipo_contrato == null) {
+    if (contract.valor == '' || contract.valor == null || contract.nome_passageiro == '' || contract.nome_passageiro == null || contract.idade_passageiro == '' || contract.idade_passageiro == null ||
+        contract.id_usuario == '' || contract.id_usuario == null || contract.id_motorista == '' || contract.id_motorista == null || contract.id_escola == '' || contract.id_escola == null || contract.id_tipo_pagamento == '' ||
+        contract.id_tipo_pagamento == null || contract.id_tipo_contrato == '' || contract.id_tipo_contrato == null) {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     } else if (contract.nome_passageiro.length > 150) {
         return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
@@ -26,6 +26,6 @@ const novoContract = async (contract) => {
     }
 }
 
-module.exports={
+module.exports = {
     novoContract
 }

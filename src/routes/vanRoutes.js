@@ -5,12 +5,9 @@ AUTOR: ARTHUR PILOTO
 DATA DE CRIAÇÃO: 07/03/2023
 VERSÃO: 1.0
 ************************************************************************/
-
-const { request } = require('express')
 const express = require(`express`)
 const jsonParser = express.json()
 const { newVan, atualizarVan, deletarVan, listarVans, listarVanById } = require('../controllers/vanController.js')
-const { deleteVan } = require('../models/DAO/van.js')
 const { MESSAGE_ERROR } = require('../modules/config.js')
 
 const router = express.Router()

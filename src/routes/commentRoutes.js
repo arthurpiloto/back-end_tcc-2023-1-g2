@@ -1,11 +1,10 @@
 /************************************************************************
 OBJETIVO: ARQUIVO RESPONSÁVEL PELA ORGANIZAÇÃO DAS ROTAS
-DE VAN
+DE COMENTÁRIO
 AUTOR: NICOLAS DOBBECK MENDES
 DATA DE CRIAÇÃO: 27/03/2023
 VERSÃO: 1.0
 ************************************************************************/
-const { Router } = require('express')
 const express = require(`express`)
 const jsonParser = express.json()
 const { novoComment, listarComments, atualizarComment, deletarComment, listarCommentById } = require('../controllers/commentController.js')
