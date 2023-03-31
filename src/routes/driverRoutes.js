@@ -124,8 +124,8 @@ router
         const driversData = await listarDrivers()
 
         if (driversData) {
-            statusCode = 200
-            message = driversData
+            statusCode = driversData.status
+            message = driversData.message
         } else {
             statusCode = 404
             message = MESSAGE_ERROR.NOT_FOUND_DB

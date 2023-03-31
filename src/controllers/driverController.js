@@ -9,6 +9,7 @@ VERSÃO: 1.0
 const { insertDriver, updateDriver, deleteDriver, selectAllDrivers, selectDriverIdByCPF, selectDriverById } = require('../models/DAO/driver.js')
 const { verifyCpf } = require('../utils/verifyCpf.js')
 const { verifyRg } = require('../utils/verifyRg.js')
+const { createDriverJson } = require('../utils/createDriverJson.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const novoDriver = async (driver) => {
@@ -86,13 +87,8 @@ const listarDrivers = async () => {
     const result = await selectAllDrivers()
 
     if (result) {
-        let driverJson = {}
-        driverJson.drivers = result
-
-        result.forEach(element => {
-            console.log(element)
-        })
-        return driverJson
+        let driverJson = await createDriverJson(result)
+        return { status: 200, message: driverJson }
     } else {
         return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
     }
@@ -123,9 +119,8 @@ const listarDriverById = async (id) => {
         const result = await selectDriverById(id)
 
         if (result) {
-            let driverJson = {}
-            driverJson.driver = result
-            return { status: 200, message: driverJson }
+            let jsonData = await createDriverJson(result)
+            return { status: 200, message: jsonData }
         } else {
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
         }
