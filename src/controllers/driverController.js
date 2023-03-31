@@ -88,11 +88,7 @@ const listarDrivers = async () => {
     if (result) {
         let driverJson = {}
         driverJson.drivers = result
-
-        result.forEach(element => {
-            console.log(element)
-        })
-        return driverJson
+        return { status: 200, message: driverJson }
     } else {
         return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
     }

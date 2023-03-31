@@ -95,15 +95,6 @@ const selectAllDrivers = async () => {
     }
 }
 
-// SELECT tbl_motorista.nome as nome_motorista, tbl_motorista.id as id_motorista,
-// 		tbl_van.id as id_van, tbl_van.placa
-//         FROM tbl_van
-
-//         INNER JOIN tbl_motorista
-// 			ON tbl_motorista.id = tbl_van.id_motorista;
-
-// SELECT * FROM tbl_motorista ORDER BY id DESC
-
 const selectDriverIdByCPF = async (cpf) => {
     try {
         let sql = `SELECT CAST(id AS DECIMAL) AS id FROM tbl_motorista WHERE cpf LIKE '${cpf}'`
