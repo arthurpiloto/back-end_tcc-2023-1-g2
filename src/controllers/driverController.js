@@ -87,8 +87,7 @@ const listarDrivers = async () => {
     const result = await selectAllDrivers()
 
     if (result) {
-        let driverJson = {}
-        driverJson.drivers = result
+        let driverJson = await createDriverJson(result)
         return { status: 200, message: driverJson }
     } else {
         return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
