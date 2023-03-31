@@ -5,7 +5,7 @@ AUTOR: NICOLAS DOBBECK
 DATA DE CRIAÇÃO: 03/03/2023
 VERSÃO: 1.0
 ************************************************************************/
-const { insertModel, updateModel, selectAllModels, selectModelIdByName } = require('../models/DAO/model.js')
+const { insertModel, updateModel, deleteModel, selectAllModels, selectModelIdByName } = require('../models/DAO/model.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const newModel = async (model) => {
@@ -35,6 +35,20 @@ const atualizarModel = async (model) => {
 
         if (result) {
             return { status: 201, message: MESSAGE_SUCCESS.UPDATE_ITEM }
+        } else {
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+        }
+    }
+}
+
+const deletarModel = async (id) => {
+    if (id == '' || id == undefined) {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    } else {
+        const result = await deleteModel(id)
+
+        if (result) {
+            return { status: 200, message: MESSAGE_SUCCESS.DELETE_ITEM }
         } else {
             return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
         }
@@ -75,6 +89,7 @@ const selectModelId = async (name) => {
 module.exports = {
     newModel,
     atualizarModel,
+    deletarModel,
     listarAllModels,
     selectModelId
 }

@@ -8,7 +8,7 @@ VERSÃO: 1.0
 
 const express = require(`express`)
 const jsonParser = express.json()
-const { newModel, atualizarModel, listarAllModels, selectModelId } = require('../controllers/modelController.js')
+const { newModel, atualizarModel, deletarModel, listarAllModels, selectModelId } = require('../controllers/modelController.js')
 const { MESSAGE_ERROR } = require('../modules/config.js')
 
 const router = express.Router()
@@ -76,6 +76,25 @@ router
         }
 
         return response.status(statusCode).json(message)
+    })
+
+    .delete(async (request, response) => {
+        let statusCode
+        let message
+        let id = request.params.modelId
+        console.log(id)
+
+        if (id != '' && id != undefined) {
+            const deleteModel = await deletarModel(id)
+
+            statusCode = deleteModel.status
+            message = deleteModel.message
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_ID
+        }
+
+        response.status(statusCode).json(message)
     })
 
 router
