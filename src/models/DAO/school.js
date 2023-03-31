@@ -28,7 +28,8 @@ const insertSchool = async (school) => {
 const updateSchool = async (school) => {
     try {
         let sql = `UPDATE tbl_escola SET 
-                nome = '${school.nome}' 
+                nome = '${school.nome}',
+                status_escola = ${school.status_escola} 
             WHERE id = ${school.id};`
 
         const result = await prisma.$executeRawUnsafe(sql)
@@ -45,7 +46,9 @@ const updateSchool = async (school) => {
 
 const deleteSchool = async (id) => {
     try {
-        let sql = `DELETE FROM tbl_escola WHERE id = ${id}`
+        let sql = `UPDATE tbl_escola SET
+            status_escola = false
+        WHERE id = ${id}`
 
         const result = await prisma.$executeRawUnsafe(sql)
 
