@@ -8,7 +8,7 @@ VERSÃO: 1.0
 
 const express = require(`express`)
 const jsonParser = express.json()
-const { newModel, atualizarModel, deletarModel, listarAllModels, selectModelId } = require('../controllers/modelController.js')
+const { newModel, atualizarModel, deletarModel, listarAllModels, selectModelId, listarModelById } = require('../controllers/modelController.js')
 const { MESSAGE_ERROR } = require('../modules/config.js')
 
 const router = express.Router()
@@ -42,6 +42,24 @@ router
 
 router
     .route('/model/:modelId')
+    .get(async (request, response) => {
+        let statusCode
+        let message
+        let id = request.params.modelId
+
+        if (id != '' && id != undefined) {
+            const driversData = await listarModelById(id)
+
+            statusCode = driversData.status
+            message = driversData.message
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_ID
+        }
+
+        return response.status(statusCode).json(message)
+    })
+
     .put(jsonParser, async (request, response) => {
         let statusCode
         let message
@@ -82,7 +100,6 @@ router
         let statusCode
         let message
         let id = request.params.modelId
-        console.log(id)
 
         if (id != '' && id != undefined) {
             const deleteModel = await deletarModel(id)
