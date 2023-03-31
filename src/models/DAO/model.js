@@ -10,13 +10,49 @@ const prisma = new PrismaClient()
 
 const insertModel = async (model) => {
     try {
-        let sql = `INSERT INTO tbl_modelo (modelo)
-        values ('${model.modelo}');`
+        let sql = `INSERT INTO tbl_modelo (modelo, status_modelo)
+        VALUES ('${model.modelo}', ${model.status_modelo});`
 
         const result = await prisma.$executeRawUnsafe(sql)
 
         if (result) {
             return true
+        } else {
+            return false
+        }
+    } catch (err) {
+        return false
+    }
+}
+
+const updateModel = async (model) => {
+    try {
+        let sql = `UPDATE tbl_modelo SET
+            modelo = '${model.modelo}',
+            status_modelo = ${model.status_modelo}
+        WHERE id = ${model.id};`
+
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if (result) {
+            return true
+        } else {
+            return false
+        }
+    } catch (err) {
+        console.log(err)
+        return false
+    }
+}
+
+const selectAllModels = async () => {
+    try {
+        let sql = `SELECT * FROM tbl_modelo ORDER BY id DESC`
+
+        const result = await prisma.$queryRawUnsafe(sql)
+
+        if (result) {
+            return result
         } else {
             return false
         }
@@ -43,5 +79,7 @@ const selectModelIdByName = async (name) => {
 
 module.exports = {
     insertModel,
+    updateModel,
+    selectAllModels,
     selectModelIdByName
 }

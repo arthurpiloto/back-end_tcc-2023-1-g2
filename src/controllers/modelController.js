@@ -5,11 +5,10 @@ AUTOR: NICOLAS DOBBECK
 DATA DE CRIAÇÃO: 03/03/2023
 VERSÃO: 1.0
 ************************************************************************/
-const { insertModel, selectModelIdByName } = require('../models/DAO/model.js')
+const { insertModel, updateModel, selectAllModels, selectModelIdByName } = require('../models/DAO/model.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const newModel = async (model) => {
-
     if (model.modelo == '' || model.modelo == null) {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     } else if (model.modelo.length > 150) {
@@ -23,6 +22,34 @@ const newModel = async (model) => {
         } else {
             return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
         }
+    }
+}
+
+const atualizarModel = async (model) => {
+    if (model.modelo == '' || model.modelo == null) {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    } else if (model.modelo.length > 150) {
+        return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
+    } else {
+        const result = await updateModel(model)
+
+        if (result) {
+            return { status: 201, message: MESSAGE_SUCCESS.UPDATE_ITEM }
+        } else {
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+        }
+    }
+}
+
+const listarAllModels = async () => {
+    const result = await selectAllModels()
+
+    if (result) {
+        let modelJson = {}
+        modelJson.models = result
+        return { status: 200, message: modelJson }
+    } else {
+        return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
     }
 }
 
@@ -47,5 +74,7 @@ const selectModelId = async (name) => {
 
 module.exports = {
     newModel,
+    atualizarModel,
+    listarAllModels,
     selectModelId
 }

@@ -8,7 +8,7 @@ VERSÃO: 1.0
 
 const express = require(`express`)
 const jsonParser = express.json()
-const { newModel, selectModelId } = require('../controllers/modelController.js')
+const { newModel, atualizarModel, listarAllModels, selectModelId } = require('../controllers/modelController.js')
 const { MESSAGE_ERROR } = require('../modules/config.js')
 
 const router = express.Router()
@@ -37,6 +37,63 @@ router
             statusCode = 415
             message = MESSAGE_ERROR.CONTENT_TYPE
         }
+        return response.status(statusCode).json(message)
+    })
+
+router
+    .route('/model/:modelId')
+    .put(jsonParser, async (request, response) => {
+        let statusCode
+        let message
+        let headerContentType
+
+        headerContentType = request.headers['content-type']
+
+        if (headerContentType == 'application/json') {
+            let bodyData = request.body
+
+            if (JSON.stringify(bodyData) != '{}') {
+                let id = request.params.modelId
+
+                if (id != '' && id != undefined) {
+                    bodyData.id = id
+
+                    const updateModel = await atualizarModel(bodyData)
+
+                    statusCode = updateModel.status
+                    message = updateModel.message
+                } else {
+                    statusCode = 400
+                    message = MESSAGE_ERROR.REQUIRED_ID
+                }
+            } else {
+                statusCode = 400
+                message = MESSAGE_ERROR.EMPTY_BODY
+            }
+        } else {
+            statusCode = 415
+            message = MESSAGE_ERROR.INCORRECT_CONTENT_TYPE
+        }
+
+        return response.status(statusCode).json(message)
+    })
+
+router
+    .route('/models')
+    .get(async (request, response) => {
+        let statusCode
+        let message
+
+        const driversData = await listarAllModels()
+
+        if (driversData) {
+            statusCode = driversData.status
+            message = driversData.message
+        } else {
+            statusCode = 404
+            message = MESSAGE_ERROR.NOT_FOUND_DB
+        }
+
         return response.status(statusCode).json(message)
     })
 
