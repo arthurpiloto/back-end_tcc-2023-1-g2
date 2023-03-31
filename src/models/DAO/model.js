@@ -66,7 +66,7 @@ const deleteModel = async (id) => {
 
 const selectAllModels = async () => {
     try {
-        let sql = `SELECT * FROM tbl_modelo ORDER BY id DESC`
+        let sql = `SELECT * FROM tbl_modelo WHERE status_modelo = 1 ORDER BY id DESC `
 
         const result = await prisma.$queryRawUnsafe(sql)
 
