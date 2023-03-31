@@ -83,12 +83,15 @@ const deletarDriver = async (id) => {
 }
 
 const listarDrivers = async () => {
-    let driverJson = {}
-
     const result = await selectAllDrivers()
 
     if (result) {
+        let driverJson = {}
         driverJson.drivers = result
+
+        result.forEach(element => {
+            console.log(element)
+        })
         return driverJson
     } else {
         return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }

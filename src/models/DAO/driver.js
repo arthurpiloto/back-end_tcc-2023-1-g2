@@ -57,7 +57,7 @@ const updateDriver = async (driver) => {
 const deleteDriver = async (id) => {
     try {
         let sql = `DELETE FROM tbl_motorista WHERE id = ${id}`
-        
+
         const result = await prisma.$executeRawUnsafe(sql)
 
         if (result) {
@@ -72,7 +72,16 @@ const deleteDriver = async (id) => {
 
 const selectAllDrivers = async () => {
     try {
-        let sql = `SELECT * FROM tbl_motorista ORDER BY id DESC`
+        let sql = `SELECT tbl_motorista.id as id_motorista, tbl_motorista.nome, tbl_motorista.email, tbl_motorista.rg, tbl_motorista.cpf, tbl_motorista.cnh, tbl_motorista.telefone, 
+        tbl_motorista.data_nascimento, tbl_motorista.inicio_carreira, tbl_motorista.senha, tbl_motorista.foto as foto_motorista, tbl_motorista.avaliacao, tbl_motorista.descricao, 
+        tbl_van.id as id_van, tbl_van.placa, tbl_van.foto as foto_van, tbl_van.quantidade_vagas,
+        tbl_modelo.id as id_modelo, tbl_modelo.modelo as modelo_van, tbl_modelo.status_modelo
+                FROM tbl_van
+            
+                INNER JOIN tbl_motorista
+                    ON tbl_motorista.id = tbl_van.id_motorista
+                INNER JOIN tbl_modelo
+                    ON tbl_modelo.id = tbl_van.id_modelo;`
 
         const result = await prisma.$queryRawUnsafe(sql)
 
@@ -85,6 +94,15 @@ const selectAllDrivers = async () => {
         return false
     }
 }
+
+// SELECT tbl_motorista.nome as nome_motorista, tbl_motorista.id as id_motorista,
+// 		tbl_van.id as id_van, tbl_van.placa
+//         FROM tbl_van
+
+//         INNER JOIN tbl_motorista
+// 			ON tbl_motorista.id = tbl_van.id_motorista;
+
+// SELECT * FROM tbl_motorista ORDER BY id DESC
 
 const selectDriverIdByCPF = async (cpf) => {
     try {
