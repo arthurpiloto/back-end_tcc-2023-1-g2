@@ -10,8 +10,8 @@ const prisma = new PrismaClient()
 
 const insertTypeContract = async (typeContract) => {
     try {
-        let sql = `INSERT INTO tbl_tipo_contrato (tipo_contrato)
-        VALUES ('${typeContract.tipo_contrato}');`
+        let sql = `INSERT INTO tbl_tipo_contrato (tipo_contrato, status_tipo_contrato)
+        VALUES ('${typeContract.tipo_contrato}', ${typeContract.status_tipo_contrato});`
 
         const result = await prisma.$executeRawUnsafe(sql)
 
@@ -28,7 +28,8 @@ const insertTypeContract = async (typeContract) => {
 const updateTypeContract = async (typeContract) => {
     try {
         let sql = `UPDATE tbl_tipo_contrato SET 
-                tipo_contrato = '${typeContract.tipo_contrato}' 
+                tipo_contrato = '${typeContract.tipo_contrato}',
+                status_tipo_contrato = ${typeContract.status_tipo_contrato} 
             WHERE id = ${typeContract.id};`
 
         const result = await prisma.$executeRawUnsafe(sql)
@@ -45,7 +46,9 @@ const updateTypeContract = async (typeContract) => {
 
 const deleteTypeContract = async (id) => {
     try {
-        let sql = `DELETE FROM tbl_tipo_contrato WHERE id = ${id}`
+        let sql = `UPDATE tbl_tipo_contrato SET
+            status_tipo_contrato = false
+        WHERE id = ${id}`
 
         const result = await prisma.$executeRawUnsafe(sql)
 

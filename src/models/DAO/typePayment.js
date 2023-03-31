@@ -10,8 +10,8 @@ const prisma = new PrismaClient()
 
 const insertTypePayment = async (typePayment) => {
     try {
-        let sql = `INSERT INTO tbl_tipo_pagamento (tipo_pagamento)
-        VALUES ('${typePayment.tipo_pagamento}');`
+        let sql = `INSERT INTO tbl_tipo_pagamento (tipo_pagamento, status_tipo_pagamento)
+        VALUES ('${typePayment.tipo_pagamento}', ${typePayment.status_tipo_pagamento});`
 
         const result = await prisma.$executeRawUnsafe(sql)
 
@@ -28,7 +28,8 @@ const insertTypePayment = async (typePayment) => {
 const updateTypePayment = async (typePayment) => {
     try {
         let sql = `UPDATE tbl_tipo_pagamento SET 
-                tipo_pagamento = '${typePayment.tipo_pagamento}' 
+                tipo_pagamento = '${typePayment.tipo_pagamento}',
+                status_tipo_pagamento = ${typePayment.status_tipo_pagamento}
             WHERE id = ${typePayment.id};`
 
         const result = await prisma.$executeRawUnsafe(sql)
@@ -45,7 +46,9 @@ const updateTypePayment = async (typePayment) => {
 
 const deleteTypePayment = async (id) => {
     try {
-        let sql = `DELETE FROM tbl_tipo_pagamento WHERE id = ${id}`
+        let sql = `UPDATE tbl_tipo_pagamento SET
+            status_tipo_pagamento = false
+        WHERE id = ${id}`
 
         const result = await prisma.$executeRawUnsafe(sql)
 

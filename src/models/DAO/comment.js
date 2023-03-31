@@ -10,8 +10,8 @@ const prisma = new PrismaClient()
 
 const insertComment = async (comment) => {
     try {
-        let sql = `INSERT INTO tbl_comentario (comentario, id_usuario, id_motorista)
-        VALUES ('${comment.comentario}', ${comment.id_usuario}, ${comment.id_motorista});`
+        let sql = `INSERT INTO tbl_comentario (comentario, id_usuario, id_motorista, status_comentario)
+        VALUES ('${comment.comentario}', ${comment.id_usuario}, ${comment.id_motorista}, ${comment.status_comentario});`
 
         const result = await prisma.$executeRawUnsafe(sql)
 
@@ -30,7 +30,8 @@ const updateComment = async (comment) => {
         let sql = `UPDATE tbl_comentario SET 
                 comentario = '${comment.comentario}', 
                 id_usuario =  ${comment.id_usuario},
-                id_motorista = ${comment.id_motorista}
+                id_motorista = ${comment.id_motorista}, 
+                status_comentario = ${comment.status_comentario}
             WHERE id = ${comment.id};`
 
         const result = await prisma.$executeRawUnsafe(sql)
@@ -47,7 +48,9 @@ const updateComment = async (comment) => {
 
 const deleteComment = async (id) => {
     try {
-        let sql = `DELETE FROM tbl_comentario WHERE id = ${id}`
+        let sql = `UPDATE tbl_comentario SET
+            status_comentario = false
+        WHERE id = ${id}`
 
         const result = await prisma.$executeRawUnsafe(sql)
 
