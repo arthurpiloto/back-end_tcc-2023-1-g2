@@ -81,7 +81,8 @@ const selectAllDrivers = async () => {
                 INNER JOIN tbl_motorista
                     ON tbl_motorista.id = tbl_van.id_motorista
                 INNER JOIN tbl_modelo
-                    ON tbl_modelo.id = tbl_van.id_modelo;`
+                    ON tbl_modelo.id = tbl_van.id_modelo
+            ORDER BY tbl_motorista.id DESC;`
 
         const result = await prisma.$queryRawUnsafe(sql)
 
@@ -114,8 +115,8 @@ const selectDriverIdByCPF = async (cpf) => {
 const selectDriverById = async (id) => {
     try {
         let sql = `SELECT tbl_motorista.id as id_motorista, tbl_motorista.nome, tbl_motorista.email, tbl_motorista.rg, tbl_motorista.cpf, tbl_motorista.cnh, tbl_motorista.telefone, 
-        tbl_motorista.data_nascimento, tbl_motorista.inicio_carreira, tbl_motorista.senha, tbl_motorista.foto as foto_motorista, tbl_motorista.avaliacao, tbl_motorista.descricao, tbl_motorista.status_motorista, 
-        tbl_van.id as id_van, tbl_van.placa, tbl_van.foto as foto_van, tbl_van.quantidade_vagas, tbl_van.status_van,
+        tbl_motorista.data_nascimento, tbl_motorista.inicio_carreira, tbl_motorista.senha, tbl_motorista.foto as foto_motorista, tbl_motorista.avaliacao, tbl_motorista.descricao, 
+        tbl_van.id as id_van, tbl_van.placa, tbl_van.foto as foto_van, tbl_van.quantidade_vagas,
         tbl_modelo.id as id_modelo, tbl_modelo.modelo as modelo_van, tbl_modelo.status_modelo
             FROM tbl_van
             
@@ -127,13 +128,12 @@ const selectDriverById = async (id) => {
 
         const result = await prisma.$queryRawUnsafe(sql)
 
-        if (result != null) {
+        if (result.length != 0) {
             return result
         } else {
             return false
         }
     } catch (err) {
-        console.log(err)
         return false
     }
 }
