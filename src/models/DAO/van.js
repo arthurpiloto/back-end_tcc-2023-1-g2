@@ -101,10 +101,27 @@ const selectVanById = async (id) => {
     }
 }
 
+const selectVanByDriverId = async (id) => {
+    try {
+        let sql = `SELECT * FROM tbl_van WHERE id_motorista = ${id};`
+
+        const result = await prisma.$queryRawUnsafe(sql)
+
+        if (result) {
+            return result
+        } else {
+            return false
+        }
+    } catch (err) {
+        return false
+    }
+}
+
 module.exports = {
     insertVan,
     updateVan, 
     deleteVan, 
     selectAllVans, 
     selectVanById,
+    selectVanByDriverId
 }

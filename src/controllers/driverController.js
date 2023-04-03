@@ -9,7 +9,6 @@ VERSÃO: 1.0
 const { insertDriver, updateDriver, deleteDriver, selectAllDrivers, selectDriverIdByCPF, selectDriverById } = require('../models/DAO/driver.js')
 const { verifyCpf } = require('../utils/verifyCpf.js')
 const { verifyRg } = require('../utils/verifyRg.js')
-const { createDriverJson } = require('../utils/createDriverJson.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const novoDriver = async (driver) => {
@@ -106,19 +105,29 @@ const listarDriverIdByCPF = async (cpf) => {
     }
 }
 
+const { selectVanByDriverId } = require('../models/DAO/van.js')
 const listarDriverById = async (id) => {
     if (id == '' || id == undefined) {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
     } else {
         const result = await selectDriverById(id)
+        const resultVan = await selectVanByDriverId(id)
+        let testeJson = {}
+        let returnMessage = result.map(async element => {
+            element.van = resultVan
+            return element
+        })
 
-        if (result) {
-            return { status: 200, message: result }
+        testeJson = await Promise.all(returnMessage)
+
+        if (testeJson) {
+            return { status: 200, message: testeJson }
         } else {
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
         }
     }
 }
+
 
 module.exports = {
     novoDriver,
