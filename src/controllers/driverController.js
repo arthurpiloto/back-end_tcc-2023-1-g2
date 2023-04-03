@@ -47,25 +47,20 @@ const atualizarDriver = async (driver) => {
     } else if (driver.email.length > 256 || driver.nome.length > 150 || driver.rg.length > 12 || driver.cpf.length > 18 || driver.telefone.length > 20 || driver.senha.length > 30 || driver.cnh.length > 15) {
         return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
     } else {
-        const verifyId = await listarDriverIdByCPF(driver.cpf)
-        if (verifyId == 200) {
-            // const safeCpf = await verifyCpf(driver.cpf)
-            // const safeRg = await verifyRg(driver.rg)
+        // const safeCpf = await verifyCpf(driver.cpf)
+        // const safeRg = await verifyRg(driver.rg)
 
-            // if (safeCpf && safeRg) {
-            const result = await updateDriver(driver)
+        // if (safeCpf && safeRg) {
+        const result = await updateDriver(driver)
 
-            if (result) {
-                return { status: 201, message: MESSAGE_SUCCESS.UPDATE_ITEM }
-            } else {
-                return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
-            }
-            // } else {
-            // return { status: 400, message: MESSAGE_ERROR.INVALID_DATA }
-            // }
+        if (result) {
+            return { status: 201, message: MESSAGE_SUCCESS.UPDATE_ITEM }
         } else {
-            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
         }
+        // } else {
+        // return { status: 400, message: MESSAGE_ERROR.INVALID_DATA }
+        // }
     }
 }
 
