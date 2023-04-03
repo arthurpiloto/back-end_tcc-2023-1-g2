@@ -102,5 +102,9 @@ const selectVanById = async (id) => {
 }
 
 module.exports = {
-    insertVan, updateVan, deleteVan, selectAllVans, selectVanById
+    insertVan,
+    updateVan, 
+    deleteVan, 
+    selectAllVans, 
+    selectVanById,
 }

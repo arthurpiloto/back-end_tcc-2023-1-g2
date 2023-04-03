@@ -82,8 +82,7 @@ const listarDrivers = async () => {
     const result = await selectAllDrivers()
 
     if (result) {
-        let driverJson = await createDriverJson(result)
-        return { status: 200, message: driverJson }
+        return { status: 200, message: result }
     } else {
         return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
     }
@@ -114,8 +113,7 @@ const listarDriverById = async (id) => {
         const result = await selectDriverById(id)
 
         if (result) {
-            let jsonData = await createDriverJson(result)
-            return { status: 200, message: jsonData }
+            return { status: 200, message: result }
         } else {
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
         }
