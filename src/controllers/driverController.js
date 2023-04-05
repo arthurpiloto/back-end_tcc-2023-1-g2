@@ -5,8 +5,9 @@ AUTOR: NICOLAS DOBBECK
 DATA DE CRIAÇÃO: 03/03/2023
 VERSÃO: 1.0
 ************************/
-
 const { insertDriver, updateDriver, deleteDriver, selectAllDrivers, selectDriverIdByCPF, selectDriverById } = require('../models/DAO/driver.js')
+const { selectVanByDriverId } = require('../models/DAO/van.js')
+const { createJsonDriver } = require('../utils/createJsonDriver.js')
 const { verifyCpf } = require('../utils/verifyCpf.js')
 const { verifyRg } = require('../utils/verifyRg.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
@@ -79,9 +80,16 @@ const deletarDriver = async (id) => {
 
 const listarDrivers = async () => {
     const result = await selectAllDrivers()
+    const messageJson = []
 
-    if (result) {
-        return { status: 200, message: result }
+    await Promise.all(result.map(async element => {
+        const resultVan = await selectVanByDriverId(element.id)
+        const res = await createJsonDriver(resultVan, element, "json")
+        messageJson.push(res)
+    }))
+
+    if (messageJson) {
+        return { status: 200, message: messageJson }
     } else {
         return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
     }
@@ -105,23 +113,16 @@ const listarDriverIdByCPF = async (cpf) => {
     }
 }
 
-const { selectVanByDriverId } = require('../models/DAO/van.js')
 const listarDriverById = async (id) => {
     if (id == '' || id == undefined) {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
     } else {
         const result = await selectDriverById(id)
         const resultVan = await selectVanByDriverId(id)
-        let testeJson = {}
-        let returnMessage = result.map(async element => {
-            element.van = resultVan
-            return element
-        })
+        const messageJson = await createJsonDriver(resultVan, result, "array")
 
-        testeJson = await Promise.all(returnMessage)
-
-        if (testeJson) {
-            return { status: 200, message: testeJson }
+        if (messageJson) {
+            return { status: 200, message: messageJson }
         } else {
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
         }
