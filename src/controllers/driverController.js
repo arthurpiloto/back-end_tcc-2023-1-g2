@@ -80,13 +80,16 @@ const deletarDriver = async (id) => {
 
 const listarDrivers = async () => {
     const result = await selectAllDrivers()
-    const messageJson = []
+    const messageArray = []
+    let messageJson = {}
 
     await Promise.all(result.map(async element => {
         const resultVan = await selectVanByDriverId(element.id)
         const res = await createJsonDriver(resultVan, element, "json")
-        messageJson.push(res)
+        messageArray.push(res)
     }))
+
+    messageJson.drivers = messageArray
 
     if (messageJson) {
         return { status: 200, message: messageJson }
