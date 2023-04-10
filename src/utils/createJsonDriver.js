@@ -7,6 +7,7 @@ VERSÃO: 1.0
 const { selectModelById } = require('../models/DAO/model.js')
 const createJsonDriver = async (resultVan, result, message) => {
     let idModel
+    let messageJson = {}
 
     resultVan.forEach(element => {
         idModel = element.id_modelo
@@ -23,12 +24,15 @@ const createJsonDriver = async (resultVan, result, message) => {
             element.van = resultVan
             return element
         })
+        let resultadoMotorista = {}
+        result.forEach(element => {
+            resultadoMotorista.driver = element
+        })
+        return resultadoMotorista
     } else {
         result.van = resultVan
+        messageJson = result
     }
-
-    let messageJson = {}
-    messageJson = result
 
     return messageJson
 }
