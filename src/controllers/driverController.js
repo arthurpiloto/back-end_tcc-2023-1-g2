@@ -124,8 +124,11 @@ const listarDriverById = async (id) => {
         const resultVan = await selectVanByDriverId(id)
         const messageJson = await createJsonDriver(resultVan, result, "array")
 
-        if (messageJson) {
-            return { status: 200, message: messageJson }
+        let jsonDriver = {}
+        jsonDriver.driver = messageJson
+
+        if (jsonDriver) {
+            return { status: 200, message: jsonDriver }
         } else {
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
         }
