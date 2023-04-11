@@ -11,7 +11,7 @@ const prisma = new PrismaClient()
 const insertUser = async (user) => {
     try {
         let sql = `INSERT INTO tbl_usuario (nome, email, rg, cpf, cep, telefone, data_nascimento, senha, foto, status_usuario)
-        VALUES ('${user.nome}', '${user.email}', '${user.rg}', '${user.cpf}', '${user.cep}', '${user.telefone}', '${user.data_nascimento}', md5('${user.senha}'), '${user.foto}', ${user.status_usuario});`
+        VALUES ('${user.nome}', '${user.email}', '${user.rg}', '${user.cpf}', '${user.cep}', '${user.telefone}', '${user.data_nascimento}', md5('${user.senha}'), '${user.foto}', true);`
 
         const result = await prisma.$executeRawUnsafe(sql)
 
@@ -21,7 +21,6 @@ const insertUser = async (user) => {
             return false
         }
     } catch (err) {
-        console.log(err);
         return false
     }
 }
@@ -73,7 +72,7 @@ const deleteUser = async (id) => {
 
 const selectAllUsers = async () => {
     try {
-        let sql = `SELECT * FROM tbl_usuario ORDER BY id DESC`
+        let sql = `SELECT * FROM tbl_usuario WHERE status_usuario = 1 ORDER BY id DESC`
 
         const result = await prisma.$queryRawUnsafe(sql)
 
