@@ -24,11 +24,7 @@ const createJsonDriver = async (resultVan, result, message) => {
             element.van = resultVan
             return element
         })
-        let resultadoMotorista = {}
-        result.forEach(element => {
-            resultadoMotorista.driver = element
-        })
-        return resultadoMotorista
+        return result[0]
     } else {
         result.van = resultVan
         messageJson = result
