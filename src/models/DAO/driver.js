@@ -121,11 +121,27 @@ const selectDriverById = async (id) => {
     }
 }
 
+const loginDriver = async (driverLogin, driverPassword) => {
+    try {
+        let sql = `SELECT * FROM tbl_motorista WHERE email = '${driverLogin}' AND senha = md5('${driverPassword}');`
+
+        const result = await prisma.$queryRawUnsafe(sql)
+
+        if(result.length > 0)
+            return result
+        else
+            return false
+    } catch (err) {
+        return false
+    }
+}
+
 module.exports = {
     insertDriver,
     updateDriver,
     deleteDriver,
     selectAllDrivers,
     selectDriverIdByCPF,
-    selectDriverById
+    selectDriverById,
+    loginDriver
 }

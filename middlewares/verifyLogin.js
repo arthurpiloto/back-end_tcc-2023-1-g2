@@ -1,26 +1,31 @@
 /************************************************************************
 OBJETIVO: ARQUIVO RESPONSÁVEL PELA VERIFICAÇÃO DO LOGIN DE 
-USUÁRIO
+USUÁRIO E MOTORISTA
 AUTOR: ARTHUR PILOTO
 DATA DE CRIAÇÃO: 15/03/2023
 VERSÃO: 1.0
 ************************************************************************/
 
 const { selectAllUsers } = require('../src/models/DAO/user.js')
+const { selectAllDrivers } = require('../src/models/DAO/driver.js')
 
-const verifyLogin = async (userInfos) => {
-    const allUsers = await selectAllUsers()
-    let foundUser
-
-    userInfos.message.forEach(element => {
-        allUsers.forEach(user => {
-            if(user.email == element.email && user.senha == element.senha) {
-                foundUser = user
-            }
+const verifyLogin = async (infos) => {
+    let foundLogin
+    if (infos.cnh) {
+        
+    } else {
+        const allUsers = await selectAllUsers()
+    
+        infos.message.forEach(element => {
+            allUsers.forEach(user => {
+                if(user.email == element.email && user.senha == element.senha) {
+                    foundLogin = user
+                }
+            })
         })
-    })
+    }
 
-    return foundUser
+    return foundLogin
 }
 
 module.exports = {
