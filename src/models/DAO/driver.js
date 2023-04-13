@@ -123,7 +123,7 @@ const selectDriverById = async (id) => {
 
 const loginDriver = async (driverLogin, driverPassword) => {
     try {
-        let sql = `SELECT * FROM tbl_motorista WHERE email = '${driverLogin}' AND senha = '${driverPassword}';`
+        let sql = `SELECT * FROM tbl_motorista WHERE email = '${driverLogin}' AND senha = md5('${driverPassword}');`
 
         const result = await prisma.$queryRawUnsafe(sql)
 
