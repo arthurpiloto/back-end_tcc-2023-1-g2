@@ -11,7 +11,7 @@ const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 const newVan = async (van) => {
     if (van.placa == '' || van.placa == null || van.quantidade_vagas == '' || van.quantidade_vagas == null || van.id_modelo == '' || van.id_modelo == null || van.id_motorista == '' || van.id_motorista == null) {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
-    } else if (van.placa.length > 10 || van.foto.length > 200) {
+    } else if (van.placa.length > 10 || van.foto.length > 400) {
         return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
     } else {
         const result = await insertVan(van)
@@ -27,7 +27,7 @@ const newVan = async (van) => {
 const atualizarVan = async (van) => {
     if (van.placa == '' || van.placa == null || van.quantidade_vagas == '' || van.quantidade_vagas == null || van.id_modelo == '' || van.id_modelo == null || van.id_motorista == '' || van.id_motorista == null) {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
-    } else if (van.placa.length > 10 || van.foto.length > 200) {
+    } else if (van.placa.length > 10 || van.foto.length > 400) {
         return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
     } else {
         const result = await updateVan(van)

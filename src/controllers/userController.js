@@ -16,7 +16,7 @@ const novoUser = async (user) => {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     } else if (!user.email.includes('@')) {
         return { status: 400, message: MESSAGE_ERROR.INVALID_EMAIL }
-    } else if (user.email.length > 256 || user.nome.length > 150 || user.rg.length > 12 || user.cpf.length > 18 || user.cep.length > 9 || user.telefone.length > 20 || user.senha.length > 32) {
+    } else if (user.email.length > 256 || user.nome.length > 150 || user.rg.length > 12 || user.cpf.length > 18 || user.cep.length > 9 || user.telefone.length > 20 || user.senha.length > 32 || user.foto.length > 400) {
         return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
     } else {
         // const safeCpf = await verifyCpf(user.cpf)
@@ -41,7 +41,7 @@ const atualizarUser = async (user) => {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     } else if (!user.email.includes('@')) {
         return { status: 400, message: MESSAGE_ERROR.INVALID_EMAIL }
-    } else if (user.email.length > 256 || user.nome.length > 150 || user.rg.length > 12 || user.cpf.length > 18 || user.cep.length > 9 || user.telefone.length > 20 || user.senha.length > 30) {
+    } else if (user.email.length > 256 || user.nome.length > 150 || user.rg.length > 12 || user.cpf.length > 18 || user.cep.length > 9 || user.telefone.length > 20 || user.senha.length > 30 || user.foto.length > 400) {
         return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
     } else {
         // const safeCpf = await verifyCpf(user.cpf)
