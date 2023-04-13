@@ -123,8 +123,8 @@ router
         const commentData = await listarComments()
 
         if (commentData) {
-            statusCode = 200
-            message = commentData
+            statusCode = commentData.status
+            message = commentData.message
         } else {
             statusCode = 404
             message = MESSAGE_ERROR.NOT_FOUND_DB

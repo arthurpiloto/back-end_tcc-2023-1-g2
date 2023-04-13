@@ -61,7 +61,11 @@ const listarTypeContractById = async (id) => {
         const result = await selectTypeContractById(id)
 
         if (result.length !== 0) {
-            return { status: 200, message: result }
+            let typesContractJson = {}
+            result.forEach(element => {
+                typesContractJson = element
+            })
+            return { status: 200, message: typesContractJson }
         } else {
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
         }
@@ -74,7 +78,7 @@ const listarTypesContracts = async () => {
     if (result) {
         let typesContractJson = {}
         typesContractJson.typesContracts = result
-        return typesContractJson
+        return { status: 200, message: typesContractJson }
     } else {
         return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
     }

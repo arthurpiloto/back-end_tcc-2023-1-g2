@@ -125,8 +125,8 @@ router
         const typeContractsData = await listarTypesContracts()
 
         if (typeContractsData) {
-            statusCode = 200
-            message = typeContractsData
+            statusCode = typeContractsData.status
+            message = typeContractsData.message
         } else {
             statusCode = 404
             message = MESSAGE_ERROR.NOT_FOUND_DB

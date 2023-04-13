@@ -11,7 +11,7 @@ const prisma = new PrismaClient()
 const insertContract = async (contract) => {
     try {
         let sql = `INSERT INTO tbl_contrato (valor, nome_passageiro, idade_passageiro, id_usuario, id_motorista, id_escola, id_tipo_pagamento, id_tipo_contrato, status_contrato)
-        VALUES (${contract.valor}, '${contract.nome_passageiro}', ${contract.idade_passageiro}, ${contract.id_usuario}, ${contract.id_motorista}, ${contract.id_escola}, ${contract.id_tipo_pagamento}, ${contract.id_tipo_contrato}, ${contract.status_contrato});`
+        VALUES (${contract.valor}, '${contract.nome_passageiro}', ${contract.idade_passageiro}, ${contract.id_usuario}, ${contract.id_motorista}, ${contract.id_escola}, ${contract.id_tipo_pagamento}, ${contract.id_tipo_contrato}, true);`
         
         const result = await prisma.$executeRawUnsafe(sql)
 

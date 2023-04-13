@@ -57,7 +57,11 @@ const listarCommentById = async (id) => {
         const result = await selectCommentById(id)
 
         if (result.length !== 0) {
-            return { status: 200, message: result }
+            let commentsJson = {}
+            result.forEach(element => {
+                commentsJson = element
+            })
+            return { status: 200, message: commentsJson }
         } else {
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
         }
@@ -70,7 +74,7 @@ const listarComments = async () => {
     if (result) {
         let commentsJson = {}
         commentsJson.comments = result
-        return commentsJson
+        return { status: 200, message: commentsJson }
     } else {
         return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
     }

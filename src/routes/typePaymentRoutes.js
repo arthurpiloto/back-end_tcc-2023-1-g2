@@ -38,7 +38,6 @@ router
         return response.status(statusCode).json(message)
     })
 
-
 router
     .route('/typePayment/:typePaymentId')
     .get(async(request, response) => {
@@ -124,8 +123,8 @@ router
         const typePaymentsData = await listarTypespayments()
 
         if (typePaymentsData) {
-            statusCode = 200
-            message = typePaymentsData
+            statusCode = typePaymentsData.status
+            message = typePaymentsData.message
         } else {
             statusCode = 404
             message = MESSAGE_ERROR.NOT_FOUND_DB

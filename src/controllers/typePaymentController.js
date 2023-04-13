@@ -61,7 +61,11 @@ const listarTypePaymentById = async (id) => {
         const result = await selectTypePaymentByID(id)
 
         if (result.length !== 0) {
-            return { status: 200, message: result }
+            let typePaymentJson = {}
+            result.forEach(element => {
+                typePaymentJson = element  
+            })
+            return { status: 200, message: typePaymentJson }
         } else {
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
         }
@@ -74,7 +78,7 @@ const listarTypespayments = async () => {
     if (result) {
         let typesPaymentsJson = {}
         typesPaymentsJson.typesPayment = result
-        return typesPaymentsJson
+        return { status: 200, message: typesPaymentsJson }
     } else {
         return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
     }

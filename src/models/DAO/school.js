@@ -10,8 +10,8 @@ const prisma = new PrismaClient()
 
 const insertSchool = async (school) => {
     try {
-        let sql = `INSERT INTO tbl_escola (nome)
-        VALUES ('${school.nome}');`
+        let sql = `INSERT INTO tbl_escola (nome, status_escola)
+        VALUES ('${school.nome}', true);`
 
         const result = await prisma.$executeRawUnsafe(sql)
 

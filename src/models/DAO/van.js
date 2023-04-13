@@ -36,10 +36,7 @@ const updateVan = async (van) => {
             status_van = ${van.status_van}
             WHERE id = ${van.id}`
 
-
-
         const result = await prisma.$executeRawUnsafe(sql)
-    
 
         if (result) {
             return true
@@ -119,9 +116,9 @@ const selectVanByDriverId = async (id) => {
 
 module.exports = {
     insertVan,
-    updateVan, 
-    deleteVan, 
-    selectAllVans, 
+    updateVan,
+    deleteVan,
+    selectAllVans,
     selectVanById,
     selectVanByDriverId
 }

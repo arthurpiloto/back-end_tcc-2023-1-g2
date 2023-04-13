@@ -11,7 +11,7 @@ const prisma = new PrismaClient()
 const insertTypePayment = async (typePayment) => {
     try {
         let sql = `INSERT INTO tbl_tipo_pagamento (tipo_pagamento, status_tipo_pagamento)
-        VALUES ('${typePayment.tipo_pagamento}', ${typePayment.status_tipo_pagamento});`
+        VALUES ('${typePayment.tipo_pagamento}', true);`
 
         const result = await prisma.$executeRawUnsafe(sql)
 

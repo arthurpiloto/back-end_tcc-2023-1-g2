@@ -61,7 +61,11 @@ const listarSchoolById = async (id) => {
         const result = await selectSchoolById(id)
 
         if (result.length !== 0) {
-            return { status: 200, message: result }
+            let schoolJson = {}
+            result.forEach(element => {
+                schoolJson = element
+            })
+            return { status: 200, message: schoolJson }
         } else {
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
         }
@@ -73,7 +77,7 @@ const listarSchools = async () => {
 
     if (result) {
         let schoolsJson = {}
-        schoolsJson.school = result
+        schoolsJson.schools = result
         return schoolsJson
     } else {
         return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }

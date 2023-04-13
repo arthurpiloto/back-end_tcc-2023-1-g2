@@ -64,7 +64,7 @@ const listarContracts = async () => {
     if (result) {
         let contractsJson = {}
         contractsJson.contracts = result
-        return contractsJson
+        return { status: 200, message: contractsJson }
     } else {
         return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
     }
@@ -77,7 +77,11 @@ const listarContractById = async (id) => {
         const result = await selectContractById(id)
 
         if (result.length !== 0) {
-            return { status: 200, message: result }
+            let contractsJson = {}
+            result.forEach(element => {
+                contractsJson = element
+            })
+            return { status: 200, message: contractsJson }
         } else {
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
         }

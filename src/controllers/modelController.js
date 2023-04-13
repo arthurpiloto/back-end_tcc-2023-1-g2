@@ -93,7 +93,9 @@ const listarModelById = async (id) => {
 
         if (result) {
             let modelJson = {}
-            modelJson.model = result
+            result.forEach(element => {
+                modelJson = element
+            })
             return { status: 200, message: modelJson }
         } else {
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }

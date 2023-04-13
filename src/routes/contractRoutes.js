@@ -123,8 +123,8 @@ router
         const contractsData = await listarContracts()
 
         if (contractsData) {
-            statusCode = 200
-            message = contractsData
+            statusCode = contractsData.status
+            message = contractsData.message
         } else {
             statusCode = 404
             message = MESSAGE_ERROR.NOT_FOUND_DB
