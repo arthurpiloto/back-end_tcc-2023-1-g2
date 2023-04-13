@@ -73,7 +73,7 @@ const listarTypesContracts = async () => {
 
     if (result) {
         let typesContractJson = {}
-        typesContractJson.typesPayment = result
+        typesContractJson.typesContracts = result
         return typesContractJson
     } else {
         return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }

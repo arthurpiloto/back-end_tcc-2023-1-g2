@@ -11,7 +11,7 @@ const prisma = new PrismaClient()
 const insertDriver = async (driver) => {
     try {
         let sql = `INSERT INTO tbl_motorista (nome, email, rg, cpf, cnh, telefone, data_nascimento, inicio_carreira, senha, foto, avaliacao, descricao, status_motorista)
-        values ('${driver.nome}', '${driver.email}', '${driver.rg}', '${driver.cpf}', '${driver.cnh}', '${driver.telefone}', '${driver.data_nascimento}', '${driver.inicio_carreira}', '${driver.senha}', '${driver.foto}', ${driver.avaliacao}, '${driver.descricao}', true);`
+        values ('${driver.nome}', '${driver.email}', '${driver.rg}', '${driver.cpf}', '${driver.cnh}', '${driver.telefone}', '${driver.data_nascimento}', '${driver.inicio_carreira}', md5('${driver.senha}'), '${driver.foto}', ${driver.avaliacao}, '${driver.descricao}', true);`
 
         const result = await prisma.$executeRawUnsafe(sql)
 
@@ -36,7 +36,7 @@ const updateDriver = async (driver) => {
             telefone = '${driver.telefone}',
             data_nascimento = '${driver.data_nascimento}',
             inicio_carreira = '${driver.inicio_carreira}',
-            senha = '${driver.senha}',
+            senha = md5('${driver.senha}'),
             foto = '${driver.foto}',
             avaliacao = '${driver.avaliacao}',
             descricao = '${driver.descricao}',
@@ -121,11 +121,27 @@ const selectDriverById = async (id) => {
     }
 }
 
+const loginDriver = async (driverLogin, driverPassword) => {
+    try {
+        let sql = `SELECT * FROM tbl_motorista WHERE email = '${driverLogin}' AND senha = md5('${driverPassword}');`
+
+        const result = await prisma.$queryRawUnsafe(sql)
+
+        if(result.length > 0)
+            return result
+        else
+            return false
+    } catch (err) {
+        return false
+    }
+}
+
 module.exports = {
     insertDriver,
     updateDriver,
     deleteDriver,
     selectAllDrivers,
     selectDriverIdByCPF,
-    selectDriverById
+    selectDriverById,
+    loginDriver
 }

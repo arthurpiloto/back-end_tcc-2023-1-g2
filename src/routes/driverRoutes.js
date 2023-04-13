@@ -8,7 +8,7 @@ VERSÃO: 1.0
 
 const express = require(`express`)
 const jsonParser = express.json()
-const { novoDriver, atualizarDriver, deletarDriver, listarDrivers, listarDriverIdByCPF, listarDriverById } = require('../controllers/driverController.js')
+const { novoDriver, atualizarDriver, deletarDriver, listarDrivers, listarDriverIdByCPF, listarDriverById, driverLogin } = require('../controllers/driverController.js')
 const { MESSAGE_ERROR } = require('../modules/config.js')
 
 const router = express.Router()
@@ -159,6 +159,50 @@ router
         }
 
         response.status(statusCode).json(message)
+    })
+
+    router
+    .route('/driver/login')
+    .post(jsonParser, async(request, response) => {
+        let statusCode = 200
+        let message
+        let headerContentType
+
+        headerContentType = request.headers[`content-type`]
+
+        if (headerContentType == `application/json`) {
+            let dadosBody = request.body
+
+            if (JSON.stringify(dadosBody) != `{}`) {
+                const dadosUser = await driverLogin(dadosBody.email, dadosBody.senha)
+                
+                if (dadosUser.status == 200) {
+                    const authUser = await verifyLogin(dadosUser)
+
+                    if (authUser) {
+                        const jwt = await createJwt(authUser)
+
+                        statusCode = jwt.status
+                        message = jwt.response
+                    } else {
+                        statusCode = 401
+                        message = MESSAGE_ERROR.INVALID_USER
+                    }
+                } else {
+                    statusCode = dadosUser.status
+                    message = dadosUser.message
+                }
+
+            } else {
+                statusCode = 400
+                message = MESSAGE_ERROR.EMPTY_BODY
+            }
+        } else {
+            statusCode = 415
+            message = MESSAGE_ERROR.CONTENT_TYPE
+        }
+
+        return response.status(statusCode).json(message)
     })
 
 module.exports = router

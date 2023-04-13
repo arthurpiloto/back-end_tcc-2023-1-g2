@@ -5,7 +5,7 @@ AUTOR: NICOLAS DOBBECK
 DATA DE CRIAÇÃO: 03/03/2023
 VERSÃO: 1.0
 ************************/
-const { insertDriver, updateDriver, deleteDriver, selectAllDrivers, selectDriverIdByCPF, selectDriverById } = require('../models/DAO/driver.js')
+const { insertDriver, updateDriver, deleteDriver, selectAllDrivers, selectDriverIdByCPF, selectDriverById, loginDriver } = require('../models/DAO/driver.js')
 const { selectVanByDriverId } = require('../models/DAO/van.js')
 const { createJsonDriver } = require('../utils/createJsonDriver.js')
 const { verifyCpf } = require('../utils/verifyCpf.js')
@@ -132,6 +132,20 @@ const listarDriverById = async (id) => {
     }
 }
 
+const driverLogin = async (driverLogin, driverPassword) => {
+    if (driverLogin == '' || driverLogin == undefined || driverPassword == '' || driverPassword == undefined) {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    } else {
+        const login = await loginDriver(driverLogin, driverPassword)
+
+        if (login) {
+            return { status: 200, message: login }
+        } else {
+            return { message: MESSAGE_ERROR.NOT_FOUND_DB, status: 404 }
+        }
+    }
+}
+
 
 module.exports = {
     novoDriver,
@@ -139,5 +153,6 @@ module.exports = {
     deletarDriver,
     listarDrivers,
     listarDriverIdByCPF,
-    listarDriverById
+    listarDriverById,
+    driverLogin
 }
