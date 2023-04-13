@@ -5,7 +5,7 @@ AUTOR: NICOLAS DOBBECK
 DATA DE CRIAÇÃO: 29/03/2023
 VERSÃO: 1.0
 ************************************************************************/
-const { insertContract, updateContract, selectAllContracts, deleteContract, selectContractById } = require('../models/DAO/contract.js')
+const { insertContract, updateContract, selectAllContracts, deleteContract, selectContractById, selectUserContracts } = require('../models/DAO/contract.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const novoContract = async (contract) => {
@@ -88,6 +88,22 @@ const listarContractById = async (id) => {
     }
 }
 
+const listarUserContracts = async (id) => {
+    if (id == '' || id == undefined) {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    } else {
+        const result = await selectUserContracts(id)
+
+        if (result.length !== 0) {
+            let contractsJson = {}
+            contractsJson.contracts = result
+            return { status: 200, message: contractsJson }
+        } else {
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+        }
+    }
+}
+
 module.exports = {
-    novoContract, atualizarContract, listarContracts, deletarContract, listarContractById
+    novoContract, atualizarContract, listarContracts, deletarContract, listarContractById, listarUserContracts
 }

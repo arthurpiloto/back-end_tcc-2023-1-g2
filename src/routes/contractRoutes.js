@@ -7,7 +7,7 @@ VERSÃO: 1.0
 ************************************************************************/
 const express = require(`express`)
 const jsonParser = express.json()
-const { novoContract, atualizarContract, listarContracts, deletarContract, listarContractById } = require('../controllers/contractController.js')
+const { novoContract, atualizarContract, listarContracts, deletarContract, listarContractById, listarUserContracts } = require('../controllers/contractController.js')
 const { MESSAGE_ERROR } = require('../modules/config.js')
 const router = express.Router()
 
@@ -112,6 +112,27 @@ router
         }
         
         response.status(statusCode).json(message)
+    })
+
+router
+    .route('/contracts/:userId')
+    .get(async(request, response) => {
+        let statusCode
+        let message
+        
+        let id = request.params.userId
+
+        if (id != '' && id != undefined) {
+            const contractData = await listarUserContracts(id)
+
+            statusCode = contractData.status
+            message = contractData.message
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_ID
+        }
+
+        return response.status(statusCode).json(message)
     })
 
 router
