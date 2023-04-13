@@ -11,8 +11,16 @@ const { selectAllDrivers } = require('../src/models/DAO/driver.js')
 
 const verifyLogin = async (infos) => {
     let foundLogin
-    if (infos.cnh) {
-        
+    if (infos.cnh === undefined) {
+        const allDrivers = await selectAllDrivers()
+    
+        infos.message.forEach(element => {
+            allDrivers.forEach(driver => {
+                if(driver.email == element.email && driver.senha == element.senha) {
+                    foundLogin = driver
+                }
+            })
+        })
     } else {
         const allUsers = await selectAllUsers()
     

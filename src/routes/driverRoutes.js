@@ -9,9 +9,22 @@ VERSÃO: 1.0
 const express = require(`express`)
 const jsonParser = express.json()
 const { novoDriver, atualizarDriver, deletarDriver, listarDrivers, listarDriverIdByCPF, listarDriverById, driverLogin } = require('../controllers/driverController.js')
+const { verifyLogin } = require('../../middlewares/verifyLogin.js')
+const { createJwt, validateJwt } = require('../../middlewares/jwt.js')
 const { MESSAGE_ERROR } = require('../modules/config.js')
 
 const router = express.Router()
+
+const verifyJwt = async (request, response, next) => {
+    let token = request.headers['x-access-token']
+    const authenticatedToken = await validateJwt(token)
+
+    if(authenticatedToken) {
+        next()
+    } else {
+        return response.status(401).end()
+    }
+}
 
 router
     .route('/driver')
@@ -42,7 +55,7 @@ router
 
 router
     .route('/driver/:driverId')
-    .get(async (request, response) => {
+    .get(/*verifyJwt,*/ async (request, response) => {
         let statusCode
         let message
         let id = request.params.driverId
@@ -98,7 +111,7 @@ router
         return response.status(statusCode).json(message)
     })
 
-    .delete(async (request, response) => {
+    .delete(/*verifyJwt,*/ async (request, response) => {
         let statusCode
         let message
 
@@ -119,7 +132,7 @@ router
 
 router
     .route('/drivers')
-    .get(async (request, response) => {
+    .get(/*verifyJwt,*/ async (request, response) => {
         let statusCode
         let message
 
@@ -138,7 +151,7 @@ router
 
 router
     .route('/driver/id/:driverCpf')
-    .get(async (request, response) => {
+    .get(/*verifyJwt,*/ async (request, response) => {
         let statusCode
         let message
         let cpf = request.params.driverCpf
@@ -174,13 +187,13 @@ router
             let dadosBody = request.body
 
             if (JSON.stringify(dadosBody) != `{}`) {
-                const dadosUser = await driverLogin(dadosBody.email, dadosBody.senha)
+                const dadosDriver = await driverLogin(dadosBody.email, dadosBody.senha)
                 
-                if (dadosUser.status == 200) {
-                    const authUser = await verifyLogin(dadosUser)
+                if (dadosDriver.status == 200) {
+                    const authDriver = await verifyLogin(dadosDriver)
 
-                    if (authUser) {
-                        const jwt = await createJwt(authUser)
+                    if (authDriver) {
+                        const jwt = await createJwt(authDriver)
 
                         statusCode = jwt.status
                         message = jwt.response
@@ -189,8 +202,8 @@ router
                         message = MESSAGE_ERROR.INVALID_USER
                     }
                 } else {
-                    statusCode = dadosUser.status
-                    message = dadosUser.message
+                    statusCode = dadosDriver.status
+                    message = dadosDriver.message
                 }
 
             } else {
