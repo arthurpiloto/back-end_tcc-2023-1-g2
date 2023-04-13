@@ -10,21 +10,10 @@ const express = require(`express`)
 const jsonParser = express.json()
 const { novoDriver, atualizarDriver, deletarDriver, listarDrivers, listarDriverIdByCPF, listarDriverById, driverLogin } = require('../controllers/driverController.js')
 const { verifyLogin } = require('../../middlewares/verifyLogin.js')
-const { createJwt, validateJwt } = require('../../middlewares/jwt.js')
+const { createJwt, verifyJwt } = require('../../middlewares/jwt.js')
 const { MESSAGE_ERROR } = require('../modules/config.js')
 
 const router = express.Router()
-
-const verifyJwt = async (request, response, next) => {
-    let token = request.headers['x-access-token']
-    const authenticatedToken = await validateJwt(token)
-
-    if(authenticatedToken) {
-        next()
-    } else {
-        return response.status(401).end()
-    }
-}
 
 router
     .route('/driver')

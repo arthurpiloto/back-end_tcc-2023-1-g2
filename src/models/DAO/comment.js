@@ -11,7 +11,7 @@ const prisma = new PrismaClient()
 const insertComment = async (comment) => {
     try {
         let sql = `INSERT INTO tbl_comentario (comentario, id_usuario, id_motorista, status_comentario)
-        VALUES ('${comment.comentario}', ${comment.id_usuario}, ${comment.id_motorista}, ${comment.status_comentario});`
+        VALUES ('${comment.comentario}', ${comment.id_usuario}, ${comment.id_motorista}, true);`
 
         const result = await prisma.$executeRawUnsafe(sql)
 

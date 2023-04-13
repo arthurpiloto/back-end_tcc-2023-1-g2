@@ -31,7 +31,19 @@ const validateJwt = async (token) => {
     return jwtStatus
 }
 
+const verifyJwt = async (request, response, next) => {
+    let token = request.headers['x-access-token']
+    const authenticatedToken = await validateJwt(token)
+
+    if(authenticatedToken) {
+        next()
+    } else {
+        return response.status(401).end()
+    }
+}
+
 module.exports = {
     createJwt,
-    validateJwt
+    validateJwt,
+    verifyJwt
 }
