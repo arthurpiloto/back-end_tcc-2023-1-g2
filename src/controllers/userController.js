@@ -95,7 +95,9 @@ const listarUserById = async (id) => {
 
         if (result) {
             let userJson = {}
-            userJson.user = result
+            result.forEach(element => {
+                userJson.user = element
+            })
             return { status: 200, message: userJson }
         } else {
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
