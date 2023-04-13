@@ -46,6 +46,7 @@ router
         let statusCode
         let message
         let id = request.params.driverId
+        console.log(id);
 
         if (id != '' && id != undefined) {
             const driversData = await listarDriverById(id)
@@ -56,6 +57,7 @@ router
             statusCode = 400
             message = MESSAGE_ERROR.REQUIRED_ID
         }
+        console.log(message);
 
         return response.status(statusCode).json(message)
     })
