@@ -167,7 +167,7 @@ router
                 const dadosUser = await userLogin(dadosBody.email, dadosBody.senha)
                 
                 if (dadosUser.status == 200) {
-                    const authUser = await verifyLogin(dadosUser)
+                    const authUser = await verifyLogin(dadosUser, "user")
 
                     if (authUser) {
                         const jwt = await createJwt(authUser)

@@ -104,7 +104,7 @@ const selectUserById = async (id) => {
 
 const loginUser = async (userLogin, userPassword) => {
     try {
-        let sql = `SELECT * FROM tbl_usuario WHERE email = '${userLogin}' AND senha = md5('${userPassword}');`
+        let sql = `SELECT * FROM tbl_usuario WHERE email = '${userLogin}' AND senha = '${userPassword}';`
 
         const result = await prisma.$queryRawUnsafe(sql)
 

@@ -179,7 +179,7 @@ router
                 const dadosDriver = await driverLogin(dadosBody.email, dadosBody.senha)
                 
                 if (dadosDriver.status == 200) {
-                    const authDriver = await verifyLogin(dadosDriver)
+                    const authDriver = await verifyLogin(dadosDriver, "driver")
 
                     if (authDriver) {
                         const jwt = await createJwt(authDriver)
