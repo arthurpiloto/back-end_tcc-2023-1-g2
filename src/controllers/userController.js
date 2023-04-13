@@ -96,7 +96,7 @@ const listarUserById = async (id) => {
         if (result) {
             let userJson = {}
             result.forEach(element => {
-                userJson.user = element
+                userJson = element
             })
             return { status: 200, message: userJson }
         } else {
