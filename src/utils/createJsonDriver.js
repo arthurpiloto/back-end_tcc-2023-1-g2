@@ -20,7 +20,7 @@ const createJsonDriver = async (resultVan, result, message) => {
         return element
     })
     
-    if (message === "array") {
+    if (message === "json") {
         result.map(async element => {
             element.van = resultVan
             element.data_nascimento = await formatDate(element.data_nascimento)

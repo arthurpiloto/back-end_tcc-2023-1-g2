@@ -85,7 +85,7 @@ const listarDrivers = async () => {
 
     await Promise.all(result.map(async element => {
         const resultVan = await selectVanByDriverId(element.id)
-        const res = await createJsonDriver(resultVan, element, "json")
+        const res = await createJsonDriver(resultVan, element, "array")
         messageArray.push(res)
     }))
 
@@ -122,7 +122,7 @@ const listarDriverById = async (id) => {
     } else {
         const result = await selectDriverById(id)
         const resultVan = await selectVanByDriverId(id)
-        const messageJson = await createJsonDriver(resultVan, result, "array")
+        const messageJson = await createJsonDriver(resultVan, result, "json")
 
         if (messageJson) {
             return { status: 200, message: messageJson }
