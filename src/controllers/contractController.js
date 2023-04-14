@@ -6,6 +6,7 @@ DATA DE CRIAÇÃO: 29/03/2023
 VERSÃO: 1.0
 ************************************************************************/
 const { insertContract, updateContract, selectAllContracts, deleteContract, selectContractById, selectUserContracts } = require('../models/DAO/contract.js')
+const { createContractJson } = require('../utils/createContractJson.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const novoContract = async (contract) => {
@@ -60,11 +61,12 @@ const deletarContract = async (id) => {
 
 const listarContracts = async () => {
     const result = await selectAllContracts()
+    const message = await createContractJson(result, "array")
 
     if (result) {
         let contractsJson = {}
         contractsJson.contracts = result
-        return { status: 200, message: contractsJson }
+        return { status: 200, message: message }
     } else {
         return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
     }
@@ -75,13 +77,10 @@ const listarContractById = async (id) => {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
     } else {
         const result = await selectContractById(id)
+        let contractMessage = await createContractJson(result, "json")
 
-        if (result.length !== 0) {
-            let contractsJson = {}
-            result.forEach(element => {
-                contractsJson = element
-            })
-            return { status: 200, message: contractsJson }
+        if (contractMessage.toString() !== "{}") {
+            return { status: 200, message: contractMessage }
         } else {
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
         }
