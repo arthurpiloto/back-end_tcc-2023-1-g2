@@ -17,38 +17,10 @@ const createContractJson = async (contractObject, message) => {
         return await createContract(contractObject)
     } else {
         let arrayContainer = []
-        arrayContainer.push(await Promise.all(contractObject.map(async element => {
-            returnMessage.id = element.id
-            returnMessage.nome_passageiro = element.nome_passageiro
-            returnMessage.idade_passageiro = element.idade_passageiro
-            returnMessage.valo_contrato = element.valor
-
-            const driver = await selectDriverById(element.id_motorista)
-            const van = await selectVanByDriverId(element.id_motorista)
-            const driverJson = await createJsonDriver(van, driver, "json")
-            returnMessage.motorista = driverJson
-
-            const user = await selectUserById(element.id_usuario)
-            user.forEach(el => {
-                returnMessage.usuario = el
-            })
-
-            const school = await selectSchoolById(element.id_escola)
-            school.forEach(el => {
-                returnMessage.escola = el
-            })
-
-            const contractType = await selectTypeContractById(element.id_tipo_contrato)
-            contractType.forEach(el => {
-                returnMessage.tipo_contrato = el
-            })
-
-            const paymentType = await selectTypePaymentByID(element.id_tipo_pagamento)
-            paymentType.forEach(el => {
-                returnMessage.tipo_pagamento = el
-            })
-        })))
-        returnMessage = arrayContainer
+        for (let index = 0; index < contractObject.length; index++) {    
+            arrayContainer.push(await createContract([contractObject[index]]))
+        }
+        return arrayContainer
     }
 }
 

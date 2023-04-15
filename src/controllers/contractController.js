@@ -63,10 +63,10 @@ const listarContracts = async () => {
     const result = await selectAllContracts()
     const message = await createContractJson(result, "array")
 
-    if (result) {
+    if (message) {
         let contractsJson = {}
-        contractsJson.contracts = result
-        return { status: 200, message: message }
+        contractsJson.contracts = message
+        return { status: 200, message: contractsJson }
     } else {
         return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
     }
@@ -79,7 +79,7 @@ const listarContractById = async (id) => {
         const result = await selectContractById(id)
         let contractMessage = await createContractJson(result, "json")
 
-        if (contractMessage.toString() !== "{}") {
+        if (contractMessage != {}) {
             return { status: 200, message: contractMessage }
         } else {
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
