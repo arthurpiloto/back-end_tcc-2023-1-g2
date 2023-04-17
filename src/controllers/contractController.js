@@ -92,10 +92,11 @@ const listarUserContracts = async (id) => {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
     } else {
         const result = await selectUserContracts(id)
+        const message = await createContractJson(result, "array")
 
-        if (result.length !== 0) {
+        if (message) {
             let contractsJson = {}
-            contractsJson.contracts = result
+            contractsJson.contracts = message
             return { status: 200, message: contractsJson }
         } else {
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
