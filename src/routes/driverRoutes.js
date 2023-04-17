@@ -8,7 +8,7 @@ VERSÃO: 1.0
 
 const express = require(`express`)
 const jsonParser = express.json()
-const { novoDriver, atualizarDriver, deletarDriver, listarDrivers, listarDriverIdByCPF, listarDriverById, driverLogin } = require('../controllers/driverController.js')
+const { novoDriver, atualizarDriver, deletarDriver, listarDrivers, listarDriverIdByCPF, listarDriverById, driverLogin, verificarDriver } = require('../controllers/driverController.js')
 const { verifyLogin } = require('../../middlewares/verifyLogin.js')
 const { createJwt, verifyJwt } = require('../../middlewares/jwt.js')
 const { MESSAGE_ERROR } = require('../modules/config.js')
@@ -163,7 +163,7 @@ router
         response.status(statusCode).json(message)
     })
 
-    router
+router
     .route('/driver/login')
     .post(jsonParser, async(request, response) => {
         let statusCode = 200
@@ -202,6 +202,27 @@ router
         } else {
             statusCode = 415
             message = MESSAGE_ERROR.CONTENT_TYPE
+        }
+
+        return response.status(statusCode).json(message)
+    })
+
+router
+    .route('/driver/email/:driverEmail')
+    .get(/*verifyJwt,*/ async(request, response) => {
+        let statusCode
+        let message
+        
+        let email = request.params.driverEmail.toString()
+
+        if (email != '' && email != undefined) {
+            const driverData = await verificarDriver(email)
+
+            statusCode = driverData.status
+            message = driverData.message
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_FIELDS
         }
 
         return response.status(statusCode).json(message)
