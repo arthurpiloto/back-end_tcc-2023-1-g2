@@ -8,7 +8,7 @@ VERSÃO: 1.0
 
 const express = require(`express`)
 const jsonParser = express.json()
-const { novoUser, atualizarUser, deletarUser, listarUsers, listarUserById, userLogin } = require('../controllers/userController.js')
+const { novoUser, atualizarUser, deletarUser, listarUsers, listarUserById, userLogin, verificarUser } = require('../controllers/userController.js')
 const { MESSAGE_ERROR } = require('../modules/config.js')
 const { verifyLogin } = require('../../middlewares/verifyLogin.js')
 const { createJwt, validateJwt } = require('../../middlewares/jwt.js')
@@ -131,7 +131,6 @@ router
         response.status(statusCode).json(message)
     })
 
-
 router
     .route('/users')
     .get(/*verifyJwt,*/ async(request, response) => {
@@ -190,6 +189,27 @@ router
         } else {
             statusCode = 415
             message = MESSAGE_ERROR.CONTENT_TYPE
+        }
+
+        return response.status(statusCode).json(message)
+    })
+
+router
+    .route('/user/email/:userEmail')
+    .get(/*verifyJwt,*/ async(request, response) => {
+        let statusCode
+        let message
+        
+        let email = request.params.userEmail.toString()
+
+        if (email != '' && email != undefined) {
+            const userData = await verificarUser(email)
+
+            statusCode = userData.status
+            message = userData.message
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_FIELDS
         }
 
         return response.status(statusCode).json(message)

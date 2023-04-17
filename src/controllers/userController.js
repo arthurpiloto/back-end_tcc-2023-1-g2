@@ -5,7 +5,7 @@ AUTOR: NICOLAS DOBBECK
 DATA DE CRIAÇÃO: 01/03/2023
 VERSÃO: 1.0
 ************************************************************************/
-const { insertUser, updateUser, deleteUser, selectAllUsers, selectUserById, loginUser } = require('../models/DAO/user.js')
+const { insertUser, updateUser, deleteUser, selectAllUsers, selectUserById, loginUser, verifyUser } = require('../models/DAO/user.js')
 const { verifyCpf } = require('../utils/verifyCpf.js')
 const { verifyRg } = require('../utils/verifyRg.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
@@ -119,11 +119,26 @@ const userLogin = async (userLogin, userPassword) => {
     }
 }
 
+const verificarUser = async (userEmail) => {
+    if (userEmail == '' || userEmail == undefined) {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    } else {
+        const result = await verifyUser(userEmail)
+
+        if (result) {
+            return { status: 200, message: result }
+        } else {
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+        }
+    }
+}
+
 module.exports = {
     novoUser,
     atualizarUser,
     deletarUser,
     listarUsers,
     listarUserById,
-    userLogin
+    userLogin,
+    verificarUser
 }
