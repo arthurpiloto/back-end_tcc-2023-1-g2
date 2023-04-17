@@ -79,7 +79,7 @@ const listarContractById = async (id) => {
         const result = await selectContractById(id)
         let contractMessage = await createContractJson(result, "json")
 
-        if (contractMessage != {}) {
+        if (Object.keys(contractMessage).length) {
             return { status: 200, message: contractMessage }
         } else {
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
