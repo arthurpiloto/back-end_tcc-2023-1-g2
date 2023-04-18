@@ -27,6 +27,7 @@ const schoolRouter = require('./routes/schoolRoutes.js')
 const typePaymentRouter = require('./routes/typePaymentRoutes.js')
 const typeContractRouter = require('./routes/typeContractRoutes.js')
 const contractRouter = require('./routes/contractRoutes.js')
+const driverSchoolsRouter = require('./routes/driverSchoolRoutes.js')
 
 app.use(userRouter)
 app.use(driverRouter)
@@ -37,6 +38,7 @@ app.use(schoolRouter)
 app.use(typePaymentRouter)
 app.use(typeContractRouter)
 app.use(contractRouter)
+app.use(driverSchoolsRouter)
 
 app.listen(3030, () => {
     console.log("Server waiting requests at http://localhost:3030")
