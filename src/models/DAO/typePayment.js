@@ -58,7 +58,6 @@ const deleteTypePayment = async (id) => {
             return false
         }
     } catch (err) {
-        console.log(err);
         return false
     }
 }

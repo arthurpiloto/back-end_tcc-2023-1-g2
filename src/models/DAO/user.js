@@ -129,7 +129,6 @@ const verifyUser = async (userEmail) => {
             return false
         }
     } catch (err) {
-        console.log(err)
         return false
     }
 }

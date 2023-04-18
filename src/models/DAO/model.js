@@ -40,7 +40,6 @@ const updateModel = async (model) => {
             return false
         }
     } catch (err) {
-        console.log(err)
         return false
     }
 }
