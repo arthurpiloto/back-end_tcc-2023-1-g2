@@ -18,7 +18,7 @@ const novoDriver = async (driver) => {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     } else if (!driver.email.includes('@')) {
         return { status: 400, message: MESSAGE_ERROR.INVALID_EMAIL }
-    } else if (driver.email.length > 256 || driver.nome.length > 150 || driver.rg.length > 12 || driver.cpf.length > 18 || driver.telefone.length > 20 || driver.senha.length > 30 || driver.cnh.length > 15 || driver.foto.length > 400) {
+    } else if (driver.email.length > 256 || driver.nome.length > 150 || driver.rg.length > 12 || driver.cpf.length > 18 || driver.telefone.length > 20 || driver.senha.length > 32 || driver.cnh.length > 15 || driver.foto.length > 400) {
         return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
     } else {
         // const safeCpf = await verifyCpf(driver.cpf)
@@ -44,7 +44,7 @@ const atualizarDriver = async (driver) => {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     } else if (!driver.email.includes('@')) {
         return { status: 400, message: MESSAGE_ERROR.INVALID_EMAIL }
-    } else if (driver.email.length > 256 || driver.nome.length > 150 || driver.rg.length > 12 || driver.cpf.length > 18 || driver.telefone.length > 20 || driver.senha.length > 30 || driver.cnh.length > 15 || driver.foto.length > 400) {
+    } else if (driver.email.length > 256 || driver.nome.length > 150 || driver.rg.length > 12 || driver.cpf.length > 18 || driver.telefone.length > 20 || driver.senha.length > 32 || driver.cnh.length > 15 || driver.foto.length > 400) {
         return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
     } else {
         // const safeCpf = await verifyCpf(driver.cpf)
