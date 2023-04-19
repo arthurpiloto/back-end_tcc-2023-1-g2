@@ -10,7 +10,10 @@ const prisma = new PrismaClient()
 
 const selectShoolsByDriverId = async (id) => {
     try {
-        let sql = `SELECT id_escola FROM tbl_escola_motorista WHERE id_motorista = ${id};`
+        let sql = `SELECT tbl_escola_motorista.id_escola, tbl_escola.nome as nome_escola FROM tbl_escola_motorista
+        INNER JOIN tbl_escola
+            ON tbl_escola.id = tbl_escola_motorista.id_escola
+        WHERE tbl_escola_motorista.id_motorista = ${id};`
 
         const result = await prisma.$queryRawUnsafe(sql)
 
