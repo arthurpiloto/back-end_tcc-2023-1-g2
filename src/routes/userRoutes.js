@@ -11,21 +11,9 @@ const jsonParser = express.json()
 const { novoUser, atualizarUser, deletarUser, listarUsers, listarUserById, userLogin, verificarUser } = require('../controllers/userController.js')
 const { MESSAGE_ERROR } = require('../modules/config.js')
 const { verifyLogin } = require('../../middlewares/verifyLogin.js')
-const { createJwt, validateJwt } = require('../../middlewares/jwt.js')
+const { createJwt, verifyJwt } = require('../../middlewares/jwt.js')
 
 const router = express.Router()
-
-// FUNCTION TO VERIFY JWT
-const verifyJwt = async (request, response, next) => {
-    let token = request.headers['x-access-token']
-    const authenticatedToken = await validateJwt(token)
-
-    if(authenticatedToken) {
-        next()
-    } else {
-        return response.status(401).end()
-    }
-}
 
 // ROTA PARA INSERIR NOVO USUÁRIO
 router
