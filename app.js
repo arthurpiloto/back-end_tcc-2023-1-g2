@@ -40,6 +40,6 @@ app.use(typeContractRouter)
 app.use(contractRouter)
 app.use(driverSchoolsRouter)
 
-app.listen(3030, () => {
-    console.log("Server waiting requests at http://localhost:3030")
+app.listen(8080, () => {
+    console.log("Server waiting requests at http://localhost:8080")
 })
