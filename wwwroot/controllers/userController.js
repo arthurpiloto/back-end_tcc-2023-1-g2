@@ -8,6 +8,7 @@ VERSÃO: 1.0
 const { insertUser, updateUser, deleteUser, selectAllUsers, selectUserById, loginUser, verifyUser } = require('../models/DAO/user.js')
 const { verifyCpf } = require('../utils/verifyCpf.js')
 const { verifyRg } = require('../utils/verifyRg.js')
+const { formatUser } = require('../utils/userFormater.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const novoUser = async (user) => {
@@ -80,7 +81,7 @@ const listarUsers = async () => {
 
     if (result) {
         let usersJson = {}
-        usersJson.users = result
+        usersJson.users = await formatUser(result, "")
         return usersJson
     } else {
         return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
@@ -94,10 +95,7 @@ const listarUserById = async (id) => {
         const result = await selectUserById(id)
 
         if (result) {
-            let userJson = {}
-            result.forEach(element => {
-                userJson = element
-            })
+            let userJson = await formatUser(result, "json")
             return { status: 200, message: userJson }
         } else {
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
