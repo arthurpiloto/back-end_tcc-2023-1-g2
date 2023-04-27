@@ -25,7 +25,16 @@ const novoDriver = async (driver) => {
         // const safeRg = await verifyRg(driver.rg)
 
         // if (safeCpf && safeRg) {
-        const result = await insertDriver(driver)
+        const driverVerification = await verifyDriver(driver.email)
+        let result
+
+        if (driverVerification) {
+            console.log(driverVerification)
+            driver.status_motorista = true
+            result = await updateDriver(driver)
+        } else {
+            result = await insertDriver(driver)
+        }
 
         if (result) {
             return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }

@@ -51,6 +51,7 @@ const updateDriver = async (driver) => {
             return false
         }
     } catch (err) {
+        // console.log(err)
         return false
     }
 }
@@ -144,7 +145,7 @@ const verifyDriver = async (driverEmail) => {
         const result = await prisma.$queryRawUnsafe(sql)
 
         if (result != null) {
-            return true
+            return result
         } else {
             return false
         }
