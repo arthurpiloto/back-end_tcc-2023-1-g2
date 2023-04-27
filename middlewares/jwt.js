@@ -6,7 +6,7 @@ VERSÃO: 1.0
 ************************************************************************/
 
 const jwt = require('jsonwebtoken')
-const { MESSAGE_SUCCESS } = require('../src/modules/config.js')
+const { MESSAGE_SUCCESS } = require('../wwwroot/modules/config.js')
 
 const createJwt = async (user) => {
     const token = jwt.sign({
