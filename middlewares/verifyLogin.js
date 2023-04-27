@@ -6,8 +6,8 @@ DATA DE CRIAÇÃO: 15/03/2023
 VERSÃO: 1.0
 ************************************************************************/
 
-const { selectAllUsers } = require('../src/models/DAO/user.js')
-const { selectAllDrivers } = require('../src/models/DAO/driver.js')
+const { selectAllUsers } = require('../wwwroot/models/DAO/user.js')
+const { selectAllDrivers } = require('../wwwroot/models/DAO/driver.js')
 
 const verifyLogin = async (infos, message) => {
     let foundLogin

@@ -1,0 +1,5 @@
+{
+    "appService.showBuildDuringDeployPrompt": false,
+    "appService.defaultWebAppToDeploy": "/subscriptions/b5324e01-a44c-4ce5-96b8-c3827f504547/resourceGroups/vanbora/providers/Microsoft.Web/sites/vanbora-back-end",
+    "appService.deploySubpath": "."
+}
