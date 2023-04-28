@@ -29,12 +29,20 @@ const novoDriver = async (driver) => {
         let result
 
         if (driverVerification.length !== 0) {
-            driver.status_motorista = true
-            id = driverVerification.map(el => {
-                return el.id
+            let status = driverVerification.map(el => {
+                return el.status_motorista
             })
-            driver.id = id[0]
-            result = await updateDriver(driver)
+
+            if (status[0] === 1) {
+                return { status: 401, message: MESSAGE_ERROR.EMAIL_USED }
+            } else {
+                driver.status_motorista = true
+                id = driverVerification.map(el => {
+                    return el.id
+                })
+                driver.id = id[0]
+                result = await updateDriver(driver)
+            }
         } else {
             result = await insertDriver(driver)
         }

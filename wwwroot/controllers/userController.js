@@ -24,7 +24,27 @@ const novoUser = async (user) => {
         // const safeRg = await verifyRg(user.rg)
 
         // if (safeCpf && safeRg) {
-        const result = await insertUser(user)
+        const userVerification = await verifyUser(user.email)
+        let result
+
+        if (userVerification.length !== 0) {
+            let status = userVerification.map(el => {
+                return el.status_usuario
+            })
+
+            if (status[0] === 1) {
+                return { status: 401, message: MESSAGE_ERROR.EMAIL_USED }
+            } else {
+                user.status_usuario = true
+                id = userVerification.map(el => {
+                    return el.id
+                })
+                user.id = id[0]
+                result = await updateUser(user)
+            }
+        } else {
+            result = await insertUser(user)
+        }
 
         if (result) {
             return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }

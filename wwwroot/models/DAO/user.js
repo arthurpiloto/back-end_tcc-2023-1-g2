@@ -124,7 +124,7 @@ const verifyUser = async (userEmail) => {
         const result = await prisma.$queryRawUnsafe(sql)
 
         if (result != null) {
-            return true
+            return result
         } else {
             return false
         }
