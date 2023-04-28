@@ -40,6 +40,8 @@ app.use(typeContractRouter)
 app.use(contractRouter)
 app.use(driverSchoolsRouter)
 
-app.listen(8080, () => {
+const port = process.env.PORT || 8080
+
+app.listen(port, () => {
     console.log("Server waiting requests at http://localhost:8080")
 })
