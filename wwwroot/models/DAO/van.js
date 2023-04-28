@@ -121,7 +121,7 @@ const verifyVan = async (vanPlaca) => {
         const result = await prisma.$queryRawUnsafe(sql)
 
         if (result != null) {
-            return result[0]
+            return result
         } else {
             return false
         }

@@ -19,7 +19,10 @@ const newVan = async (van) => {
 
         if (vanVerification.length !== 0) {
             van.status_van = true
-            van.id = vanVerification.id
+            id = vanVerification.map(el => {
+                return el.id
+            })
+            van.id = id[0]
             result = await updateVan(van)
         } else {
             result = await insertVan(van)
