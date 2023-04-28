@@ -5,7 +5,7 @@ AUTOR: NICOLAS DOBBECK
 DATA DE CRIAÇÃO: 01/03/2023
 VERSÃO: 1.0
 ************************************************************************/
-const { insertVan, updateVan, deleteVan, selectAllVans, selectVanById } = require('../models/DAO/van.js')
+const { insertVan, updateVan, deleteVan, selectAllVans, selectVanById, verifyVan } = require('../models/DAO/van.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const newVan = async (van) => {
@@ -14,7 +14,16 @@ const newVan = async (van) => {
     } else if (van.placa.length > 10 || van.foto.length > 400) {
         return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
     } else {
-        const result = await insertVan(van)
+        const vanVerification = await verifyVan(van.placa)
+        let result
+
+        if (vanVerification.length !== 0) {
+            van.status_van = true
+            van.id = vanVerification.id
+            result = await updateVan(van)
+        } else {
+            result = await insertVan(van)
+        }
 
         if (result) {
             return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }

@@ -68,7 +68,7 @@ const deleteVan = async (id) => {
 
 const selectAllVans = async () => {
     try {
-        let sql = `SELECT * FROM tbl_van ORDER BY id DESC`
+        let sql = `SELECT * FROM tbl_van WHERE status_van = 1 ORDER BY id DESC`
 
         const result = await prisma.$queryRawUnsafe(sql)
 
@@ -100,12 +100,28 @@ const selectVanById = async (id) => {
 
 const selectVanByDriverId = async (id) => {
     try {
-        let sql = `SELECT * FROM tbl_van WHERE id_motorista = ${id};`
+        let sql = `SELECT * FROM tbl_van WHERE status_van = 1 AND id_motorista = ${id};`
 
         const result = await prisma.$queryRawUnsafe(sql)
 
         if (result) {
             return result
+        } else {
+            return false
+        }
+    } catch (err) {
+        return false
+    }
+}
+
+const verifyVan = async (vanPlaca) => {
+    try {
+        let sql = `SELECT * FROM tbl_van WHERE placa = '${vanPlaca}';`
+
+        const result = await prisma.$queryRawUnsafe(sql)
+
+        if (result != null) {
+            return result[0]
         } else {
             return false
         }
@@ -120,5 +136,6 @@ module.exports = {
     deleteVan,
     selectAllVans,
     selectVanById,
-    selectVanByDriverId
+    selectVanByDriverId,
+    verifyVan
 }

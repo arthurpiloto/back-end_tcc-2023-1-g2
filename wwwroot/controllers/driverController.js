@@ -28,9 +28,9 @@ const novoDriver = async (driver) => {
         const driverVerification = await verifyDriver(driver.email)
         let result
 
-        if (driverVerification) {
-            console.log(driverVerification)
+        if (driverVerification.length !== 0) {
             driver.status_motorista = true
+            driver.id = driverVerification.id
             result = await updateDriver(driver)
         } else {
             result = await insertDriver(driver)
