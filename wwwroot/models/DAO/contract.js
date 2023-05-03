@@ -53,9 +53,7 @@ const updateContract = async (contract) => {
 
 const deleteContract = async (id) => {
     try {
-        let sql = `UPDATE tbl_contrato SET
-            status_contrato = false
-        WHERE id = ${id}`
+        let sql = `DELETE FROM tbl_contrato WHERE id = ${id}`
 
         const result = await prisma.$executeRawUnsafe(sql)
 
