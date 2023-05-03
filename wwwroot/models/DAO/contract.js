@@ -69,7 +69,7 @@ const deleteContract = async (id) => {
 
 const selectAllContracts = async () => {
     try {
-        let sql = `SELECT * FROM tbl_contrato ORDER BY id DESC`
+        let sql = `SELECT * FROM tbl_contrato WHERE status_contrato = 1 ORDER BY id DESC`
 
         const result = await prisma.$queryRawUnsafe(sql)
 
@@ -85,7 +85,7 @@ const selectAllContracts = async () => {
 
 const selectContractById = async (id) => {
     try {
-        let sql = `SELECT * FROM tbl_contrato WHERE id = ${id}`
+        let sql = `SELECT * FROM tbl_contrato WHERE id = ${id} AND status_contrato = 1`
 
         const result = await prisma.$queryRawUnsafe(sql)
 
