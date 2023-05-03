@@ -8,6 +8,23 @@ VERSÃO: 1.0
 const { PrismaClient } = require(`@prisma/client`)
 const prisma = new PrismaClient()
 
+const insertDriverSchool = async (driverSchool) => {
+    try {
+        let sql = `INSERT INTO tbl_escola_motorista (id_escola, id_motorista)
+        VALUES (${driverSchool.id_escola}, ${driverSchool.id_motorista})`
+
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if (result) {
+            return true
+        } else {
+            return false
+        }
+    } catch (err) {
+        return false
+    }
+}
+
 const selectShoolsByDriverId = async (id) => {
     try {
         let sql = `SELECT tbl_escola_motorista.id_escola, tbl_escola.nome as nome_escola FROM tbl_escola_motorista
@@ -28,5 +45,6 @@ const selectShoolsByDriverId = async (id) => {
 }
 
 module.exports = {
+    insertDriverSchool,
     selectShoolsByDriverId
 }
