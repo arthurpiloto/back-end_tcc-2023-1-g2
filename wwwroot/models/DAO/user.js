@@ -59,8 +59,9 @@ const deleteUser = async (id) => {
         WHERE id = ${id}`
         
         const result = await prisma.$executeRawUnsafe(sql)
-
+        
         if (result) {
+            await prisma.$executeRawUnsafe(`DELETE FROM tbl_contrato WHERE id_usuario = ${id}`)
             return true
         } else {
             return false
