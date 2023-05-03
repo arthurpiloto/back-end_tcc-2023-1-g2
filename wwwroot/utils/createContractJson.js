@@ -7,7 +7,7 @@ VERSÃO: 1.0
 const { selectDriverById } = require('../models/DAO/driver.js')
 const { selectVanByDriverId } = require('../models/DAO/van.js')
 const { createJsonDriver } = require('./createJsonDriver.js')
-const { selectUserById } = require('../models/DAO/user.js')
+const { listarUserById } = require('../controllers/userController.js')
 const { selectSchoolById } = require('../models/DAO/school.js')
 const { selectTypeContractById } = require('../models/DAO/typeContract.js')
 const { selectTypePaymentByID } = require('../models/DAO/typePayment.js')
@@ -37,10 +37,8 @@ const createContract = async (contractObject) => {
         const driverJson = await createJsonDriver(van, driver, "json")
         returnMessage.motorista = driverJson
 
-        const user = await selectUserById(element.id_usuario)
-        user.forEach(el => {
-            returnMessage.usuario = el
-        })
+        const user = await listarUserById(element.id_usuario)
+        returnMessage.usuario = user.message
 
         const school = await selectSchoolById(element.id_escola)
         school.forEach(el => {
