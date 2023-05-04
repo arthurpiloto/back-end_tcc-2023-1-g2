@@ -62,7 +62,12 @@ const deleteDriverSchool = async (id) => {
 
 const selectAllDriversSchool = async () => {
     try {
-        let sql = `SELECT tbl_escola_motorista.id as id, tbl_escola_motorista.id_escola, tbl_escola.nome as nome_escola FROM tbl_escola_motorista ORDER BY id DESC`
+        let sql = `SELECT tbl_escola_motorista.id as id, tbl_escola_motorista.id_escola, tbl_escola.nome as nome_escola, tbl_escola_motorista.id_motorista, tbl_motorista.nome as nome_motorista FROM tbl_escola_motorista
+        INNER JOIN tbl_escola
+            ON tbl_escola.id = tbl_escola_motorista.id_escola
+        INNER JOIN tbl_motorista
+            ON tbl_motorista.id = tbl_escola_motorista.id_motorista
+        ORDER BY id DESC`
 
         const result = await prisma.$queryRawUnsafe(sql)
 
@@ -102,5 +107,6 @@ module.exports = {
     insertDriverSchool,
     updateDriverSchool,
     deleteDriverSchool,
+    selectAllDriversSchool,
     selectShoolsByDriverId
 }

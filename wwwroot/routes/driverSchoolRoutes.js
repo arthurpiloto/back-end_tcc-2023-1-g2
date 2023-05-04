@@ -9,7 +9,7 @@ const express = require(`express`)
 const jsonParser = express.json()
 const router = express.Router()
 const { MESSAGE_ERROR } = require('../modules/config.js')
-const { novoSchoolDriver, atualizarSchoolDriver, deletarSchoolDriver, listarSchoolsByDriverId } = require('../controllers/driverSchoolController.js')
+const { novoSchoolDriver, atualizarSchoolDriver, deletarSchoolDriver, listarSchoolDrivers, listarSchoolsByDriverId } = require('../controllers/driverSchoolController.js')
 const { verifyJwt } = require('../../middlewares/jwt.js')
 
 router
@@ -36,6 +36,25 @@ router
             statusCode = 415
             message = MESSAGE_ERROR.CONTENT_TYPE
         }
+        return response.status(statusCode).json(message)
+    })
+
+router
+    .route('/driversSchools')
+    .get(async (request, response) => {
+        let statusCode
+        let message
+
+        const schoolsData = await listarSchoolDrivers()
+
+        if (schoolsData) {
+            statusCode = schoolsData.status
+            message = schoolsData.message
+        } else {
+            statusCode = 404
+            message = MESSAGE_ERROR.NOT_FOUND_DB
+        }
+
         return response.status(statusCode).json(message)
     })
 
@@ -77,13 +96,13 @@ router
         return response.status(statusCode).json(message)
     })
 
-    .delete(async(request, response) => {
+    .delete(async (request, response) => {
         let statusCode
         let message
 
         let id = request.params.driverSchoolId
 
-        if(id != '' && id != undefined) {
+        if (id != '' && id != undefined) {
             const deletedDriverSchool = await deletarSchoolDriver(id)
 
             statusCode = deletedDriverSchool.status
@@ -92,7 +111,7 @@ router
             statusCode = 400
             message = MESSAGE_ERROR.REQUIRED_ID
         }
-        
+
         response.status(statusCode).json(message)
     })
 
