@@ -59,7 +59,7 @@ const listarPrices = async () => {
 
     if (result) {
         let jsonReturn = {}
-        jsonReturn.schools = result
+        jsonReturn.prices = result
         return { status: 200, message: jsonReturn }
     } else {
         return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
