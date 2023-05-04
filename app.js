@@ -28,6 +28,7 @@ const typePaymentRouter = require('./wwwroot/routes/typePaymentRoutes.js')
 const typeContractRouter = require('./wwwroot/routes/typeContractRoutes.js')
 const contractRouter = require('./wwwroot/routes/contractRoutes.js')
 const driverSchoolsRouter = require('./wwwroot/routes/driverSchoolRoutes.js')
+const priceRouter = require('./wwwroot/routes/priceRoutes.js')
 
 app.use(userRouter)
 app.use(driverRouter)
@@ -39,6 +40,7 @@ app.use(typePaymentRouter)
 app.use(typeContractRouter)
 app.use(contractRouter)
 app.use(driverSchoolsRouter)
+app.use(priceRouter)
 
 const port = process.env.PORT || 8080
 
