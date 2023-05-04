@@ -6,7 +6,7 @@ DATA DE CRIAÇÃO: 17/04/2023
 VERSÃO: 1.0
 ************************************************************************/
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
-const { insertDriverSchool, updateDriverSchool, selectShoolsByDriverId } = require('../models/DAO/driverSchool.js')
+const { insertDriverSchool, updateDriverSchool, deleteDriverSchool, selectShoolsByDriverId } = require('../models/DAO/driverSchool.js')
 
 const novoSchoolDriver = async (driverSchool) => {
     if (driverSchool.id_escola == '' || driverSchool.id_escola == undefined || driverSchool.id_motorista == '' || driverSchool.id_motorista == undefined) {
@@ -64,6 +64,20 @@ const atualizarSchoolDriver = async (driverSchool) => {
     }
 }
 
+const deletarSchoolDriver = async (id) => {
+    if (id == '' || id == undefined) {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    } else {
+        const result = await deleteDriverSchool(id)
+
+        if (result) {
+            return { status: 200, message: MESSAGE_SUCCESS.DELETE_ITEM }
+        } else {
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+        }
+    }
+}
+
 const listarSchoolsByDriverId = async (id) => {
     if (id == '' || id == undefined) {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
@@ -83,5 +97,6 @@ const listarSchoolsByDriverId = async (id) => {
 module.exports = {
     novoSchoolDriver,
     atualizarSchoolDriver,
+    deletarSchoolDriver,
     listarSchoolsByDriverId
 }

@@ -44,6 +44,22 @@ const updateDriverSchool = async (driverSchool) => {
     }
 }
 
+const deleteDriverSchool = async (id) => {
+    try {
+        let sql = `DELETE FROM tbl_escola_motorista WHERE id = ${id}`
+
+        const result = await prisma.$executeRawUnsafe(sql)
+
+        if (result) {
+            return true
+        } else {
+            return false
+        }
+    } catch (err) {
+        return false
+    }
+}
+
 const selectShoolsByDriverId = async (id) => {
     try {
         let sql = `SELECT tbl_escola_motorista.id as id, tbl_escola_motorista.id_escola, tbl_escola.nome as nome_escola FROM tbl_escola_motorista
@@ -67,5 +83,6 @@ const selectShoolsByDriverId = async (id) => {
 module.exports = {
     insertDriverSchool,
     updateDriverSchool,
+    deleteDriverSchool,
     selectShoolsByDriverId
 }

@@ -9,7 +9,7 @@ const express = require(`express`)
 const jsonParser = express.json()
 const router = express.Router()
 const { MESSAGE_ERROR } = require('../modules/config.js')
-const { novoSchoolDriver, atualizarSchoolDriver, listarSchoolsByDriverId } = require('../controllers/driverSchoolController.js')
+const { novoSchoolDriver, atualizarSchoolDriver, deletarSchoolDriver, listarSchoolsByDriverId } = require('../controllers/driverSchoolController.js')
 const { verifyJwt } = require('../../middlewares/jwt.js')
 
 router
@@ -75,6 +75,25 @@ router
         }
 
         return response.status(statusCode).json(message)
+    })
+
+    .delete(async(request, response) => {
+        let statusCode
+        let message
+
+        let id = request.params.driverSchoolId
+
+        if(id != '' && id != undefined) {
+            const deletedDriverSchool = await deletarSchoolDriver(id)
+
+            statusCode = deletedDriverSchool.status
+            message = deletedDriverSchool.message
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_ID
+        }
+        
+        response.status(statusCode).json(message)
     })
 
 router
