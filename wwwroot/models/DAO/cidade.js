@@ -21,7 +21,6 @@ const insertCidade = async (cidade) => {
             return false
         }
     } catch (err) {
-        console.log(err)
         return false
     }
 }
@@ -41,7 +40,6 @@ const updateCidade = async (cidade) => {
             return false
         }
     } catch (err) {
-        console.log(err)
         return false
     }
 }
