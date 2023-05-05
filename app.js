@@ -29,6 +29,9 @@ const typeContractRouter = require('./wwwroot/routes/typeContractRoutes.js')
 const contractRouter = require('./wwwroot/routes/contractRoutes.js')
 const driverSchoolsRouter = require('./wwwroot/routes/driverSchoolRoutes.js')
 const priceRouter = require('./wwwroot/routes/priceRoutes.js')
+const cidadeRouter = require('./wwwroot/routes/cidadeRoutes.js')
+const estadoRouter = require('./wwwroot/routes/estadoRoutes.js')
+const enderecoRouter = require('./wwwroot/routes/enderecoRoutes.js')
 
 app.use(userRouter)
 app.use(driverRouter)
@@ -41,6 +44,9 @@ app.use(typeContractRouter)
 app.use(contractRouter)
 app.use(driverSchoolsRouter)
 app.use(priceRouter)
+app.use(cidadeRouter)
+app.use(estadoRouter)
+app.use(enderecoRouter)
 
 const port = process.env.PORT || 8080
 
