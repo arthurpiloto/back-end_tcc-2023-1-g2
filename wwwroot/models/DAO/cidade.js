@@ -29,7 +29,7 @@ const updateCidade = async (cidade) => {
     try {
         let sql = `UPDATE tbl_cidade SET 
                 nome = '${cidade.nome}',
-                status_cidade = true
+                status_cidade = ${cidade.status_cidade}
             WHERE id = ${cidade.id};`
 
         const result = await prisma.$executeRawUnsafe(sql)
@@ -46,7 +46,9 @@ const updateCidade = async (cidade) => {
 
 const deleteCidade = async (id) => {
     try {
-        let sql = `DELETE FROM tbl_cidade WHERE id = ${id}`
+        let sql = `UPDATE tbl_cidade SET
+            status_cidade = false
+        WHERE id = ${id}`
 
         const result = await prisma.$executeRawUnsafe(sql)
 
