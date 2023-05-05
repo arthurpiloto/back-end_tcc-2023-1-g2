@@ -30,7 +30,7 @@ const createContract = async (contractObject) => {
         returnMessage.id = element.id
         returnMessage.nome_passageiro = element.nome_passageiro
         returnMessage.idade_passageiro = element.idade_passageiro
-        returnMessage.valo_contrato = element.valor
+        returnMessage.valor_contrato = element.valor
 
         const driver = await selectDriverById(element.id_motorista)
         const van = await selectVanByDriverId(element.id_motorista)
