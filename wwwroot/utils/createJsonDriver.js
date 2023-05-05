@@ -22,14 +22,14 @@ const createJsonDriver = async (resultVan, result, message) => {
     })
 
     if (message === "json") {
-        result.map(async element => {
+        await Promise.all(result.map(async element => {
             element.van = resultVan
             let priceResult = await listarPriceById(element.id_preco)
             element.id_preco = priceResult.message
             element.data_nascimento = await formatDate(element.data_nascimento)
             element.inicio_carreira = await formatDate(element.inicio_carreira)
             return element
-        })
+        }))
         return result[0]
     } else {
         result.van = resultVan
