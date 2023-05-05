@@ -5,8 +5,7 @@ AUTOR: ARTHUR PILOTO
 DATA DE CRIAÇÃO: 03/03/2023
 VERSÃO: 1.0
 ************************************************************************/
-const { PrismaClient } = require(`@prisma/client`)
-const prisma = new PrismaClient()
+const prisma = require('../../libs/prisma.js')
 
 const insertModel = async (model) => {
     try {

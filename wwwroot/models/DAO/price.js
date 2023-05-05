@@ -5,8 +5,7 @@ AUTOR:  ARTHUR PILOTO SILVA
 DATA DE CRIAÇÃO: 04/05/2023
 VERSÃO: 1.0
 ************************************************************************/
-const { PrismaClient } = require(`@prisma/client`)
-const prisma = new PrismaClient()
+const prisma = require('../../libs/prisma.js')
 
 const insertPrice = async (price) => {
     try {
