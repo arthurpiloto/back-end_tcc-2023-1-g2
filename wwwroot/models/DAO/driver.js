@@ -10,8 +10,8 @@ const prisma = new PrismaClient()
 
 const insertDriver = async (driver) => {
     try {
-        let sql = `INSERT INTO tbl_motorista (nome, email, rg, cpf, cnh, telefone, data_nascimento, inicio_carreira, senha, foto, avaliacao, descricao, status_motorista)
-        values ('${driver.nome}', '${driver.email}', '${driver.rg}', '${driver.cpf}', '${driver.cnh}', '${driver.telefone}', '${driver.data_nascimento}', '${driver.inicio_carreira}', md5('${driver.senha}'), '${driver.foto}', ${driver.avaliacao}, '${driver.descricao}', true);`
+        let sql = `INSERT INTO tbl_motorista (nome, email, rg, cpf, cnh, telefone, data_nascimento, inicio_carreira, senha, foto, avaliacao, descricao, status_motorista, id_preco)
+        values ('${driver.nome}', '${driver.email}', '${driver.rg}', '${driver.cpf}', '${driver.cnh}', '${driver.telefone}', '${driver.data_nascimento}', '${driver.inicio_carreira}', md5('${driver.senha}'), '${driver.foto}', ${driver.avaliacao}, '${driver.descricao}', true, ${driver.id_preco});`
 
         const result = await prisma.$executeRawUnsafe(sql)
 
@@ -40,7 +40,8 @@ const updateDriver = async (driver) => {
             foto = '${driver.foto}',
             avaliacao = '${driver.avaliacao}',
             descricao = '${driver.descricao}',
-            status_motorista = ${driver.status_motorista}
+            status_motorista = ${driver.status_motorista},
+            id_preco = ${driver.id_preco}
         WHERE id = ${driver.id};`
 
         const result = await prisma.$executeRawUnsafe(sql)
@@ -51,7 +52,6 @@ const updateDriver = async (driver) => {
             return false
         }
     } catch (err) {
-        // console.log(err)
         return false
     }
 }
