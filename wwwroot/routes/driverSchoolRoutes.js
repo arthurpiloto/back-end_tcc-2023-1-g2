@@ -1,6 +1,5 @@
 /************************************************************************
 OBJETIVO: ARQUIVO RESPONSÁVEL PELA ORGANIZAÇÃO DAS ROTAS
-DAS ESCOLAS DO MOTORISTA
 AUTOR: ARTHUR PILOTO
 DATA DE CRIAÇÃO: 17/04/2023
 VERSÃO: 1.0

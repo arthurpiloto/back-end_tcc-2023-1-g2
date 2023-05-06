@@ -6,6 +6,7 @@ DATA DE CRIAÇÃO: 05/05/2023
 VERSÃO: 1.0
 ************************************************************************/
 const { insertEndereco, updateEndereco, deleteEndereco, selectAllEnderecos, selectEnderecoById } = require('../models/DAO/endereco.js')
+const { cepConverter } = require('../utils/cepConverter.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const novoEndereco = async (endereco) => {
@@ -14,7 +15,8 @@ const novoEndereco = async (endereco) => {
     } else if (endereco.cep.length > 9 || endereco.numero.length > 10 || endereco.bairro.length > 150 || endereco.logradouro.length > 200) {
         return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
     } else {
-        const result = await insertEndereco(endereco)
+        const resultCep = await cepConverter(endereco.cep)
+        const result = await insertEndereco(resultCep, endereco)
 
         if (result) {
             return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }

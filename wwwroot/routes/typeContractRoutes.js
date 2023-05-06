@@ -1,6 +1,5 @@
 /************************************************************************
 OBJETIVO: ARQUIVO RESPONSÁVEL PELA ORGANIZAÇÃO DAS ROTAS
-DE TIPO DE CONTRATO
 AUTOR: NICOLAS DOBBECK MENDES
 DATA DE CRIAÇÃO: 29/03/2023
 VERSÃO: 1.0

@@ -1,6 +1,5 @@
 /************************************************************************
 OBJETIVO: ARQUIVO RESPONSÁVEL PELA ORGANIZAÇÃO DAS ROTAS
-DE USUÁRIO
 AUTOR: ARTHUR PILOTO
 DATA DE CRIAÇÃO: 03/03/2023
 VERSÃO: 1.0

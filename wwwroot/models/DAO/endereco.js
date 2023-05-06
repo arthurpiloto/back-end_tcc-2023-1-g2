@@ -7,10 +7,10 @@ VERSÃO: 1.0
 ************************************************************************/
 const prisma = require('../../libs/prisma.js')
 
-const insertEndereco = async (endereco) => {
+const insertEndereco = async (resultCep, endereco) => {
     try {
         let sql = `INSERT INTO tbl_endereco (cep, numero, bairro, logradouro, status_endereco, id_estado)
-        VALUES ('${endereco.cep}', '${endereco.numero}', '${endereco.bairro}', '${endereco.logradouro}', true, ${endereco.id_estado});`
+        VALUES ('${resultCep.cep}', '${endereco.numero}', '${resultCep.neighborhood}', '${resultCep.street}', true, ${endereco.id_estado});`
 
         const result = await prisma.$executeRawUnsafe(sql)
 
@@ -24,13 +24,13 @@ const insertEndereco = async (endereco) => {
     }
 }
 
-const updateEndereco = async (endereco) => {
+const updateEndereco = async (resultCep, endereco) => {
     try {
         let sql = `UPDATE tbl_endereco SET
-                cep = '${endereco.cep}',
+                cep = '${resultCep.cep}',
                 numero = '${endereco.numero}',
-                bairro = '${endereco.bairro}',
-                logradouro = '${endereco.logradouro}',
+                bairro = '${resultCep.neighborhood}',
+                logradouro = '${resultCep.street}',
                 status_endereco = ${endereco.status_endereco},
                 id_estado = ${endereco.id_estado}
             WHERE id = ${endereco.id};`

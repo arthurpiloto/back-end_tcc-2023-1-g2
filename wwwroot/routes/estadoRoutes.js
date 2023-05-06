@@ -1,6 +1,5 @@
 /************************************************************************
 OBJETIVO: ARQUIVO RESPONSÁVEL PELA ORGANIZAÇÃO DAS ROTAS
-DE ESCOLA
 AUTOR: ARTHUR PILOTO SILVA
 DATA DE CRIAÇÃO: 05/05/2023
 VERSÃO: 1.0
