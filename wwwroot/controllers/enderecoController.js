@@ -32,7 +32,8 @@ const atualizarEndereco = async (endereco) => {
     } else if (endereco.cep.length > 9 || endereco.numero.length > 10 || endereco.bairro.length > 150 || endereco.logradouro.length > 200) {
         return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
     } else {
-        const result = await updateEndereco(endereco)
+        const resultCep = await cepConverter(endereco.cep)
+        const result = await updateEndereco(resultCep, endereco)
 
         if (result) {
             return { status: 201, message: MESSAGE_SUCCESS.UPDATE_ITEM }
