@@ -12,12 +12,17 @@ const novoEnderecoUsuario = async (enderecoUsuario) => {
     if (enderecoUsuario.id_endereco == '' || enderecoUsuario.id_endereco == undefined || enderecoUsuario.id_usuario == '' || enderecoUsuario.id_usuario == undefined) {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     } else {
-        const result = await insertEnderecoUsuario(enderecoUsuario)
-
-        if (result) {
-            return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }
+        const verify = await listarEnderecoByUsuarioId(enderecoUsuario.id_usuario)
+        if (verify.status == 200) {
+            return { status: 401, message: MESSAGE_ERROR.USER_ADDRESS }
         } else {
-            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+            const result = await insertEnderecoUsuario(enderecoUsuario)
+
+            if (result) {
+                return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }
+            } else {
+                return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+            }
         }
     }
 }
@@ -29,7 +34,7 @@ const atualizarEnderecoUsuario = async (enderecoUsuario) => {
         const result = await updateEnderecoUsuario(enderecoUsuario)
 
         if (result) {
-            return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }
+            return { status: 201, message: MESSAGE_SUCCESS.UPDATE_ITEM }
         } else {
             return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
         }
@@ -55,7 +60,7 @@ const listarEnderecosUsuario = async () => {
 
     if (result) {
         let schoolsJson = {}
-        schoolsJson.schools = result
+        schoolsJson.enderecos_usuarios = result
         return { status: 200, message: schoolsJson }
     } else {
         return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
@@ -69,9 +74,7 @@ const listarEnderecoByUsuarioId = async (id) => {
         const result = await selectEnderecoByUserId(id)
 
         if (result) {
-            let schoolsJson = {}
-            schoolsJson.schools = result
-            return { status: 200, message: schoolsJson }
+            return { status: 200, message: result[0] }
         } else {
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
         }
