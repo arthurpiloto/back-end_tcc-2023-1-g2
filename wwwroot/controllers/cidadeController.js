@@ -14,21 +14,19 @@ const novoCidade = async (cidade) => {
     } else if (cidade.nome.length > 150) {
         return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
     } else {
-        let messageVerify = false
-        const verifyCity = await listarCidades()
-        verifyCity.message.cidades.map(el => {
-            if (cidade.nome == el.nome) {
-                messageVerify = true
-            }
-        })
+        const verifyCity = await listarCidadeByNome(cidade.nome)
 
-        if (messageVerify) {
-            return { status: 401, message: MESSAGE_ERROR.CITY_EXISTS }
+        if (verifyCity.status == 200) {
+            return { status: 401, message: verifyCity.message }
         } else {
             const result = await insertCidade(cidade)
 
             if (result) {
-                return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }
+                let messageReturn = {}
+                messageReturn.message = MESSAGE_SUCCESS.INSERT_ITEM
+                messageReturn.id = result[0]
+
+                return { status: 201, message: messageReturn }
             } else {
                 return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
             }

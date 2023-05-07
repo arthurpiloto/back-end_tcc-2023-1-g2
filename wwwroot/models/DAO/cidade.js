@@ -12,10 +12,15 @@ const insertCidade = async (cidade) => {
         let sql = `INSERT INTO tbl_cidade (nome, status_cidade)
         VALUES ('${cidade.nome}', true);`
 
-        const result = await prisma.$executeRawUnsafe(sql)
+        let result = await prisma.$executeRawUnsafe(sql)
 
         if (result) {
-            return true
+            sql = `SELECT id FROM tbl_cidade WHERE nome LIKE '${cidade.nome}';`
+            result = await prisma.$queryRawUnsafe(sql)
+
+            if (result) {
+                return result
+            }
         } else {
             return false
         }
