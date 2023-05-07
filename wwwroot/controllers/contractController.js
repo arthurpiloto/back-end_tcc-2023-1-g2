@@ -5,12 +5,12 @@ AUTOR: NICOLAS DOBBECK
 DATA DE CRIAÇÃO: 29/03/2023
 VERSÃO: 1.0
 ************************************************************************/
-const { insertContract, updateContract, selectAllContracts, deleteContract, selectContractById, selectUserContracts } = require('../models/DAO/contract.js')
+const { insertContract, updateContract, selectAllContracts, deleteContract, selectContractById, selectUserContracts, selectDriverContracts } = require('../models/DAO/contract.js')
 const { createContractJson } = require('../utils/createContractJson.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const novoContract = async (contract) => {
-    if (contract.valor == '' || contract.valor == null || contract.nome_passageiro == '' || contract.nome_passageiro == null || contract.idade_passageiro == '' || contract.idade_passageiro == null ||
+    if (contract.nome_passageiro == '' || contract.nome_passageiro == null || contract.idade_passageiro == '' || contract.idade_passageiro == null ||
         contract.id_usuario == '' || contract.id_usuario == null || contract.id_motorista == '' || contract.id_motorista == null || contract.id_escola == '' || contract.id_escola == null || contract.id_tipo_pagamento == '' ||
         contract.id_tipo_pagamento == null || contract.id_tipo_contrato == '' || contract.id_tipo_contrato == null) {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
@@ -28,7 +28,7 @@ const novoContract = async (contract) => {
 }
 
 const atualizarContract = async (contract) => {
-    if (contract.valor == '' || contract.valor == null || contract.nome_passageiro == '' || contract.nome_passageiro == null || contract.idade_passageiro == '' || contract.idade_passageiro == null ||
+    if (contract.nome_passageiro == '' || contract.nome_passageiro == null || contract.idade_passageiro == '' || contract.idade_passageiro == null ||
         contract.id_usuario == '' || contract.id_usuario == null || contract.id_motorista == '' || contract.id_motorista == null || contract.id_escola == '' || contract.id_escola == null || contract.id_tipo_pagamento == '' ||
         contract.id_tipo_pagamento == null || contract.id_tipo_contrato == '' || contract.id_tipo_contrato == null) {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
@@ -104,6 +104,29 @@ const listarUserContracts = async (id) => {
     }
 }
 
+const listarDriverContracts = async (id) => {
+    if (id == '' || id == undefined) {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    } else {
+        const result = await selectDriverContracts(id)
+        const message = await createContractJson(result, "array")
+
+        if (message) {
+            let contractsJson = {}
+            contractsJson.contracts = message
+            return { status: 200, message: contractsJson }
+        } else {
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+        }
+    }
+}
+
 module.exports = {
-    novoContract, atualizarContract, listarContracts, deletarContract, listarContractById, listarUserContracts
+    novoContract,
+    atualizarContract,
+    listarContracts,
+    deletarContract,
+    listarContractById,
+    listarUserContracts,
+    listarDriverContracts
 }
