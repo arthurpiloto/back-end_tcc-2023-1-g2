@@ -6,6 +6,7 @@ DATA DE CRIAÇÃO: 05/05/2023
 VERSÃO: 1.0
 ************************************************************************/
 const { insertEndereco, updateEndereco, deleteEndereco, selectAllEnderecos, selectEnderecoById } = require('../models/DAO/endereco.js')
+const { createEnderecoJson } = require('../utils/createEnderecoJson.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const novoEndereco = async (endereco) => {
@@ -60,11 +61,10 @@ const deletarEndereco = async (id) => {
 
 const listarEnderecos = async () => {
     const result = await selectAllEnderecos()
-
+    
     if (result) {
-        let jsonReturn = {}
-        jsonReturn.enderecos = result
-        return { status: 200, message: jsonReturn }
+        const json = await createEnderecoJson(result, "array")
+        return { status: 200, message: json }
     } else {
         return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
     }
@@ -75,13 +75,10 @@ const listarEnderecoById = async (id) => {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
     } else {
         const result = await selectEnderecoById(id)
-
+        
         if (result.length !== 0) {
-            let jsonReturn = {}
-            result.forEach(element => {
-                jsonReturn = element
-            })
-            return { status: 200, message: jsonReturn }
+            const json = await createEnderecoJson(result[0], "json")
+            return { status: 200, message: json }
         } else {
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
         }
