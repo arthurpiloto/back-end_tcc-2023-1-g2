@@ -93,10 +93,28 @@ const selectCidadeById = async (id) => {
     }
 }
 
+const selectCidadeByName = async (cidade) => {
+    try {
+        let sql = `SELECT * FROM tbl_cidade WHERE nome LIKE '${cidade}'`
+
+        const result = await prisma.$queryRawUnsafe(sql)
+
+        if (result) {
+            return result
+        } else {
+            return false
+        }
+    } catch (err) {
+        console.log(err)
+        return false
+    }
+}
+
 module.exports = {
     insertCidade,
     updateCidade,
     deleteCidade,
     selectAllCidades,
-    selectCidadeById
+    selectCidadeById,
+    selectCidadeByName
 }

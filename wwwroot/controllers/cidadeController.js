@@ -5,7 +5,7 @@ AUTOR: ARTHUR PILOTO SILVA
 DATA DE CRIAÇÃO: 05/05/2023
 VERSÃO: 1.0
 ************************************************************************/
-const { insertCidade, updateCidade, deleteCidade, selectAllCidades, selectCidadeById } = require('../models/DAO/cidade.js')
+const { insertCidade, updateCidade, deleteCidade, selectAllCidades, selectCidadeById, selectCidadeByName } = require('../models/DAO/cidade.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const novoCidade = async (cidade) => {
@@ -14,12 +14,24 @@ const novoCidade = async (cidade) => {
     } else if (cidade.nome.length > 150) {
         return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
     } else {
-        const result = await insertCidade(cidade)
+        let messageVerify = false
+        const verifyCity = await listarCidades()
+        verifyCity.message.cidades.map(el => {
+            if (cidade.nome == el.nome) {
+                messageVerify = true
+            }
+        })
 
-        if (result) {
-            return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }
+        if (messageVerify) {
+            return { status: 401, message: MESSAGE_ERROR.CITY_EXISTS }
         } else {
-            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+            const result = await insertCidade(cidade)
+
+            if (result) {
+                return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }
+            } else {
+                return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+            }
         }
     }
 }
@@ -84,10 +96,25 @@ const listarCidadeById = async (id) => {
     }
 }
 
+const listarCidadeByNome = async (cidade) => {
+    if (cidade == '' || cidade == undefined) {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    } else {
+        const result = await selectCidadeByName(cidade)
+
+        if (result.length !== 0) {
+            return { status: 200, message: result[0] }
+        } else {
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+        }
+    }
+}
+
 module.exports = {
     novoCidade,
     atualizarCidade,
     deletarCidade,
     listarCidades,
-    listarCidadeById
+    listarCidadeById,
+    listarCidadeByNome
 }
