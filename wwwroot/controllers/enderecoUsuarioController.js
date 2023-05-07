@@ -6,6 +6,7 @@ DATA DE CRIAÇÃO: 07/05/2023
 VERSÃO: 1.0
 ************************************************************************/
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
+const { createEnderecoUsuarioJson } = require('../utils/createEnderecoUsuarioJson.js')
 const { insertEnderecoUsuario, updateEnderecoUsuario, deleteEnderecoUsuario, selectAllEnderecosUsuario, selectEnderecoByUserId } = require('../models/DAO/enderecoUsuario.js')
 
 const novoEnderecoUsuario = async (enderecoUsuario) => {
@@ -74,7 +75,8 @@ const listarEnderecoByUsuarioId = async (id) => {
         const result = await selectEnderecoByUserId(id)
 
         if (result) {
-            return { status: 200, message: result[0] }
+            const json = await createEnderecoUsuarioJson(result)
+            return { status: 200, message: json }
         } else {
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
         }
