@@ -8,6 +8,7 @@ const express = require(`express`)
 const jsonParser = express.json()
 const { novoEndereco, atualizarEndereco, deletarEndereco, listarEnderecos, listarEnderecoById } = require('../controllers/enderecoController.js')
 const { MESSAGE_ERROR } = require('../modules/config.js')
+const { cepConverter } = require('../utils/cepConverter.js')
 const router = express.Router()
 
 router
@@ -23,6 +24,12 @@ router
             let dadosBody = request.body
 
             if (JSON.stringify(dadosBody) != `{}`) {
+                let numeroCasa = dadosBody.numero
+                let idEstado = dadosBody.id_estado
+                dadosBody = await cepConverter(dadosBody.cep)
+                dadosBody.numero = numeroCasa
+                dadosBody.id_estado = idEstado
+                
                 const data = await novoEndereco(dadosBody)
                 statusCode = data.status
                 message = data.message

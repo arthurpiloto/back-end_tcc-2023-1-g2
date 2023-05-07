@@ -7,15 +7,20 @@ VERSÃO: 1.0
 ************************************************************************/
 const prisma = require('../../libs/prisma.js')
 
-const insertEndereco = async (resultCep, endereco) => {
+const insertEndereco = async (endereco) => {
     try {
         let sql = `INSERT INTO tbl_endereco (cep, numero, bairro, logradouro, status_endereco, id_estado)
-        VALUES ('${resultCep.cep}', '${endereco.numero}', '${resultCep.neighborhood}', '${resultCep.street}', true, ${endereco.id_estado});`
+        VALUES ('${endereco.cep}', '${endereco.numero}', '${endereco.neighborhood}', '${endereco.street}', true, ${endereco.id_estado});`
 
-        const result = await prisma.$executeRawUnsafe(sql)
+        let result = await prisma.$executeRawUnsafe(sql)
 
         if (result) {
-            return true
+            sql = `SELECT id FROM tbl_endereco ORDER BY id DESC LIMIT 1;`
+            result = await prisma.$queryRawUnsafe(sql)
+
+            if (result) {
+                return result
+            }
         } else {
             return false
         }
@@ -24,13 +29,13 @@ const insertEndereco = async (resultCep, endereco) => {
     }
 }
 
-const updateEndereco = async (resultCep, endereco) => {
+const updateEndereco = async (endereco) => {
     try {
         let sql = `UPDATE tbl_endereco SET
-                cep = '${resultCep.cep}',
+                cep = '${endereco.cep}',
                 numero = '${endereco.numero}',
-                bairro = '${resultCep.neighborhood}',
-                logradouro = '${resultCep.street}',
+                bairro = '${endereco.neighborhood}',
+                logradouro = '${endereco.street}',
                 status_endereco = ${endereco.status_endereco},
                 id_estado = ${endereco.id_estado}
             WHERE id = ${endereco.id};`
@@ -49,9 +54,7 @@ const updateEndereco = async (resultCep, endereco) => {
 
 const deleteEndereco = async (id) => {
     try {
-        let sql = `UPDATE tbl_endereco SET
-            status_endereco = false
-        WHERE id = ${id}`
+        let sql = `DELETE FROM tbl_endereco WHERE id = ${id}`
 
         const result = await prisma.$executeRawUnsafe(sql)
 

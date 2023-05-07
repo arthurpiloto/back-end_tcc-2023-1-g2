@@ -10,12 +10,12 @@ const prisma = require('../../libs/prisma.js')
 const insertCidade = async (cidade) => {
     try {
         let sql = `INSERT INTO tbl_cidade (nome, status_cidade)
-        VALUES ('${cidade.nome}', true);`
+        VALUES ('${cidade}', true);`
 
         let result = await prisma.$executeRawUnsafe(sql)
 
         if (result) {
-            sql = `SELECT id FROM tbl_cidade WHERE nome LIKE '${cidade.nome}';`
+            sql = `SELECT id FROM tbl_cidade WHERE nome LIKE '${cidade}';`
             result = await prisma.$queryRawUnsafe(sql)
 
             if (result) {
@@ -110,7 +110,6 @@ const selectCidadeByName = async (cidade) => {
             return false
         }
     } catch (err) {
-        console.log(err)
         return false
     }
 }

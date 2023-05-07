@@ -15,7 +15,12 @@ const insertEstado = async (estado) => {
         const result = await prisma.$executeRawUnsafe(sql)
 
         if (result) {
-            return true
+            sql = `SELECT id FROM tbl_estado WHERE nome LIKE '${estado.nome}';`
+            result = await prisma.$queryRawUnsafe(sql)
+
+            if (result) {
+                return result
+            }
         } else {
             return false
         }
@@ -94,10 +99,27 @@ const selectEstadoById = async (id) => {
     }
 }
 
+const selectEstadoByName = async (estado) => {
+    try {
+        let sql = `SELECT * FROM tbl_estado WHERE nome LIKE '${estado}'`
+
+        const result = await prisma.$queryRawUnsafe(sql)
+
+        if (result) {
+            return result
+        } else {
+            return false
+        }
+    } catch (err) {
+        return false
+    }
+}
+
 module.exports = {
     insertEstado,
     updateEstado,
     deleteEstado,
     selectAllEstados,
-    selectEstadoById
+    selectEstadoById,
+    selectEstadoByName
 }

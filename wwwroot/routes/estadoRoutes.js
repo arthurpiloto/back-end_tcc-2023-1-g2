@@ -6,7 +6,7 @@ VERSÃO: 1.0
 ************************************************************************/
 const express = require(`express`)
 const jsonParser = express.json()
-const { novoEstado, atualizarEstado, deletarEstado, listarEstados, listarEstadoById } = require('../controllers/estadoController.js')
+const { novoEstado, atualizarEstado, deletarEstado, listarEstados, listarEstadoById, listarEstadoByNome } = require('../controllers/estadoController.js')
 const { MESSAGE_ERROR } = require('../modules/config.js')
 const router = express.Router()
 
@@ -39,10 +39,10 @@ router
 
 router
     .route('/estado/:estadoId')
-    .get(async(request, response) => {
+    .get(async (request, response) => {
         let statusCode
         let message
-        
+
         let id = request.params.estadoId
 
         if (id != '' && id != undefined) {
@@ -58,24 +58,24 @@ router
         return response.status(statusCode).json(message)
     })
 
-    .put(jsonParser, async(request, response) => {
+    .put(jsonParser, async (request, response) => {
         let statusCode
         let message
         let headerContentType
-    
+
         headerContentType = request.headers['content-type']
-    
-        if(headerContentType == 'application/json') {
+
+        if (headerContentType == 'application/json') {
             let bodyData = request.body
-    
-            if(JSON.stringify(bodyData) != '{}') {
+
+            if (JSON.stringify(bodyData) != '{}') {
                 let id = request.params.estadoId
-    
-                if(id != '' && id != undefined) {
+
+                if (id != '' && id != undefined) {
                     bodyData.id = id
-    
+
                     const data = await atualizarEstado(bodyData)
-    
+
                     statusCode = data.status
                     message = data.message
                 } else {
@@ -90,17 +90,17 @@ router
             statusCode = 415
             message = MESSAGE_ERROR.INCORRECT_CONTENT_TYPE
         }
-    
+
         return response.status(statusCode).json(message)
     })
 
-    .delete(async(request, response) => {
+    .delete(async (request, response) => {
         let statusCode
         let message
 
         let id = request.params.estadoId
 
-        if(id != '' && id != undefined) {
+        if (id != '' && id != undefined) {
             const data = await deletarEstado(id)
 
             statusCode = data.status
@@ -109,13 +109,13 @@ router
             statusCode = 400
             message = MESSAGE_ERROR.REQUIRED_ID
         }
-        
+
         response.status(statusCode).json(message)
     })
 
-router 
+router
     .route('/estados')
-    .get(async(request, response) => {
+    .get(async (request, response) => {
         let statusCode
         let message
 
@@ -127,6 +127,27 @@ router
         } else {
             statusCode = 404
             message = MESSAGE_ERROR.NOT_FOUND_DB
+        }
+
+        return response.status(statusCode).json(message)
+    })
+
+router
+    .route('/estado/nome/:estadoNome')
+    .get(async (request, response) => {
+        let statusCode
+        let message
+
+        let nome = request.params.estadoNome
+
+        if (nome != '' && nome != undefined) {
+            const data = await listarEstadoByNome(nome)
+
+            statusCode = data.status
+            message = data.message
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_FIELDS
         }
 
         return response.status(statusCode).json(message)

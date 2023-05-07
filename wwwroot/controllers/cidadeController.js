@@ -9,12 +9,12 @@ const { insertCidade, updateCidade, deleteCidade, selectAllCidades, selectCidade
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const novoCidade = async (cidade) => {
-    if (cidade.nome == '' || cidade.nome == null) {
+    if (cidade == '' || cidade == null) {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
-    } else if (cidade.nome.length > 150) {
+    } else if (cidade.length > 150) {
         return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
     } else {
-        const verifyCity = await listarCidadeByNome(cidade.nome)
+        const verifyCity = await listarCidadeByNome(cidade)
 
         if (verifyCity.status == 200) {
             return { status: 401, message: verifyCity.message }
@@ -24,7 +24,7 @@ const novoCidade = async (cidade) => {
             if (result) {
                 let messageReturn = {}
                 messageReturn.message = MESSAGE_SUCCESS.INSERT_ITEM
-                messageReturn.id = result[0]
+                messageReturn.id = result[0].id
 
                 return { status: 201, message: messageReturn }
             } else {

@@ -6,20 +6,22 @@ DATA DE CRIAÇÃO: 05/05/2023
 VERSÃO: 1.0
 ************************************************************************/
 const { insertEndereco, updateEndereco, deleteEndereco, selectAllEnderecos, selectEnderecoById } = require('../models/DAO/endereco.js')
-const { cepConverter } = require('../utils/cepConverter.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const novoEndereco = async (endereco) => {
-    if (endereco.cep == '' || endereco.cep == null || endereco.numero == '' || endereco.numero == null || endereco.bairro == '' || endereco.bairro == null || endereco.logradouro == '' || endereco.logradouro == null || endereco.id_estado == '' || endereco.id_estado == null) {
+    if (endereco.cep == '' || endereco.cep == null || endereco.numero == '' || endereco.numero == null || endereco.neighborhood == '' || endereco.neighborhood == null || endereco.street == '' || endereco.street == null || endereco.id_estado == '' || endereco.id_estado == null) {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
-    } else if (endereco.cep.length > 9 || endereco.numero.length > 10 || endereco.bairro.length > 150 || endereco.logradouro.length > 200) {
+    } else if (endereco.cep.length > 9 || endereco.numero.length > 10 || endereco.neighborhood.length > 150 || endereco.street.length > 200) {
         return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
     } else {
-        const resultCep = await cepConverter(endereco.cep)
-        const result = await insertEndereco(resultCep, endereco)
+        const result = await insertEndereco(endereco)
 
         if (result) {
-            return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }
+            let messageReturn = {}
+            messageReturn.message = MESSAGE_SUCCESS.INSERT_ITEM
+            messageReturn.id = result[0]
+
+            return { status: 201, message: messageReturn }
         } else {
             return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
         }
@@ -27,13 +29,12 @@ const novoEndereco = async (endereco) => {
 }
 
 const atualizarEndereco = async (endereco) => {
-    if (endereco.cep == '' || endereco.cep == null || endereco.numero == '' || endereco.numero == null || endereco.bairro == '' || endereco.bairro == null || endereco.logradouro == '' || endereco.logradouro == null || endereco.id_estado == '' || endereco.id_estado == null) {
+    if (endereco.cep == '' || endereco.cep == null || endereco.numero == '' || endereco.numero == null || endereco.neighborhood == '' || endereco.neighborhood == null || endereco.street == '' || endereco.street == null || endereco.id_estado == '' || endereco.id_estado == null) {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
-    } else if (endereco.cep.length > 9 || endereco.numero.length > 10 || endereco.bairro.length > 150 || endereco.logradouro.length > 200) {
+    } else if (endereco.cep.length > 9 || endereco.numero.length > 10 || endereco.neighborhood.length > 150 || endereco.street.length > 200) {
         return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
     } else {
-        const resultCep = await cepConverter(endereco.cep)
-        const result = await updateEndereco(resultCep, endereco)
+        const result = await updateEndereco(endereco)
 
         if (result) {
             return { status: 201, message: MESSAGE_SUCCESS.UPDATE_ITEM }

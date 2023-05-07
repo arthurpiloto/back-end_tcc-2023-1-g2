@@ -5,7 +5,7 @@ AUTOR: ARTHUR PILOTO SILVA
 DATA DE CRIAÇÃO: 05/05/2023
 VERSÃO: 1.0
 ************************************************************************/
-const { insertEstado, updateEstado, deleteEstado, selectAllEstados, selectEstadoById } = require('../models/DAO/estado.js')
+const { insertEstado, updateEstado, deleteEstado, selectAllEstados, selectEstadoById, selectEstadoByName } = require('../models/DAO/estado.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const novoEstado = async (estado) => {
@@ -14,12 +14,22 @@ const novoEstado = async (estado) => {
     } else if (estado.nome.length > 150) {
         return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
     } else {
-        const result = await insertEstado(estado)
+        const verify = await listarEstadoByNome(estado.nome)
 
-        if (result) {
-            return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }
+        if (verify.status == 200) {
+            return { status: 401, message: verify.message }
         } else {
-            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+            const result = await insertEstado(estado)
+
+            if (result) {
+                let messageReturn = {}
+                messageReturn.message = MESSAGE_SUCCESS.INSERT_ITEM
+                messageReturn.id = result[0].id
+
+                return { status: 201, message: messageReturn }
+            } else {
+                return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+            }
         }
     }
 }
@@ -84,10 +94,25 @@ const listarEstadoById = async (id) => {
     }
 }
 
+const listarEstadoByNome = async (estado) => {
+    if (estado == '' || estado == undefined) {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    } else {
+        const result = await selectEstadoByName(estado)
+
+        if (result.length !== 0) {
+            return { status: 200, message: result[0] }
+        } else {
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+        }
+    }
+}
+
 module.exports = {
     novoEstado,
     atualizarEstado,
     deletarEstado,
     listarEstados,
-    listarEstadoById
+    listarEstadoById,
+    listarEstadoByNome
 }
