@@ -9,6 +9,10 @@ const { insertUser, updateUser, deleteUser, selectAllUsers, selectUserById, logi
 const { verifyCpf } = require('../utils/verifyCpf.js')
 const { verifyRg } = require('../utils/verifyRg.js')
 const { formatUser } = require('../utils/userFormater.js')
+const { cepConverter } = require('../utils/cepConverter.js')
+const { novoEndereco } = require('../controllers/enderecoController.js')
+const { novoEstado } = require('../controllers/estadoController.js')
+const { novoCidade } = require('../controllers/cidadeController.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const novoUser = async (user) => {
@@ -47,6 +51,21 @@ const novoUser = async (user) => {
         }
 
         if (result) {
+            let insertEndereco = await cepConverter(user.cep)
+            insertEndereco.numero = user.numero
+
+            const idCidade = await novoCidade(insertEndereco.city)
+
+            let estadoJson = {}
+            estadoJson.nome = insertEndereco.state
+            estadoJson.id_cidade = idCidade.message.id
+            const idEstado = await novoEstado(estadoJson)
+
+            insertEndereco.id_cidade = idCidade.message.id
+            insertEndereco.id_estado = idEstado.message.id
+
+            const idEndereco = await novoEndereco(insertEndereco)
+
             return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }
         } else {
             return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
