@@ -12,10 +12,15 @@ const insertUser = async (user) => {
         let sql = `INSERT INTO tbl_usuario (nome, email, rg, cpf, cep, telefone, data_nascimento, senha, foto, status_usuario)
         VALUES ('${user.nome}', '${user.email}', '${user.rg}', '${user.cpf}', '${user.cep}', '${user.telefone}', '${user.data_nascimento}', md5('${user.senha}'), '${user.foto}', true);`
 
-        const result = await prisma.$executeRawUnsafe(sql)
+        let result = await prisma.$executeRawUnsafe(sql)
 
         if (result) {
-            return true
+            sql = `SELECT id FROM tbl_usuario ORDER BY id DESC LIMIT 1;`
+            result = await prisma.$queryRawUnsafe(sql)
+
+            if (result) {
+                return result
+            }
         } else {
             return false
         }

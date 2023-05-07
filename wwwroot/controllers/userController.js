@@ -13,6 +13,7 @@ const { cepConverter } = require('../utils/cepConverter.js')
 const { novoEndereco } = require('../controllers/enderecoController.js')
 const { novoEstado } = require('../controllers/estadoController.js')
 const { novoCidade } = require('../controllers/cidadeController.js')
+const { novoEnderecoUsuario } = require('../controllers/enderecoUsuarioController.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const novoUser = async (user) => {
@@ -65,6 +66,12 @@ const novoUser = async (user) => {
             insertEndereco.id_estado = idEstado.message.id
 
             const idEndereco = await novoEndereco(insertEndereco)
+
+            let enderecoUsuario = {
+                id_endereco: idEndereco.message.id.id,
+                id_usuario: result[0].id
+            }
+            await novoEnderecoUsuario(enderecoUsuario)
 
             return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }
         } else {
