@@ -14,12 +14,18 @@ const novoSchool = async (school) => {
     } else if (school.nome.length > 150) {
         return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
     } else {
-        const result = await insertSchool(school)
+        const verify = await listarSchoolByName(school.nome)
 
-        if (result) {
-            return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }
+        if (verify.status == 200) {
+            return { status: 401, message: verify.message }
         } else {
-            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+            const result = await insertSchool(school)
+    
+            if (result) {
+                return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }
+            } else {
+                return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+            }
         }
     }
 }
