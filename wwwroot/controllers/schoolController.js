@@ -5,7 +5,7 @@ AUTOR: NICOLAS DOBBECK
 DATA DE CRIAÇÃO: 27/03/2023
 VERSÃO: 1.0
 ************************************************************************/
-const { insertSchool, selectAllSchools, updateSchool, deleteSchool, selectSchoolById } = require('../models/DAO/school.js')
+const { insertSchool, selectAllSchools, updateSchool, deleteSchool, selectSchoolById, selectSchoolByName } = require('../models/DAO/school.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const novoSchool = async (school) => {
@@ -84,6 +84,24 @@ const listarSchools = async () => {
     }
 }
 
+const listarSchoolByName = async (school) => {
+    if (school == '' || school == undefined) {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+    } else {
+        const result = await selectSchoolByName(school)
+
+        if (result.length !== 0) {
+            let schoolJson = {}
+            result.forEach(element => {
+                schoolJson = element
+            })
+            return { status: 200, message: schoolJson }
+        } else {
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+        }
+    }
+}
+
 module.exports = {
-    novoSchool, listarSchools, atualizarSchool, deletarSchool, listarSchoolById
+    novoSchool, listarSchools, atualizarSchool, deletarSchool, listarSchoolById, listarSchoolByName
 }

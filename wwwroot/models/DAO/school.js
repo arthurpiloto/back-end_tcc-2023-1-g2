@@ -93,6 +93,22 @@ const selectSchoolById = async (id) => {
     }
 }
 
+const selectSchoolByName = async (school) => {
+    try {
+        let sql = `SELECT * FROM tbl_escola WHERE nome LIKE '${school}'`
+
+        const result = await prisma.$queryRawUnsafe(sql)
+
+        if (result) {
+            return result
+        } else {
+            return false
+        }
+    } catch (err) {
+        return false
+    }
+}
+
 module.exports={
-    insertSchool, selectAllSchools, updateSchool, deleteSchool, selectSchoolById
+    insertSchool, selectAllSchools, updateSchool, deleteSchool, selectSchoolById, selectSchoolByName
 }
