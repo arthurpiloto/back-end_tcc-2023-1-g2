@@ -1,6 +1,6 @@
 /************************************************************************
 OBJETIVO: ARQUIVO RESPONSÁVEL PELA ORGANIZAÇÃO DAS ROTAS
-AUTOR: NICOLAS DOBBECK MENDES
+AUTOR: NICOLAS MENDES
 DATA DE CRIAÇÃO: 27/03/2023
 VERSÃO: 1.0
 ************************************************************************/
