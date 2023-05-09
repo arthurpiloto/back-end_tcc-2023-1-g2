@@ -153,6 +153,22 @@ const verifyDriver = async (driverEmail) => {
     }
 }
 
+const selectDriversByFilters = async (driverName, price) => {
+    try {
+        let sql = `SELECT * FROM tbl_motorista WHERE nome LIKE %${driverName}% AND id_preco = ${price} ORDER BY id DESC;`
+
+        const result = await prisma.$queryRawUnsafe(sql)
+
+        if (result) {
+            return result
+        } else {
+            return false
+        }
+    } catch (err) {
+        return false
+    }
+}
+
 module.exports = {
     insertDriver,
     updateDriver,
@@ -161,5 +177,6 @@ module.exports = {
     selectDriverIdByCPF,
     selectDriverById,
     loginDriver,
-    verifyDriver
+    verifyDriver,
+    selectDriversByFilters
 }
