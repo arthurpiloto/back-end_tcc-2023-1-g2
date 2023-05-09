@@ -5,8 +5,9 @@ AUTOR: NICOLAS DOBBECK
 DATA DE CRIAÇÃO: 03/03/2023
 VERSÃO: 1.0
 ************************/
-const { insertDriver, updateDriver, deleteDriver, selectAllDrivers, selectDriverIdByCPF, selectDriverById, loginDriver, verifyDriver } = require('../models/DAO/driver.js')
+const { insertDriver, updateDriver, deleteDriver, selectAllDrivers, selectDriverIdByCPF, selectDriverById, loginDriver, verifyDriver, selectDriversByFilters } = require('../models/DAO/driver.js')
 const { selectVanByDriverId } = require('../models/DAO/van.js')
+const { formatDate } = require('../utils/formatDate.js')
 const { createJsonDriver } = require('../utils/createJsonDriver.js')
 const { verifyCpf } = require('../utils/verifyCpf.js')
 const { verifyRg } = require('../utils/verifyRg.js')
@@ -180,6 +181,21 @@ const verificarDriver = async (driverEmail) => {
     }
 }
 
+const listarDriversByFilters = async (price, school) => {
+    let result = await selectDriversByFilters(price, school)
+
+    await Promise.all(result.map(async el => {
+        el.data_nascimento = await formatDate(el.data_nascimento);
+        el.inicio_carreira = await formatDate(el.inicio_carreira);
+    }))
+
+    if (result) {
+        return { status: 200, message: result }
+    } else {
+        return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+    }
+}
+
 module.exports = {
     novoDriver,
     atualizarDriver,
@@ -188,5 +204,6 @@ module.exports = {
     listarDriverIdByCPF,
     listarDriverById,
     driverLogin,
-    verificarDriver
+    verificarDriver,
+    listarDriversByFilters
 }

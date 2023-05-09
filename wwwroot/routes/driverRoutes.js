@@ -7,7 +7,7 @@ VERSÃO: 1.0
 
 const express = require(`express`)
 const jsonParser = express.json()
-const { novoDriver, atualizarDriver, deletarDriver, listarDrivers, listarDriverIdByCPF, listarDriverById, driverLogin, verificarDriver } = require('../controllers/driverController.js')
+const { novoDriver, atualizarDriver, deletarDriver, listarDrivers, listarDriverIdByCPF, listarDriverById, driverLogin, verificarDriver, listarDriversByFilters } = require('../controllers/driverController.js')
 const { verifyLogin } = require('../../middlewares/verifyLogin.js')
 const { createJwt, verifyJwt } = require('../../middlewares/jwt.js')
 const { MESSAGE_ERROR } = require('../modules/config.js')
@@ -162,7 +162,7 @@ router
 
 router
     .route('/driver/login')
-    .post(jsonParser, async(request, response) => {
+    .post(jsonParser, async (request, response) => {
         let statusCode = 200
         let message
         let headerContentType
@@ -174,7 +174,7 @@ router
 
             if (JSON.stringify(dadosBody) != `{}`) {
                 const dadosDriver = await driverLogin(dadosBody.email, dadosBody.senha)
-                
+
                 if (dadosDriver.status == 200) {
                     const authDriver = await verifyLogin(dadosDriver, "driver")
 
@@ -206,10 +206,10 @@ router
 
 router
     .route('/driver/email/:driverEmail')
-    .get(/*verifyJwt,*/ async(request, response) => {
+    .get(/*verifyJwt,*/ async (request, response) => {
         let statusCode
         let message
-        
+
         let email = request.params.driverEmail.toString()
 
         if (email != '' && email != undefined) {
@@ -223,6 +223,22 @@ router
         }
 
         return response.status(statusCode).json(message)
+    })
+
+router
+    .route('/filter-drivers/?')
+    .post(jsonParser, async (req, res) => {
+        let statusCode
+        let message
+        let school = req.query.school
+        let price = req.query.price
+
+        const data = await listarDriversByFilters(price, school)
+
+        statusCode = data.status
+        message = data.message
+
+        res.status(statusCode).json(message)
     })
 
 module.exports = router

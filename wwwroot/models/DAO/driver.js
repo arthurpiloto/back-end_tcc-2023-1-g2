@@ -153,9 +153,31 @@ const verifyDriver = async (driverEmail) => {
     }
 }
 
-const selectDriversByFilters = async (driverName, price) => {
+const selectDriversByFilters = async (driverName, price, school) => {
     try {
-        let sql = `SELECT * FROM tbl_motorista WHERE nome LIKE %${driverName}% AND id_preco = ${price} ORDER BY id DESC;`
+        let sqlWhere = ""
+        if (driverName == "" || driverName == undefined) {
+            sqlWhere = `WHERE id_escola = ${school} AND id_preco = ${price}`
+        } else if (school == "" || school == undefined) {
+            sqlWhere = `WHERE tbl_motorista.nome LIKE '%${driverName}%' AND id_preco = ${price}`
+        } else if (price == "" || price == undefined) {
+            sqlWhere = `WHERE id_escola = ${school} AND tbl_motorista.nome LIKE '%${driverName}%'`
+        } else {
+            sqlWhere = `WHERE tbl_motorista.nome LIKE '%${driverName}%' AND id_escola = ${school} AND id_preco = ${price}`
+        }
+        
+        let sql = `SELECT tbl_motorista.id as id_motorista, tbl_motorista.email, tbl_motorista.nome as nome_motorista, 
+        tbl_motorista.rg, tbl_motorista.cpf, tbl_motorista.cnh, tbl_motorista.telefone, tbl_motorista.data_nascimento, tbl_motorista.senha, tbl_motorista.foto,
+        tbl_motorista.avaliacao as avaliacao_motorista, tbl_motorista.descricao as descricao_motorista, tbl_motorista.inicio_carreira, tbl_motorista.status_motorista,
+        tbl_preco.id as id_preco, tbl_preco.faixa_preco,
+        tbl_escola.id as id_escola, tbl_escola.nome as nome_escola, tbl_escola.status_escola FROM tbl_escola_motorista
+            INNER JOIN tbl_escola
+                ON tbl_escola.id = tbl_escola_motorista.id_escola
+            INNER JOIN tbl_motorista
+                ON tbl_motorista.id = tbl_escola_motorista.id_motorista
+            INNER JOIN tbl_preco
+                ON tbl_preco.id = tbl_motorista.id_preco
+        ${sqlWhere} ORDER BY tbl_escola_motorista.id DESC;`
 
         const result = await prisma.$queryRawUnsafe(sql)
 
