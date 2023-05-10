@@ -50,6 +50,8 @@ app.use(estadoRouter)
 app.use(enderecoRouter)
 app.use(enderecoUsuarioRouter)
 
+
+
 const port = process.env.PORT || 8080
 
 app.listen(port, () => {
