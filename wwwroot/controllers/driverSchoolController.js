@@ -57,7 +57,7 @@ const atualizarSchoolDriver = async (driverSchool) => {
         const result = await updateDriverSchool(driverSchool)
 
         if (result) {
-            return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }
+            return { status: 201, message: MESSAGE_SUCCESS.UPDATE_ITEM }
         } else {
             return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
         }
