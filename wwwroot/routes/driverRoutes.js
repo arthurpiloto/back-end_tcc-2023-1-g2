@@ -232,8 +232,9 @@ router
         let message
         let school = req.query.school
         let price = req.query.price
+        let driverName = req.query.driverName
 
-        const data = await listarDriversByFilters(price, school)
+        const data = await listarDriversByFilters(driverName, price, school)
 
         statusCode = data.status
         message = data.message

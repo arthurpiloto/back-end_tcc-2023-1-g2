@@ -156,16 +156,23 @@ const verifyDriver = async (driverEmail) => {
 const selectDriversByFilters = async (driverName, price, school) => {
     try {
         let sqlWhere = ""
-        if (driverName == "" || driverName == undefined) {
-            sqlWhere = `WHERE id_escola = ${school} AND id_preco = ${price}`
-        } else if (school == "" || school == undefined) {
-            sqlWhere = `WHERE tbl_motorista.nome LIKE '%${driverName}%' AND id_preco = ${price}`
-        } else if (price == "" || price == undefined) {
-            sqlWhere = `WHERE id_escola = ${school} AND tbl_motorista.nome LIKE '%${driverName}%'`
-        } else {
-            sqlWhere = `WHERE tbl_motorista.nome LIKE '%${driverName}%' AND id_escola = ${school} AND id_preco = ${price}`
+
+        if (driverName && price && school) {
+            sqlWhere = `WHERE tbl_motorista.nome LIKE '%${driverName}%' AND tbl_preco.id = ${price} AND tbl_escola.id = ${school}`
+        } else if (driverName && price) {
+            sqlWhere = `WHERE tbl_motorista.nome LIKE '%${driverName}%' AND tbl_preco.id = ${price}`
+        } else if (driverName && school) {
+            sqlWhere = `WHERE tbl_motorista.nome LIKE '%${driverName}%' AND tbl_escola.id = ${school}`
+        } else if (price && school) {
+            sqlWhere = `WHERE tbl_preco.id = ${price} AND tbl_escola.id = ${school}`
+        } else if (driverName) {
+            sqlWhere = `WHERE tbl_motorista.nome LIKE '%${driverName}%'`
+        } else if (price) {
+            sqlWhere = `WHERE tbl_preco.id = ${price}`
+        } else if (school) {
+            sqlWhere = `WHERE tbl_escola.id = ${school}`
         }
-        
+
         let sql = `SELECT tbl_motorista.id as id_motorista, tbl_motorista.email, tbl_motorista.nome as nome_motorista, 
         tbl_motorista.rg, tbl_motorista.cpf, tbl_motorista.cnh, tbl_motorista.telefone, tbl_motorista.data_nascimento, tbl_motorista.senha, tbl_motorista.foto,
         tbl_motorista.avaliacao as avaliacao_motorista, tbl_motorista.descricao as descricao_motorista, tbl_motorista.inicio_carreira, tbl_motorista.status_motorista,
@@ -181,7 +188,7 @@ const selectDriversByFilters = async (driverName, price, school) => {
 
         const result = await prisma.$queryRawUnsafe(sql)
 
-        if (result) {
+        if (result.length != 0) {
             return result
         } else {
             return false

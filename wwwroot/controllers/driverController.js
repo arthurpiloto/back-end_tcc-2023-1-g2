@@ -181,16 +181,18 @@ const verificarDriver = async (driverEmail) => {
     }
 }
 
-const listarDriversByFilters = async (price, school) => {
-    let result = await selectDriversByFilters(price, school)
-
-    await Promise.all(result.map(async el => {
-        el.data_nascimento = await formatDate(el.data_nascimento);
-        el.inicio_carreira = await formatDate(el.inicio_carreira);
-    }))
+const listarDriversByFilters = async (driverName, price, school) => {
+    let result = await selectDriversByFilters(driverName, price, school)
 
     if (result) {
-        return { status: 200, message: result }
+        await Promise.all(result.map(async el => {
+            el.data_nascimento = await formatDate(el.data_nascimento)
+            el.inicio_carreira = await formatDate(el.inicio_carreira)
+        }))
+
+        let messageJson = {}
+        messageJson.drivers = result
+        return { status: 200, message: messageJson }
     } else {
         return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
     }
