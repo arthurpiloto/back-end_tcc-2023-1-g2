@@ -188,6 +188,7 @@ const listarDriversByFilters = async (driverName, price, school) => {
         await Promise.all(result.map(async el => {
             el.data_nascimento = await formatDate(el.data_nascimento)
             el.inicio_carreira = await formatDate(el.inicio_carreira)
+            el.van = await selectVanByDriverId(el.id_motorista)
         }))
 
         let messageJson = {}
