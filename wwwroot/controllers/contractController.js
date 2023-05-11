@@ -35,7 +35,6 @@ const atualizarContract = async (contract) => {
     } else if (contract.nome_passageiro.length > 150) {
         return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
     } else {
-        console.log(contract)
         const result = await updateContract(contract)
 
         if (result) {
