@@ -30,11 +30,12 @@ const novoContract = async (contract) => {
 const atualizarContract = async (contract) => {
     if (contract.nome_passageiro == '' || contract.nome_passageiro == null || contract.idade_passageiro == '' || contract.idade_passageiro == null ||
         contract.id_usuario == '' || contract.id_usuario == null || contract.id_motorista == '' || contract.id_motorista == null || contract.id_escola == '' || contract.id_escola == null || contract.id_tipo_pagamento == '' ||
-        contract.id_tipo_pagamento == null || contract.id_tipo_contrato == '' || contract.id_tipo_contrato == null) {
+        contract.id_tipo_pagamento == null || contract.id_tipo_contrato == '' || contract.id_tipo_contrato == null || contract.status_contrato == '' || contract.status_contrato == null) {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     } else if (contract.nome_passageiro.length > 150) {
         return { status: 413, message: MESSAGE_ERROR.CHARACTERS_EXCEEDED }
     } else {
+        console.log(contract)
         const result = await updateContract(contract)
 
         if (result) {
