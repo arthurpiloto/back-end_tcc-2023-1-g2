@@ -57,11 +57,9 @@ const updateDriver = async (driver) => {
 
 const deleteDriver = async (id) => {
     try {
-        let sql = `UPDATE tbl_motorista SET
-            status_motorista = false
-        WHERE id = ${id}`
+        let sql = `CALL deletePerfilMotorista(${id});`
 
-        const result = await prisma.$executeRawUnsafe(sql)
+        const result = await prisma.$queryRawUnsafe(sql)
 
         if (result) {
             return true
