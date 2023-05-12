@@ -190,37 +190,7 @@ const listarDriversByFilters = async (driverName, price, school) => {
             el.inicio_carreira = await formatDate(el.inicio_carreira)
             el.van = await selectVanByDriverId(el.id_motorista)
         }))
-
-        let escolas =[];
-        result.forEach(({nome_escola, id_escola}) => {
-            escolas.push({nome_escola, id_escola})
-        } )
-        const firstObject = {
-            ...result[0],
-            nome_escola: null,
-            id_escola: null,
-            escolas,
-        }
         
-
-        // let schoolArray = []
-        // let cont = 0
-        // result.forEach(el => {
-        //     while (cont < result.length) {
-        //         if (result[cont].id_motorista == result[cont].id_motorista) {
-        //             schoolArray.push({nome_escola: result[cont].nome_escola, id: result[cont].id_escola})
-        //             el.escolas = schoolArray
-        //         }
-        //         delete el.nome_escola
-        //         delete el.id_escola
-        //         cont++
-        //     }
-        // })
-
-        // let filteredJson = result.filter((element, index, self) => index === self.findIndex((t => (
-        //     parseInt(t.id_motorista) === parseInt(element.id_motorista)
-        // ))))
-
         let messageJson = {}
         messageJson.drivers = result
         return { status: 200, message: firstObject }
