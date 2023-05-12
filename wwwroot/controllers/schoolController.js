@@ -5,7 +5,7 @@ AUTOR: NICOLAS DOBBECK
 DATA DE CRIAÇÃO: 27/03/2023
 VERSÃO: 1.0
 ************************************************************************/
-const { insertSchool, selectAllSchools, updateSchool, deleteSchool, selectSchoolById, selectSchoolByName } = require('../models/DAO/school.js')
+const { insertSchool, selectAllSchools, updateSchool, deleteSchool, selectSchoolById, selectSchoolByName, selectLastId } = require('../models/DAO/school.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const novoSchool = async (school) => {
@@ -22,7 +22,11 @@ const novoSchool = async (school) => {
             const result = await insertSchool(school)
     
             if (result) {
-                return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }
+                let messageJson = {}
+                const id = await selectLastId()
+                messageJson.message = MESSAGE_SUCCESS.INSERT_ITEM
+                messageJson.id = id[0].id
+                return { status: 201, message: messageJson }
             } else {
                 return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
             }

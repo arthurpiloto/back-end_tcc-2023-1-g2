@@ -109,6 +109,22 @@ const selectSchoolByName = async (school) => {
     }
 }
 
-module.exports={
-    insertSchool, selectAllSchools, updateSchool, deleteSchool, selectSchoolById, selectSchoolByName
+const selectLastId = async () => {
+    try {
+        let sql = `SELECT id FROM tbl_escola ORDER BY id DESC LIMIT 1;`
+
+        const result = await prisma.$queryRawUnsafe(sql)
+
+        if (result) {
+            return result
+        } else {
+            return false
+        }
+    } catch (err) {
+        return false
+    }
+}
+
+module.exports = {
+    insertSchool, selectAllSchools, updateSchool, deleteSchool, selectSchoolById, selectSchoolByName, selectLastId
 }
