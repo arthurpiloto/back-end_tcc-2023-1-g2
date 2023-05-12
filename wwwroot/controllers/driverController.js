@@ -190,10 +190,10 @@ const listarDriversByFilters = async (driverName, price, school) => {
             el.inicio_carreira = await formatDate(el.inicio_carreira)
             el.van = await selectVanByDriverId(el.id_motorista)
         }))
-        
+
         let messageJson = {}
         messageJson.drivers = result
-        return { status: 200, message: firstObject }
+        return { status: 200, message: messageJson }
     } else {
         return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
     }
