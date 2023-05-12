@@ -156,19 +156,19 @@ const selectDriversByFilters = async (driverName, price, school) => {
         let sqlWhere = ""
 
         if (driverName && price && school) {
-            sqlWhere = `WHERE tbl_motorista.nome LIKE '%${driverName}%' AND tbl_preco.id = ${price} AND tbl_escola.id = ${school}`
+            sqlWhere = `WHERE tbl_motorista.nome LIKE '%${driverName}%' AND tbl_preco.faixa_preco LIKE '%${price}%' AND tbl_escola.nome LIKE '%${school}%'`
         } else if (driverName && price) {
-            sqlWhere = `WHERE tbl_motorista.nome LIKE '%${driverName}%' AND tbl_preco.id = ${price}`
+            sqlWhere = `WHERE tbl_motorista.nome LIKE '%${driverName}%' AND tbl_preco.faixa_preco LIKE '%${price}%'`
         } else if (driverName && school) {
-            sqlWhere = `WHERE tbl_motorista.nome LIKE '%${driverName}%' AND tbl_escola.id = ${school}`
+            sqlWhere = `WHERE tbl_motorista.nome LIKE '%${driverName}%' AND tbl_escola.nome LIKE '%${school}%'`
         } else if (price && school) {
-            sqlWhere = `WHERE tbl_preco.id = ${price} AND tbl_escola.id = ${school}`
+            sqlWhere = `WHERE tbl_preco.faixa_preco LIKE '%${price}%' AND tbl_escola.nome LIKE '%${school}%'`
         } else if (driverName) {
             sqlWhere = `WHERE tbl_motorista.nome LIKE '%${driverName}%'`
         } else if (price) {
-            sqlWhere = `WHERE tbl_preco.id = ${price}`
+            sqlWhere = `WHERE tbl_preco.faixa_preco LIKE '%${price}%'`
         } else if (school) {
-            sqlWhere = `WHERE tbl_escola.id = ${school}`
+            sqlWhere = `WHERE tbl_escola.nome LIKE '%${school}%'`
         }
 
         let sql = `SELECT tbl_motorista.id as id_motorista, tbl_motorista.email, tbl_motorista.nome, 
