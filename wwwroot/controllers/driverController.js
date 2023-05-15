@@ -7,6 +7,7 @@ VERSÃO: 1.0
 ************************/
 const { insertDriver, updateDriver, deleteDriver, selectAllDrivers, selectDriverIdByCPF, selectDriverById, loginDriver, verifyDriver, selectDriversByFilters } = require('../models/DAO/driver.js')
 const { selectVanByDriverId } = require('../models/DAO/van.js')
+const { listarSchoolsByDriverId } = require('../controllers/driverSchoolController.js')
 const { formatDate } = require('../utils/formatDate.js')
 const { createJsonDriver } = require('../utils/createJsonDriver.js')
 const { verifyCpf } = require('../utils/verifyCpf.js')
@@ -185,14 +186,33 @@ const listarDriversByFilters = async (driverName, price, school) => {
     let result = await selectDriversByFilters(driverName, price, school)
 
     if (result) {
-        await Promise.all(result.map(async el => {
-            el.data_nascimento = await formatDate(el.data_nascimento)
-            el.inicio_carreira = await formatDate(el.inicio_carreira)
-            el.van = await selectVanByDriverId(el.id_motorista)
-        }))
-
+        let messageArray = []
         let messageJson = {}
-        messageJson.drivers = result
+
+        await Promise.all(result.map(async element => {
+            const resultVan = await selectVanByDriverId(element.id_motorista)
+            const res = await createJsonDriver(resultVan, element, "array")
+            let schools = await listarSchoolsByDriverId(element.id_motorista)
+            schools = schools.message
+            await Promise.all(schools = schools.schools.map(el => {
+                delete el.id
+                delete el.id_motorista
+                delete el.nome_motorista
+                return el
+            }))
+            res.escolas = schools
+            delete res.id_escola
+            delete res.status_escola
+            delete res.nome_escola
+            delete res.faixa_preco
+            messageArray.push(res)
+        }))
+        
+        messageArray = messageArray.filter((element, index, self) => index === self.findIndex((t => (
+            parseInt(t.id_motorista) === parseInt(element.id_motorista)
+        ))))
+
+        messageJson.drivers = messageArray
         return { status: 200, message: messageJson }
     } else {
         return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
