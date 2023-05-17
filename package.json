@@ -12,6 +12,7 @@
     "nodemon": "^2.0.20"
   },
   "scripts": {
+    "start": "npm i && npx prisma generate && nodemon ./app.js",
     "nodemon": "nodemon ./app.js"
   }
 }
