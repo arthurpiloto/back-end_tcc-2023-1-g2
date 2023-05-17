@@ -190,9 +190,9 @@ const listarDriversByFilters = async (driverName, price, school) => {
         let messageJson = {}
 
         await Promise.all(result.map(async element => {
-            const resultVan = await selectVanByDriverId(element.id_motorista)
+            const resultVan = await selectVanByDriverId(element.id)
             const res = await createJsonDriver(resultVan, element, "array")
-            let schools = await listarSchoolsByDriverId(element.id_motorista)
+            let schools = await listarSchoolsByDriverId(element.id)
             schools = schools.message
             await Promise.all(schools = schools.schools.map(el => {
                 delete el.id
@@ -209,7 +209,7 @@ const listarDriversByFilters = async (driverName, price, school) => {
         }))
         
         messageArray = messageArray.filter((element, index, self) => index === self.findIndex((t => (
-            parseInt(t.id_motorista) === parseInt(element.id_motorista)
+            parseInt(t.id) === parseInt(element.id)
         ))))
 
         messageJson.drivers = messageArray
