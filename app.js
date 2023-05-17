@@ -50,7 +50,7 @@ app.use(estadoRouter)
 app.use(enderecoRouter)
 app.use(enderecoUsuarioRouter)
 
-const port = process.env.PORT || 8080
+const port = process.env.PORT || 3030
 
 app.listen(port, () => {
     console.log(`Server waiting requests at http://localhost:${port}`)
