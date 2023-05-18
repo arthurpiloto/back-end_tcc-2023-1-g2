@@ -64,11 +64,11 @@ const atualizarSchoolDriver = async (driverSchool) => {
     }
 }
 
-const deletarSchoolDriver = async (id_motorista, id_escola) => {
-    if (id_motorista == '' || id_motorista == undefined || id_escola == '' || id_escola == undefined) {
-        return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
+const deletarSchoolDriver = async (idMotorista, idEscola) => {
+    if (idMotorista == '' || idMotorista == undefined || idEscola == '' || idEscola == undefined) {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
     } else {
-        const result = await deleteDriverSchool(id_motorista, id_escola)
+        const result = await deleteDriverSchool(idMotorista, idEscola)
 
         if (result) {
             return { status: 200, message: MESSAGE_SUCCESS.DELETE_ITEM }

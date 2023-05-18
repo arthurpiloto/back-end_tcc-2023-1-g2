@@ -95,25 +95,6 @@ router
         return response.status(statusCode).json(message)
     })
 
-    .delete(async (request, response) => {
-        let statusCode
-        let message
-
-        let id = request.params.driverSchoolId
-
-        if (id != '' && id != undefined) {
-            const deletedDriverSchool = await deletarSchoolDriver(id)
-
-            statusCode = deletedDriverSchool.status
-            message = deletedDriverSchool.message
-        } else {
-            statusCode = 400
-            message = MESSAGE_ERROR.REQUIRED_ID
-        }
-
-        response.status(statusCode).json(message)
-    })
-
 router
     .route('/driverSchools/:driverId')
     .get(/*verifyJwt,*/ async (request, response) => {
@@ -135,38 +116,25 @@ router
     })
 
 router
-    .route('/driverSchools/delete')
+    .route('/driverSchool/escola/:schoolId/motorista/:driverId')
     .delete(jsonParser, async (request, response) => {
         let statusCode
         let message
-        let headerContentType
 
-        headerContentType = request.headers['content-type']
+        let idMotorista = request.params.driverId
+        let idEscola = request.params.schoolId
 
-        if (headerContentType == 'application/json') {
-            let bodyData = request.body
+        if (idMotorista != '' && idMotorista != undefined && idEscola != '' && idEscola != undefined) {
+            const data = await deletarSchoolDriver(idMotorista, idEscola)
 
-            if (JSON.stringify(bodyData) != '{}') {
-
-                if (bodyData.id_motorista != undefined && bodyData.id_motorista != "" && bodyData.id_escola != undefined && bodyData.id_escola != "") {
-                    const data = await deletarSchoolDriver(bodyData.id_motorista, bodyData.id_escola)
-
-                    statusCode = data.status
-                    message = data.message
-                } else {
-                    statusCode = 400
-                    message = MESSAGE_ERROR.REQUIRED_FIELDS
-                }
-            } else {
-                statusCode = 400
-                message = MESSAGE_ERROR.EMPTY_BODY
-            }
+            statusCode = data.status
+            message = data.message
         } else {
-            statusCode = 415
-            message = MESSAGE_ERROR.CONTENT_TYPE
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_ID
         }
 
-        return response.status(statusCode).json(message)
+        response.status(statusCode).json(message)
     })
 
 module.exports = router
