@@ -8,6 +8,7 @@ VERSÃO: 1.0
 const cep = require('cep-promise')
 
 const cepConverter = async (cepUsuario) => {
+    cepUsuario = cepUsuario.split('-').join("")
     const endereco = await cep(cepUsuario)
     return endereco
 }
