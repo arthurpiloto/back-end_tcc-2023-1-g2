@@ -31,6 +31,7 @@ const novoUser = async (user) => {
         // if (safeCpf && safeRg) {
         const userVerification = await verifyUser(user.email)
         let result
+        let insertEndereco = await cepConverter(user.cep)
 
         if (userVerification.length !== 0) {
             let status = userVerification.map(el => {
@@ -48,11 +49,12 @@ const novoUser = async (user) => {
                 result = await updateUser(user)
             }
         } else {
-            result = await insertUser(user)
+            if (insertEndereco) {
+                result = await insertUser(user)
+            }
         }
 
         if (result) {
-            let insertEndereco = await cepConverter(user.cep)
             insertEndereco.numero = user.numero
 
             const idCidade = await novoCidade(insertEndereco.city)
