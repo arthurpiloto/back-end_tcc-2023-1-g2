@@ -43,11 +43,11 @@ const updateDriverSchool = async (driverSchool) => {
     }
 }
 
-const deleteDriverSchool = async (id) => {
+const deleteDriverSchool = async (id_motorista, id_escola) => {
     try {
-        let sql = `DELETE FROM tbl_escola_motorista WHERE id = ${id}`
+        let sql = `CALL deleteEscolaMotorista(${id_motorista}, ${id_escola});`
 
-        const result = await prisma.$executeRawUnsafe(sql)
+        const result = await prisma.$queryRawUnsafe(sql)
 
         if (result) {
             return true

@@ -134,4 +134,39 @@ router
         return response.status(statusCode).json(message)
     })
 
+router
+    .route('/driverSchools/delete')
+    .delete(jsonParser, async (request, response) => {
+        let statusCode
+        let message
+        let headerContentType
+
+        headerContentType = request.headers['content-type']
+
+        if (headerContentType == 'application/json') {
+            let bodyData = request.body
+
+            if (JSON.stringify(bodyData) != '{}') {
+
+                if (bodyData.id_motorista != undefined && bodyData.id_motorista != "" && bodyData.id_escola != undefined && bodyData.id_escola != "") {
+                    const data = await deletarSchoolDriver(bodyData.id_motorista, bodyData.id_escola)
+
+                    statusCode = data.status
+                    message = data.message
+                } else {
+                    statusCode = 400
+                    message = MESSAGE_ERROR.REQUIRED_FIELDS
+                }
+            } else {
+                statusCode = 400
+                message = MESSAGE_ERROR.EMPTY_BODY
+            }
+        } else {
+            statusCode = 415
+            message = MESSAGE_ERROR.CONTENT_TYPE
+        }
+
+        return response.status(statusCode).json(message)
+    })
+
 module.exports = router
