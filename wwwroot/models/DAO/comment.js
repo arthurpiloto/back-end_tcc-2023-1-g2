@@ -47,9 +47,7 @@ const updateComment = async (comment) => {
 
 const deleteComment = async (id) => {
     try {
-        let sql = `UPDATE tbl_comentario SET
-            status_comentario = false
-        WHERE id = ${id}`
+        let sql = `DELETE FROM tbl_comentario WHERE id = ${id}`
 
         const result = await prisma.$executeRawUnsafe(sql)
 
