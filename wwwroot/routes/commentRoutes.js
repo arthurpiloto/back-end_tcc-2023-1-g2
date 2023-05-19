@@ -6,7 +6,7 @@ VERSÃO: 1.0
 ************************************************************************/
 const express = require(`express`)
 const jsonParser = express.json()
-const { novoComment, listarComments, atualizarComment, deletarComment, listarCommentById } = require('../controllers/commentController.js')
+const { novoComment, listarComments, atualizarComment, deletarComment, listarCommentById, listarCommentsByDriverId } = require('../controllers/commentController.js')
 const { MESSAGE_ERROR } = require('../modules/config.js')
 const router = express.Router()
 
@@ -39,17 +39,17 @@ router
 
 router
     .route('/comment/:commentId')
-    .get(async(request, response) => {
+    .get(async (request, response) => {
         let statusCode
         let message
-        
+
         let id = request.params.commentId
 
         if (id != '' && id != undefined) {
-            const commentData = await listarCommentById(id)
+            const data = await listarCommentById(id)
 
-            statusCode = commentData.status
-            message = commentData.message
+            statusCode = data.status
+            message = data.message
         } else {
             statusCode = 400
             message = MESSAGE_ERROR.REQUIRED_ID
@@ -58,24 +58,24 @@ router
         return response.status(statusCode).json(message)
     })
 
-    .put(jsonParser, async(request, response) => {
+    .put(jsonParser, async (request, response) => {
         let statusCode
         let message
         let headerContentType
-    
+
         headerContentType = request.headers['content-type']
-    
-        if(headerContentType == 'application/json') {
+
+        if (headerContentType == 'application/json') {
             let bodyData = request.body
-    
-            if(JSON.stringify(bodyData) != '{}') {
+
+            if (JSON.stringify(bodyData) != '{}') {
                 let id = request.params.commentId
-    
-                if(id != '' && id != undefined) {
+
+                if (id != '' && id != undefined) {
                     bodyData.id = id
-    
+
                     const updatedComment = await atualizarComment(bodyData)
-    
+
                     statusCode = updatedComment.status
                     message = updatedComment.message
                 } else {
@@ -90,17 +90,17 @@ router
             statusCode = 415
             message = MESSAGE_ERROR.INCORRECT_CONTENT_TYPE
         }
-    
+
         return response.status(statusCode).json(message)
     })
 
-    .delete(async(request, response) => {
+    .delete(async (request, response) => {
         let statusCode
         let message
 
         let id = request.params.commentId
 
-        if(id != '' && id != undefined) {
+        if (id != '' && id != undefined) {
             const deletedComment = await deletarComment(id)
 
             statusCode = deletedComment.status
@@ -109,24 +109,45 @@ router
             statusCode = 400
             message = MESSAGE_ERROR.REQUIRED_ID
         }
-        
+
         response.status(statusCode).json(message)
     })
 
-router 
+router
     .route('/comments')
-    .get(async(request, response) => {
+    .get(async (request, response) => {
         let statusCode
         let message
 
-        const commentData = await listarComments()
+        const data = await listarComments()
 
-        if (commentData) {
-            statusCode = commentData.status
-            message = commentData.message
+        if (data) {
+            statusCode = data.status
+            message = data.message
         } else {
             statusCode = 404
             message = MESSAGE_ERROR.NOT_FOUND_DB
+        }
+
+        return response.status(statusCode).json(message)
+    })
+
+router
+    .route('/comments/driver/:driverId')
+    .get(async (request, response) => {
+        let statusCode
+        let message
+
+        let id = request.params.driverId
+
+        if (id != '' && id != undefined) {
+            const data = await listarCommentsByDriverId(id)
+
+            statusCode = data.status
+            message = data.message
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_ID
         }
 
         return response.status(statusCode).json(message)

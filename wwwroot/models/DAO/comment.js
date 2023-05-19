@@ -92,7 +92,27 @@ const selectAllComments = async () => {
     }
 }
 
+const selectCommentsByDriverId = async (idMotorista) => {
+    try {
+        let sql = `SELECT * FROM tbl_comentario WHERE id_motorista = ${idMotorista} ORDER BY id DESC;`
+
+        const result = await prisma.$queryRawUnsafe(sql)
+
+        if (result) {
+            return result
+        } else {
+            return false
+        }
+    } catch (err) {
+        return false
+    }
+}
 
 module.exports = {
-    insertComment, updateComment, selectAllComments, deleteComment, selectCommentById
+    insertComment,
+    updateComment,
+    selectAllComments,
+    deleteComment,
+    selectCommentById,
+    selectCommentsByDriverId
 }

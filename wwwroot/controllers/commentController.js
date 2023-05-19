@@ -5,7 +5,7 @@ AUTOR: NICOLAS DOBBECK
 DATA DE CRIAÇÃO: 27/03/2023
 VERSÃO: 1.0
 ************************************************************************/
-const { insertComment, updateComment, selectAllComments, deleteComment, selectCommentById } = require('../models/DAO/comment.js')
+const { insertComment, updateComment, selectAllComments, deleteComment, selectCommentById, selectCommentsByDriverId } = require('../models/DAO/comment.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const novoComment = async (comment) => {
@@ -80,6 +80,27 @@ const listarComments = async () => {
     }
 }
 
+const listarCommentsByDriverId = async (idMotorista) => {
+    if (idMotorista == '' || idMotorista == undefined) {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    } else {
+        const result = await selectCommentsByDriverId(idMotorista)
+
+        if (result) {
+            let messageJson = {}
+            messageJson.comentarios = result
+            return { status: 201, message: messageJson }
+        } else {
+            return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+        }
+    }
+}
+
 module.exports = {
-    novoComment, atualizarComment, listarComments, deletarComment, listarCommentById
+    novoComment,
+    atualizarComment,
+    listarComments,
+    deletarComment,
+    listarCommentById,
+    listarCommentsByDriverId
 }
