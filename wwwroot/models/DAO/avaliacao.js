@@ -2,7 +2,7 @@
 OBJETIVO: ARQUIVO RESPONSÁVEL PELA MANIPULAÇÃO DE DADOS 
 COM O BD (insert, update, delete e select)
 AUTOR:  ARTHUR PILOTO SILVA
-DATA DE CRIAÇÃO: 19/05/2023
+DATA DE CRIAÇÃO: 23/05/2023
 VERSÃO: 1.0
 ************************************************************************/
 const prisma = require('../../libs/prisma.js')
@@ -10,7 +10,7 @@ const prisma = require('../../libs/prisma.js')
 const insertAvaliacao = async (avaliacao) => {
     try {
         let sql = `INSERT INTO tbl_avaliacao (avaliacao)
-        VALUES ('${avaliacao}');`
+        VALUES (${avaliacao.avaliacao});`
 
         let result = await prisma.$executeRawUnsafe(sql)
 
