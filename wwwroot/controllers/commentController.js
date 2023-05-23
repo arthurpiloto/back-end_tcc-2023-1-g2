@@ -6,6 +6,7 @@ DATA DE CRIAÇÃO: 27/03/2023
 VERSÃO: 1.0
 ************************************************************************/
 const { insertComment, updateComment, selectAllComments, deleteComment, selectCommentById, selectCommentsByDriverId } = require('../models/DAO/comment.js')
+const { listarUserById } = require('./userController.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const novoComment = async (comment) => {
@@ -88,6 +89,11 @@ const listarCommentsByDriverId = async (idMotorista) => {
 
         if (result) {
             let messageJson = {}
+            await Promise.all(result.map(async el => {
+                const user = await listarUserById(el.id_usuario)
+                el.user = user.message
+                delete el.id_usuario
+            }))
             messageJson.comentarios = result
             return { status: 201, message: messageJson }
         } else {
