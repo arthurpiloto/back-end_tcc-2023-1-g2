@@ -34,6 +34,7 @@ const estadoRouter = require('./wwwroot/routes/estadoRoutes.js')
 const enderecoRouter = require('./wwwroot/routes/enderecoRoutes.js')
 const enderecoUsuarioRouter = require('./wwwroot/routes/enderecoUsuarioRoutes.js')
 const avaliacaoRouter = require('./wwwroot/routes/avaliacaoRoutes.js')
+const usuarioAvaliacaoMotoristaRouter = require('./wwwroot/routes/usuarioAvaliacaoMotoristaRoutes.js')
 
 app.use(userRouter)
 app.use(driverRouter)
@@ -51,6 +52,7 @@ app.use(estadoRouter)
 app.use(enderecoRouter)
 app.use(enderecoUsuarioRouter)
 app.use(avaliacaoRouter)
+app.use(usuarioAvaliacaoMotoristaRouter)
 
 const port = process.env.PORT || 8080
 
