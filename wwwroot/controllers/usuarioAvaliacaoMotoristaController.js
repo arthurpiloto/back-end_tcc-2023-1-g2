@@ -12,7 +12,15 @@ const novoUsuarioAvaliacaoMotorista = async (usuarioAvaliacaoMotorista) => {
     if (usuarioAvaliacaoMotorista.id_usuario == '' || usuarioAvaliacaoMotorista.id_usuario == null || usuarioAvaliacaoMotorista.id_motorista == '' || usuarioAvaliacaoMotorista.id_motorista == null || usuarioAvaliacaoMotorista.id_avaliacao == '' || usuarioAvaliacaoMotorista.id_avaliacao == null) {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_FIELDS }
     } else {
-        const result = await insertUsuarioAvaliacaoMotorista(usuarioAvaliacaoMotorista)
+        let result = false
+        const verify = await listarUsuarioAvaliacaoMotoristaByIdUsuarioAndIdMotorista(usuarioAvaliacaoMotorista.id_usuario, usuarioAvaliacaoMotorista.id_motorista)
+
+        if (verify.status == 200) {
+            usuarioAvaliacaoMotorista.id = verify.message.id
+            result = await atualizarUsuarioAvaliacaoMotorista(usuarioAvaliacaoMotorista)
+        } else {
+            result = await insertUsuarioAvaliacaoMotorista(usuarioAvaliacaoMotorista)
+        }
 
         if (result) {
             return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }
