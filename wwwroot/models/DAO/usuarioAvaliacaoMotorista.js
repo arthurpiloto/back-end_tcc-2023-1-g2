@@ -108,11 +108,28 @@ const selectUsuarioAvaliacaoMotoristaByIdMotorista = async (id) => {
     }
 }
 
+const selectUsuarioAvaliacaoMotoristaByIdUsuarioAndIdMotorista = async (idUser, idDriver) => {
+    try {
+        let sql = `SELECT * FROM tbl_usuario_avaliacao_motorista WHERE id_usuario = ${idUser} AND id_motorista = ${idDriver}`
+
+        const result = await prisma.$queryRawUnsafe(sql)
+
+        if (result) {
+            return result
+        } else {
+            return false
+        }
+    } catch (err) {
+        return false
+    }
+}
+
 module.exports = {
     insertUsuarioAvaliacaoMotorista,
     updateUsuarioAvaliacaoMotorista,
     deleteUsuarioAvaliacaoMotorista,
     selectAllUsuariosAvaliacoesMotoristas,
     selectUsuarioAvaliacaoMotoristaById,
-    selectUsuarioAvaliacaoMotoristaByIdMotorista
+    selectUsuarioAvaliacaoMotoristaByIdMotorista,
+    selectUsuarioAvaliacaoMotoristaByIdUsuarioAndIdMotorista
 }

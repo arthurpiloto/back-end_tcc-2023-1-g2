@@ -6,7 +6,7 @@ VERSÃO: 1.0
 ************************************************************************/
 const express = require(`express`)
 const jsonParser = express.json()
-const { novoUsuarioAvaliacaoMotorista, atualizarUsuarioAvaliacaoMotorista, deletarUsuarioAvaliacaoMotorista, listarUsuarioAvaliacaoMotoristaById, listarUsuarioAvaliacaoMotoristaByIdMotorista, listarUsuariosAvaliacoesMotoristas } = require('../controllers/usuarioAvaliacaoMotoristaController.js')
+const { novoUsuarioAvaliacaoMotorista, atualizarUsuarioAvaliacaoMotorista, deletarUsuarioAvaliacaoMotorista, listarUsuarioAvaliacaoMotoristaById, listarUsuarioAvaliacaoMotoristaByIdMotorista, listarUsuariosAvaliacoesMotoristas, listarUsuarioAvaliacaoMotoristaByIdUsuarioAndIdMotorista } = require('../controllers/usuarioAvaliacaoMotoristaController.js')
 const { MESSAGE_ERROR } = require('../modules/config.js')
 const router = express.Router()
 
@@ -142,6 +142,28 @@ router
 
         if (id != '' && id != undefined) {
             const data = await listarUsuarioAvaliacaoMotoristaByIdMotorista(id)
+
+            statusCode = data.status
+            message = data.message
+        } else {
+            statusCode = 400
+            message = MESSAGE_ERROR.REQUIRED_ID
+        }
+
+        return response.status(statusCode).json(message)
+    })
+
+router
+    .route('/usuarioAvaliacaoMotorista/usuario/:usuarioId/motorista/:motoristaId')
+    .get(async (request, response) => {
+        let statusCode
+        let message
+
+        let idUser = request.params.usuarioId
+        let idDriver = request.params.motoristaId
+
+        if (idUser != '' || idUser != undefined || idDriver != '' || idDriver != undefined) {
+            const data = await listarUsuarioAvaliacaoMotoristaByIdUsuarioAndIdMotorista(idUser, idDriver)
 
             statusCode = data.status
             message = data.message

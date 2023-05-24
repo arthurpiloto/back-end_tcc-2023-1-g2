@@ -5,7 +5,7 @@ AUTOR: ARTHUR PILOTO SILVA
 DATA DE CRIAÇÃO: 23/05/2023
 VERSÃO: 1.0
 ************************************************************************/
-const { insertUsuarioAvaliacaoMotorista, updateUsuarioAvaliacaoMotorista, deleteUsuarioAvaliacaoMotorista, selectAllUsuariosAvaliacoesMotoristas, selectUsuarioAvaliacaoMotoristaById, selectUsuarioAvaliacaoMotoristaByIdMotorista } = require('../models/DAO/usuarioAvaliacaoMotorista.js')
+const { insertUsuarioAvaliacaoMotorista, updateUsuarioAvaliacaoMotorista, deleteUsuarioAvaliacaoMotorista, selectAllUsuariosAvaliacoesMotoristas, selectUsuarioAvaliacaoMotoristaById, selectUsuarioAvaliacaoMotoristaByIdMotorista, selectUsuarioAvaliacaoMotoristaByIdUsuarioAndIdMotorista } = require('../models/DAO/usuarioAvaliacaoMotorista.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const novoUsuarioAvaliacaoMotorista = async (usuarioAvaliacaoMotorista) => {
@@ -96,11 +96,26 @@ const listarUsuarioAvaliacaoMotoristaByIdMotorista = async (id) => {
     }
 }
 
+const listarUsuarioAvaliacaoMotoristaByIdUsuarioAndIdMotorista = async (idUser, idDriver) => {
+    if (idUser == '' || idUser == undefined || idDriver == '' || idDriver == undefined) {
+        return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
+    } else {
+        const result = await selectUsuarioAvaliacaoMotoristaByIdUsuarioAndIdMotorista(idUser, idDriver)
+
+        if (result.length !== 0) {
+            return { status: 200, message: result[0] }
+        } else {
+            return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
+        }
+    }
+}
+
 module.exports = {
     novoUsuarioAvaliacaoMotorista,
     atualizarUsuarioAvaliacaoMotorista,
     listarUsuariosAvaliacoesMotoristas,
     deletarUsuarioAvaliacaoMotorista,
     listarUsuarioAvaliacaoMotoristaById,
-    listarUsuarioAvaliacaoMotoristaByIdMotorista
+    listarUsuarioAvaliacaoMotoristaByIdMotorista,
+    listarUsuarioAvaliacaoMotoristaByIdUsuarioAndIdMotorista
 }
