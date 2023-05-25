@@ -6,6 +6,7 @@ DATA DE CRIAÇÃO: 23/05/2023
 VERSÃO: 1.0
 ************************************************************************/
 const { insertUsuarioAvaliacaoMotorista, updateUsuarioAvaliacaoMotorista, deleteUsuarioAvaliacaoMotorista, selectAllUsuariosAvaliacoesMotoristas, selectUsuarioAvaliacaoMotoristaById, selectUsuarioAvaliacaoMotoristaByIdMotorista, selectUsuarioAvaliacaoMotoristaByIdUsuarioAndIdMotorista } = require('../models/DAO/usuarioAvaliacaoMotorista.js')
+const { driverAvaliacoes } = require('../models/DAO/driver.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const novoUsuarioAvaliacaoMotorista = async (usuarioAvaliacaoMotorista) => {
@@ -23,7 +24,20 @@ const novoUsuarioAvaliacaoMotorista = async (usuarioAvaliacaoMotorista) => {
         }
 
         if (result) {
-            return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }
+            const avaliacao = await calculateAvaliacao(usuarioAvaliacaoMotorista.id_motorista)
+
+            if (avaliacao) {
+                let driver = { id: usuarioAvaliacaoMotorista.id_motorista, avaliacao: avaliacao }
+                const insertAvaliacao = await driverAvaliacoes(driver)
+
+                if (insertAvaliacao) {
+                    return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }
+                } else {
+                    return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }    
+                }
+            } else {
+                return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
+            }
         } else {
             return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
         }
@@ -115,6 +129,41 @@ const listarUsuarioAvaliacaoMotoristaByIdUsuarioAndIdMotorista = async (idUser, 
         } else {
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
         }
+    }
+}
+
+const calculateAvaliacao = async (idDriver) => {
+    let nota1 = 0, nota2 = 0, nota3 = 0, nota4 = 0, nota5 = 0
+
+    const driverAvaliacoes = await listarUsuarioAvaliacaoMotoristaByIdMotorista(idDriver)
+
+    driverAvaliacoes.message.usuarios_avaliacoes_motorista.forEach(el => {
+        switch (el.id_avaliacao) {
+            case el.id_avaliacao = 1:
+                nota1 = nota1 + 1
+                break;
+            case el.id_avaliacao = 2:
+                nota2 = 2
+                break;
+            case el.id_avaliacao = 3:
+                nota3 = 3
+                break;
+            case el.id_avaliacao = 4:
+                nota4 = 4
+                break;
+            case el.id_avaliacao = 7:
+                nota5 = 5
+                break;
+        }
+    })
+    // console.log(`nota1: ${nota1}, nota2: ${nota2}, nota3: ${nota3}, nota4: ${nota4}, nota5: ${nota5}`)
+    let media = ((nota1 * 1) + (nota2 * 2) + (nota3 * 3) + (nota4 * 4) + (nota5 * 5)) / (driverAvaliacoes.message.usuarios_avaliacoes_motorista.length)
+    media = parseFloat(media.toFixed(1))
+
+    if (media) {
+        return media
+    } else {
+        return false
     }
 }
 
