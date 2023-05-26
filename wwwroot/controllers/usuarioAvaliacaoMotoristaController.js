@@ -144,20 +144,20 @@ const calculateAvaliacao = async (idDriver) => {
                 nota1 = nota1 + 1
                 break;
             case el.id_avaliacao = 2:
-                nota2 = 2
+                nota2 = nota2 + 1
                 break;
             case el.id_avaliacao = 3:
-                nota3 = 3
+                nota3 = nota3 + 1
                 break;
             case el.id_avaliacao = 4:
-                nota4 = 4
+                nota4 = nota4 + 1
                 break;
             case el.id_avaliacao = 7:
-                nota5 = 5
+                nota5 = nota5 + 1
                 break;
         }
     })
-    // console.log(`nota1: ${nota1}, nota2: ${nota2}, nota3: ${nota3}, nota4: ${nota4}, nota5: ${nota5}`)
+    
     let media = ((nota1 * 1) + (nota2 * 2) + (nota3 * 3) + (nota4 * 4) + (nota5 * 5)) / (driverAvaliacoes.message.usuarios_avaliacoes_motorista.length)
     media = parseFloat(media.toFixed(1))
 
