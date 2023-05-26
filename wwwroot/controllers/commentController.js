@@ -7,6 +7,7 @@ VERSÃO: 1.0
 ************************************************************************/
 const { insertComment, updateComment, selectAllComments, deleteComment, selectCommentById, selectCommentsByDriverId } = require('../models/DAO/comment.js')
 const { listarUserById } = require('./userController.js')
+const { formatDate } = require('../utils/formatDate.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const novoComment = async (comment) => {
@@ -91,6 +92,7 @@ const listarCommentsByDriverId = async (idMotorista) => {
             let messageJson = {}
             await Promise.all(result.map(async el => {
                 const user = await listarUserById(el.id_usuario)
+                el.data_comentario = await formatDate(el.data_comentario)
                 el.user = user.message
                 delete el.id_usuario
             }))
