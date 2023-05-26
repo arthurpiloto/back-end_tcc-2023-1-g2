@@ -8,7 +8,6 @@ VERSÃO: 1.0
 const { insertDriver, updateDriver, deleteDriver, selectAllDrivers, selectDriverIdByCPF, selectDriverById, loginDriver, verifyDriver, selectDriversByFilters } = require('../models/DAO/driver.js')
 const { selectVanByDriverId } = require('../models/DAO/van.js')
 const { listarSchoolsByDriverId } = require('../controllers/driverSchoolController.js')
-const { formatDate } = require('../utils/formatDate.js')
 const { createJsonDriver } = require('../utils/createJsonDriver.js')
 const { verifyCpf } = require('../utils/verifyCpf.js')
 const { verifyRg } = require('../utils/verifyRg.js')
