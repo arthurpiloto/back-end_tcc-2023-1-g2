@@ -7,6 +7,7 @@ VERSÃO: 1.0
 ************************************************************************/
 const { insertUsuarioAvaliacaoMotorista, updateUsuarioAvaliacaoMotorista, deleteUsuarioAvaliacaoMotorista, selectAllUsuariosAvaliacoesMotoristas, selectUsuarioAvaliacaoMotoristaById, selectUsuarioAvaliacaoMotoristaByIdMotorista, selectUsuarioAvaliacaoMotoristaByIdUsuarioAndIdMotorista } = require('../models/DAO/usuarioAvaliacaoMotorista.js')
 const { driverAvaliacoes } = require('../models/DAO/driver.js')
+const { createAvaliacao } = require('../utils/createAvaliacao.js')
 const { MESSAGE_ERROR, MESSAGE_SUCCESS } = require('../modules/config.js')
 
 const novoUsuarioAvaliacaoMotorista = async (usuarioAvaliacaoMotorista) => {
@@ -33,7 +34,7 @@ const novoUsuarioAvaliacaoMotorista = async (usuarioAvaliacaoMotorista) => {
                 if (insertAvaliacao) {
                     return { status: 201, message: MESSAGE_SUCCESS.INSERT_ITEM }
                 } else {
-                    return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }    
+                    return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
                 }
             } else {
                 return { status: 500, message: MESSAGE_ERROR.INTERNAL_ERROR_DB }
@@ -76,14 +77,11 @@ const listarUsuarioAvaliacaoMotoristaById = async (id) => {
     if (id == '' || id == undefined) {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
     } else {
-        const result = await selectUsuarioAvaliacaoMotoristaById(id)
+        let result = await selectUsuarioAvaliacaoMotoristaById(id)
 
         if (result.length !== 0) {
-            let jsonReturn = {}
-            result.forEach(element => {
-                jsonReturn = element
-            })
-            return { status: 200, message: jsonReturn }
+            result = await createAvaliacao(result, "json")
+            return { status: 200, message: result[0] }
         } else {
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
         }
@@ -91,9 +89,10 @@ const listarUsuarioAvaliacaoMotoristaById = async (id) => {
 }
 
 const listarUsuariosAvaliacoesMotoristas = async () => {
-    const result = await selectAllUsuariosAvaliacoesMotoristas()
+    let result = await selectAllUsuariosAvaliacoesMotoristas()
 
     if (result) {
+        result = await createAvaliacao(result, "array")
         let jsonReturn = {}
         jsonReturn.usuarios_avaliacoes_motoristas = result
         return { status: 200, message: jsonReturn }
@@ -106,9 +105,10 @@ const listarUsuarioAvaliacaoMotoristaByIdMotorista = async (id) => {
     if (id == '' || id == undefined) {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
     } else {
-        const result = await selectUsuarioAvaliacaoMotoristaByIdMotorista(id)
+        let result = await selectUsuarioAvaliacaoMotoristaByIdMotorista(id)
 
         if (result.length !== 0) {
+            result = await createAvaliacao(result, "array")
             let jsonReturn = {}
             jsonReturn.usuarios_avaliacoes_motorista = result
             return { status: 200, message: jsonReturn }
@@ -122,9 +122,10 @@ const listarUsuarioAvaliacaoMotoristaByIdUsuarioAndIdMotorista = async (idUser, 
     if (idUser == '' || idUser == undefined || idDriver == '' || idDriver == undefined) {
         return { status: 400, message: MESSAGE_ERROR.REQUIRED_ID }
     } else {
-        const result = await selectUsuarioAvaliacaoMotoristaByIdUsuarioAndIdMotorista(idUser, idDriver)
+        let result = await selectUsuarioAvaliacaoMotoristaByIdUsuarioAndIdMotorista(idUser, idDriver)
 
         if (result.length !== 0) {
+            result = await createAvaliacao(result, "json")
             return { status: 200, message: result[0] }
         } else {
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
