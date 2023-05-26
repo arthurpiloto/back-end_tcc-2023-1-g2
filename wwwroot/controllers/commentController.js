@@ -60,9 +60,13 @@ const listarCommentById = async (id) => {
 
         if (result.length !== 0) {
             let commentsJson = {}
-            result.forEach(element => {
+            await Promise.all(result.map(async element => {
+                const user = await listarUserById(element.id_usuario)
+                element.data_comentario = await formatDate(element.data_comentario)
+                element.user = user.message
+                delete element.id_usuario
                 commentsJson = element
-            })
+            }))
             return { status: 200, message: commentsJson }
         } else {
             return { status: 404, message: MESSAGE_ERROR.NOT_FOUND_DB }
@@ -74,6 +78,12 @@ const listarComments = async () => {
     const result = await selectAllComments()
 
     if (result) {
+        await Promise.all(result.map(async el => {
+            const user = await listarUserById(el.id_usuario)
+            el.data_comentario = await formatDate(el.data_comentario)
+            el.user = user.message
+            delete el.id_usuario
+        }))
         let commentsJson = {}
         commentsJson.comments = result
         return { status: 200, message: commentsJson }

@@ -94,7 +94,7 @@ const selectAllComments = async () => {
 
 const selectCommentsByDriverId = async (idMotorista) => {
     try {
-        let sql = `SELECT tbl_comentario.id, tbl_comentario.comentario, date(tbl_comentario.data_comentario) as data_comentario FROM tbl_comentario WHERE tbl_comentario.id_motorista = ${idMotorista} ORDER BY id DESC;`
+        let sql = `SELECT tbl_comentario.id, tbl_comentario.id_usuario, tbl_comentario.id_motorista, tbl_comentario.comentario, date(tbl_comentario.data_comentario) as data_comentario FROM tbl_comentario WHERE tbl_comentario.id_motorista = ${idMotorista} ORDER BY id DESC;`
 
         const result = await prisma.$queryRawUnsafe(sql)
 
