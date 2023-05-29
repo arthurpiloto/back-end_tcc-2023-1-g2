@@ -159,7 +159,6 @@ const calculateAvaliacao = async (idDriver) => {
     })
     
     let media = ((nota1 * 1) + (nota2 * 2) + (nota3 * 3) + (nota4 * 4) + (nota5 * 5)) / (driverAvaliacoes.message.usuarios_avaliacoes_motorista.length)
-    console.log(media);
     media = parseFloat(media.toFixed(1))
 
     if (media) {
