@@ -39,10 +39,10 @@ router
 
 router
     .route('/typeContract/:typeContractId')
-    .get(async(request, response) => {
+    .get(async (request, response) => {
         let statusCode
         let message
-        
+
         let id = request.params.typeContractId
 
         if (id != '' && id != undefined) {
@@ -59,24 +59,24 @@ router
     })
 
 
-    .put(jsonParser, async(request, response) => {
+    .put(jsonParser, async (request, response) => {
         let statusCode
         let message
         let headerContentType
-    
+
         headerContentType = request.headers['content-type']
-    
-        if(headerContentType == 'application/json') {
+
+        if (headerContentType == 'application/json') {
             let bodyData = request.body
-    
-            if(JSON.stringify(bodyData) != '{}') {
+
+            if (JSON.stringify(bodyData) != '{}') {
                 let id = request.params.typeContractId
-    
-                if(id != '' && id != undefined) {
+
+                if (id != '' && id != undefined) {
                     bodyData.id = id
-    
+
                     const updatedTypeContract = await atualizarTypeContract(bodyData)
-    
+
                     statusCode = updatedTypeContract.status
                     message = updatedTypeContract.message
                 } else {
@@ -91,17 +91,17 @@ router
             statusCode = 415
             message = MESSAGE_ERROR.INCORRECT_CONTENT_TYPE
         }
-    
+
         return response.status(statusCode).json(message)
     })
 
-    .delete(async(request, response) => {
+    .delete(async (request, response) => {
         let statusCode
         let message
 
         let id = request.params.typeContractId
 
-        if(id != '' && id != undefined) {
+        if (id != '' && id != undefined) {
             const deletedTypeContract = await deletarTypeContract(id)
 
             statusCode = deletedTypeContract.status
@@ -110,14 +110,14 @@ router
             statusCode = 400
             message = MESSAGE_ERROR.REQUIRED_ID
         }
-        
+
         response.status(statusCode).json(message)
     })
 
 
 router
     .route('/typeContracts')
-    .get(async(request, response) => {
+    .get(async (request, response) => {
         let statusCode
         let message
 
