@@ -173,7 +173,7 @@ const selectDriversByFilters = async (driverName, price, school) => {
 
         let sql = `SELECT tbl_motorista.id as id, tbl_motorista.email, tbl_motorista.nome, 
         tbl_motorista.rg, tbl_motorista.cpf, tbl_motorista.cnh, tbl_motorista.telefone, tbl_motorista.data_nascimento, tbl_motorista.senha, tbl_motorista.foto,
-        tbl_motorista.avaliacao as avaliacao_motorista, tbl_motorista.descricao as descricao_motorista, tbl_motorista.inicio_carreira, tbl_motorista.status_motorista,
+        tbl_motorista.avaliacao as avaliacao, tbl_motorista.descricao as descricao_motorista, tbl_motorista.inicio_carreira, tbl_motorista.status_motorista,
         tbl_preco.id as id_preco, tbl_preco.faixa_preco,
         tbl_escola.id as id_escola, tbl_escola.nome as nome_escola, tbl_escola.status_escola FROM tbl_escola_motorista
             INNER JOIN tbl_escola
